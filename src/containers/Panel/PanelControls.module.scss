@@ -1,0 +1,36 @@
+.controlPanel {
+  display: flex;
+  flex-direction: column;
+  > * {
+    margin: 5px;
+  }
+  button {
+    border: none;
+    color: var(--color-light-1);
+    background: var(--color-dark-2);
+    padding: 5px;
+  }
+}
+
+.updateCheckbox {
+  display: none;
+  &:checked ~ label {
+    &::before {
+      background: var(--color-light1);
+      box-shadow: 3px 3px 0px var(--color-dark-2) inset, -3px -3px 0px var(--color-dark-2) inset;
+    }
+  }
+}
+.checkbox {
+  display: flex;
+  align-items: center;
+  &::before {
+    background: var(--color-dark-2);
+    border: 1px solid var(--color-light2);
+    content: '';
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    margin-right: 10px;
+  }
+}

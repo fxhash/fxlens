@@ -1,0 +1,21 @@
+.hashControls {
+  display: flex;
+
+  input, button {
+    background: #333;
+    border: none;
+    color: #fff;
+  }
+  input {
+    flex-grow: 1;
+    font-size: .8em;
+  }
+  button {
+    width: 30px;
+  }
+  button img {
+    color: #FFF;
+    height: 100%;
+    width: 100%;
+  }
+}
