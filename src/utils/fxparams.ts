@@ -34,10 +34,9 @@ export const ParameterProcessors: FxParamProcessors = {
     // convert hex from the string
     deserialize: (input) => {
       const view = new DataView(new ArrayBuffer(8));
-      for (let i = 0; i < 8; i++) {
-        view.setUint8(i, parseInt(input.substring(i * 2, i * 2 + 2), 16));
-      }
-      return view.getFloat64(0);
+      view.setBigInt64(0, BigInt(parseInt(input, 16)));
+      let r = view.getFloat64(0);
+      return r;
     },
     bytesLength: () => 8,
   },
