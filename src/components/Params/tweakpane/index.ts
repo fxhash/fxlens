@@ -121,9 +121,7 @@ export function createFxPane(
     const { controller } =
       parameterControlsDefinition[paramDefinition.type as EParameterType]
     const value = (v as ParameterValueMap)?.[key] ||controller.parseValue( params[key].default)
-    console.log('================')
-    console.log(value)
-    acc[key] = value; 
+    acc[key] = value;
     return acc
   }, v || {} as ParameterValueMap)
   Object.keys(params).forEach((key: string) => {
@@ -139,8 +137,16 @@ export function createFxPane(
         ...paramDefinition.options,
       })
     } else {
+      console.log(inputBinding)
+      if (inputBinding.controller_.props.get("label") !== paramDefinition.name) {
+        inputBinding.controller_.props.set("label", paramDefinition.name)
+      }
       controller.updateBinding?.(inputBinding, paramDefinition, p, valueMap)
     }
+  })
+  pane.children.forEach((input) => {
+    const coldBinding = !Object.keys(params).includes((input as InputBindingApi<any, any>).controller_.binding.target.key)
+    if (coldBinding) pane.remove(input)
   })
   return [pane, valueMap]
 }
