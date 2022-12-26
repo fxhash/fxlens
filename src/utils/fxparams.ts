@@ -93,14 +93,14 @@ export const ParameterProcessors: FxParamProcessors = {
       // find the index of the input in the array of options
       return Math.min(
         255, 
-        def.options?.indexOf(input) || 0
+        def.options?.options?.indexOf(input) || 0
       ).toString(16).padStart(2, "0")
     },
 
     deserialize: (input, def) => {
       // get the index, which is the input
       const idx = parseInt(input, 16)
-      return def.options?.[idx] || def.options?.[0] || ""
+      return def.options?.options?.[idx] || def.options?.options?.[0] || ""
     },
 
     bytesLength: () => 1, // index between 0 and 255
@@ -119,15 +119,15 @@ export function serializeParams(
   // loop through each parameter from the definition to find the associated
   // parameter as set on the UI
   for (const def of definition) {
-    const { name: key, type } = def
+    const { id, type } = def
     // @ts-ignore
     const processor = ParameterProcessors[type]
     // if the param is definined in the object
-    if (Object.hasOwn(params, key)) {
-      const val = params[key] as FxParamTypeMap[]
+    if (Object.hasOwn(params, id)) {
+      const val = params[id] as FxParamTypeMap[]
       const serialized = processor.serialize(val, def)
       console.log({
-        key,
+        id,
         val,
         serialized,
       })
@@ -155,7 +155,7 @@ export function deserializeParams(
     const valueBytes = bytes.substring(0, bytesLen * 2)
     bytes = bytes.substring(bytesLen * 2)
     // deserialize the bytes into the params
-    params[def.name] = processor.deserialize(valueBytes, def)
+    params[def.id] = processor.deserialize(valueBytes, def)
   }
   return params
 }
@@ -170,9 +170,9 @@ export function consolidateParams(params: any, datParams: any) {
   if (!datParams) return rtn;
 
   for(const p in rtn) {
-    const { name: key, type, default: def } = rtn[p];
-    if(Object.hasOwn(datParams, key)) {
-      rtn[p].value = datParams[key];
+    const { id, type, default: def } = rtn[p];
+    if(Object.hasOwn(datParams, id)) {
+      rtn[p].value = datParams[id];
     } else {
       rtn[p].value =
         type == "number" ? Number(def || 0) : type == "color" ? `#${(def+'000000').substring(0,6)}` : def;

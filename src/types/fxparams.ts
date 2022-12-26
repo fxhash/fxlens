@@ -12,19 +12,23 @@ interface FxParamOption_string {
   maxLength?: string
 }
 
-interface FxParamOptionsMap {
+interface FxParamOption_select {
+  options: string[]
+}
+
+export interface FxParamOptionsMap {
   number: FxParamOption_number
   boolean: undefined
   color: undefined
   string: FxParamOption_string
-  select: string[]
+  select: FxParamOption_select
 }
 
 export interface FxParamDefinition<Type extends FxParamType> {
-  name: string
+  id: string
+  name?: string
   type: Type
   default: string
-  id?: string
   options?: FxParamOptionsMap[Type]
   exposedAsFeature?: string
 }
