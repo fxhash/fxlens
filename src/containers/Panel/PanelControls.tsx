@@ -3,9 +3,10 @@ import cs from "classnames"
 import { useContext, useEffect, useState } from "react"
 import { MainContext } from "context/MainContext"
 import { serializeParams } from "utils/fxparams"
+import {ParamsContext} from "context/Params"
 
-const updateIframe = (ctx: any) => {
-  const bytes = serializeParams(ctx.datParams, ctx.params);
+const updateIframe = (ctx: any, data: any, params: any) => {
+  const bytes = serializeParams(data, params);
   const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`];
   const target = `${ctx.baseUrl}?${p.join("&")}`;
   if (ctx.iframe) {
@@ -20,6 +21,7 @@ export function PanelControls({
   
 }: Props) {
   const ctx = useContext(MainContext)
+  const params = useContext(ParamsContext)
 
   const [autoUpdate, setAutoUpdate] = useState(false);
   const onAutoUpdate = () => {
@@ -28,10 +30,10 @@ export function PanelControls({
 
   useEffect(() => {
       if (autoUpdate) {
-        updateIframe(ctx);
+        updateIframe(ctx, params.data, params.paramsList);
       }
     },
-    [ctx.hash, ctx.datParamsUpdate]
+    [ctx.hash, params.data]
   );
 
 
@@ -50,7 +52,8 @@ export function PanelControls({
       <button
         type="button"
         onClick={() => {
-          const bytes = serializeParams(ctx.datParams, ctx.params);
+          if (!params.paramsList) return;
+          const bytes = serializeParams(params.data, params.paramsList);
           const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`];
           const target = `${ctx.baseUrl}?${p.join("&")}`;
           window.open(target);
@@ -61,7 +64,9 @@ export function PanelControls({
       <button
         type="button"
         onClick={() => {
-          updateIframe(ctx);
+          console.log(ctx)
+          console.log(params)
+          updateIframe(ctx, params.data, params.paramsList);
         }}
       >
         Refresh

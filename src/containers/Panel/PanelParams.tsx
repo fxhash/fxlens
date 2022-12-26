@@ -1,12 +1,11 @@
-import { useContext } from "react"
+import { useContext, useRef } from "react"
 import { MainContext } from "context/MainContext"
-
+import { useParams } from "context/Params";
 import { Controls } from "components/Controls/Controls";
 import { PanelGroup } from "components/Panel/PanelGroup";
 
-interface Props {
-  
-}
+interface Props {}
+
 export function PanelParams({
   
 }: Props) {

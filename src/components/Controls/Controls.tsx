@@ -1,4 +1,4 @@
-import { createRef, useEffect, useContext, useState, useCallback } from "react";
+import { createRef, useEffect, useContext, useState, useCallback, useRef } from "react";
 import DatGui, {
   DatBoolean,
   DatColor,
@@ -10,21 +10,13 @@ import { MainContext } from "context/MainContext";
 import "./datgui.css"
 import { consolidateParams } from "utils/fxparams";
 import throttle from "lodash.throttle"
-
-const getDefByName = (params:any, name:string) => {
-  if(params) {
-    for(let i=0; i< params.length; i++) {
-      if(params[i].name === name) return params[i];
-    }
-  }
-}
+import {Pane} from "components/Params/Pane";
 
 interface ControlsProps {
   params: any;
 }
 export const Controls = ({ params }: ControlsProps) => {
   const ctx = useContext(MainContext);
-
   const consolidatedParams = consolidateParams(params, ctx.datParams);
 
   const p: React.RefObject<HTMLDivElement> = createRef();
@@ -33,9 +25,9 @@ export const Controls = ({ params }: ControlsProps) => {
     const ps: any = {};
     if (consolidatedParams) {
       consolidatedParams.forEach((p: any) => {
-        ps[p.name] = p.type == "number" ? Number(p.value) : p.value;
+        ps[p.id] = p.type == "number" ? Number(p.value) : p.value;
       });
-      ctx.setDatParams(ps);
+      // ctx.setDatParams(ps);
     }
   }, [params]);
   
@@ -43,7 +35,7 @@ export const Controls = ({ params }: ControlsProps) => {
     throttle(
       () => {   
         console.log("ss");
-        ctx.setDatParamsUpdate(Date.now);
+        // ctx.setDatParamsUpdate(Date.now);
       },
       1000
     ),
@@ -54,8 +46,12 @@ export const Controls = ({ params }: ControlsProps) => {
     dbParamsUpdate();
     ctx.setDatParams({ ...ctx.datParams, ...newData });
   };
+  
 
   return (
+    <>
+
+    <Pane  />
     <div ref={p}>
       <DatGui data={ctx.datParams} onUpdate={handleUpdate}>
         {consolidatedParams?.map((p: any) => {
@@ -68,21 +64,22 @@ export const Controls = ({ params }: ControlsProps) => {
                   min={Number(p.options.min)}
                   max={Number(p.options.max)}
                   step={Number(p.options.step)}
-                  key={p.name}
+                  key={p.id}
                 />
               );
             case "color":
-              return <DatColor path={p.name} label={p.name} key={p.name} />;
+              return <DatColor path={p.name} label={p.name} key={p.id} />;
             case "boolean":
-              return <DatBoolean path={p.name} label={p.name} key={p.name} />;
+              return <DatBoolean path={p.name} label={p.name} key={p.id} />;
             case "select":
-              return <DatSelect path={p.name} label={p.name} key={p.name} options={p.options} />;
+              return <DatSelect path={p.name} label={p.name} key={p.id} options={p.options.options} />;
 
             default:
-              return <DatString path={p.name} label={p.name} key={p.name} />;
+              return <DatString path={p.name} label={p.name} key={p.id} />;
           }
         })}
       </DatGui>
     </div>
+    </>
   );
 };
