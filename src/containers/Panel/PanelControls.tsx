@@ -30,7 +30,7 @@ export function PanelControls({
 
   useEffect(() => {
       if (autoUpdate) {
-        updateIframe(ctx, params.data, params.paramsList);
+        updateIframe(ctx, params.data, params.params);
       }
     },
     [ctx.hash, params.data]
@@ -52,8 +52,8 @@ export function PanelControls({
       <button
         type="button"
         onClick={() => {
-          if (!params.paramsList) return;
-          const bytes = serializeParams(params.data, params.paramsList);
+          if (!params.params) return;
+          const bytes = serializeParams(params.data, params.params);
           const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`];
           const target = `${ctx.baseUrl}?${p.join("&")}`;
           window.open(target);
@@ -66,7 +66,7 @@ export function PanelControls({
         onClick={() => {
           console.log(ctx)
           console.log(params)
-          updateIframe(ctx, params.data, params.paramsList);
+          updateIframe(ctx, params.data, params.params);
         }}
       >
         Refresh

@@ -7,7 +7,8 @@ interface IPaneProps {
 }
 export function Pane(props: IPaneProps) {
   const params = useMemo(() => props.params, [JSON.stringify(props.params)])
-  const pane = useRef<HTMLDivElement>(null)
-  const data = usePaneOfParams(params, pane)
-  return <div ref={pane} className={classes.pane} />
+  const paneRef = useRef<HTMLDivElement>(null)
+  const tweakpane = usePaneOfParams(params, paneRef)
+
+  return <div ref={paneRef} className={classes.pane} />
 }
