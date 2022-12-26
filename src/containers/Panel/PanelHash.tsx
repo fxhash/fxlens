@@ -2,8 +2,6 @@ import styles from "./PanelHash.module.scss";
 import { useContext } from "react";
 import { MainContext } from "context/MainContext";
 
-import { Controls } from "components/Controls/Controls";
-
 import RefreshIcon from "../../assets/rotate-right-solid.svg";
 import { PanelGroup } from "components/Panel/PanelGroup";
 
