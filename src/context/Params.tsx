@@ -76,16 +76,11 @@ function usePaneStable(
   useEffect(() => {
     if (!settings.container || !params) return
     const [p, pValues] = createFxPane(settings.container, params, pane.current, values.current)
-    if(!pane.current) {
-      p.on("change", (e: TpChangeEvent<unknown>) => {
-        setParam(e.presetKey as string, e.value)
-      })
-    }
+    p.on("change", (e: TpChangeEvent<unknown>) => {
+      setParam(e.presetKey as string, e.value)
+    })
     pane.current = p
     values.current = pValues
-    return () => {
-     // p.dispose()
-    }
   }, [params, settings, setParam, contextValues])
   useEffect(() => {
     contextPane?.on?.("change", (e: TpChangeEvent<unknown>) => {
@@ -94,6 +89,9 @@ function usePaneStable(
       values.current[key] = value
       pane.current?.refresh()
     })
+    return () => {
+      pane.current?.dispose()
+    }
   }, [contextPane, pane, values])
   return pane;
 }
@@ -150,18 +148,19 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
     const container = paneContainer || paneContainerRef?.current
     if (!container) return
     const [p, pValues] = createFxPane(container, params, pane, values.current)
-    if(!pane) {
-      p.on("change", (e: TpChangeEvent<unknown>) => {
-        setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
-      })
-      setPane(p)
-    }
+    setPane(p)
     values.current = pValues
-    // setData({...pValues})
-    return () => {
-    //   p.dispose()
-    }
   }, [params, paneContainer])
+
+  useEffect(() => {
+    if (!pane) return;
+    pane.on("change", (e: TpChangeEvent<unknown>) => {
+      setData((d) => ({ ...d, [e.presetKey as string]: e.value }))
+    })
+    return () => {
+      pane?.dispose()
+    }
+  }, [pane, setData])
 
   const contextValue = useMemo(
     () => ({
