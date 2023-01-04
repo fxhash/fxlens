@@ -4,7 +4,6 @@ import {FxParamDefinition, FxParamOptionsMap} from "types/fxparams"
 
 import { BladeController, InputBindingApi, SliderTextController, View } from "@tweakpane/core"
 import {FxStringInputController} from "./plugins/StringInputPlugin/controller"
-
 enum EParameterType {
   string = "string",
   number = "number",
@@ -69,13 +68,16 @@ export const parameterControlsDefinition: Record<
         if (!p || !v) return
         const controller = binding.controller_
           .valueController as SliderTextController
+        if (!controller.sliderController) return
         if (
           // you cannot update the step of a number controller so we need to re-init the input
           // fixable with custom number control plugin
           // @ts-ignore
           controller.sliderController.baseStep_ !== definition.options?.step ||
-          controller.sliderController.props.get('minValue') !== definition.options?.min || 
-          controller.sliderController.props.get('maxValue') !== definition.options.max
+          controller.sliderController.props.get("minValue") !==
+            definition.options?.min ||
+          controller.sliderController.props.get("maxValue") !==
+            definition.options.max
         ) {
           const index = p.children.findIndex(
             (input) =>
@@ -111,14 +113,17 @@ export const parameterControlsDefinition: Record<
 
 export type ParameterValueMap = Record<string, any>
 
-export function consolidateParamValues(params: FxParamDefinition<any>[], data?: ParameterValueMap) {
+export function consolidateParamValues(
+  params: FxParamDefinition<any>[],
+  data?: ParameterValueMap
+) {
   return params.reduce((acc, paramDefinition) => {
-    const { type, id } = paramDefinition;
-    const { controller } =
-      parameterControlsDefinition[type as EParameterType]
-    const value = typeof data?.[id] !== "undefined" ? 
-      (data as ParameterValueMap)?.[id] :
-      controller.parseValue(paramDefinition.default)
+    const { type, id } = paramDefinition
+    const { controller } = parameterControlsDefinition[type as EParameterType]
+    const value =
+      typeof data?.[id] !== "undefined"
+        ? (data as ParameterValueMap)?.[id]
+        : controller.parseValue(paramDefinition.default)
     acc[id] = value
     return acc
   }, data || ({} as ParameterValueMap))
@@ -134,7 +139,7 @@ export function createFxPane(
   pane.registerPlugin(StringInputPlugin)
   const valueMap = consolidateParamValues(params, v)
   params.forEach((paramDefinition) => {
-    const { id } = paramDefinition;
+    const { id } = paramDefinition
     const { controller } =
       parameterControlsDefinition[paramDefinition.type as EParameterType]
     const inputBinding = pane.children.find(
@@ -158,9 +163,11 @@ export function createFxPane(
     }
   })
   pane.children.forEach((input) => {
-    const coldBinding = !params.map(p => p.id).includes(
-      (input as InputBindingApi<any, any>).controller_.binding.target.key
-    )
+    const coldBinding = !params
+      .map((p) => p.id)
+      .includes(
+        (input as InputBindingApi<any, any>).controller_.binding.target.key
+      )
     if (coldBinding) pane.remove(input)
   })
   return [pane, valueMap]
