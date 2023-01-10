@@ -16,7 +16,7 @@ import {
   consolidateParamValues,
 } from "../components/Params/tweakpane"
 
-import {FxParamDefinition} from "types/fxparams"
+import { FxParamDefinition } from "types/fxparams"
 interface IParamsContext<CustomParams = ParameterValueMap> {
   pane?: Pane
   params?: FxParamDefinition<any>[]
@@ -209,4 +209,3 @@ export function ParamsProvider({ children }: PropsWithChildren<{}>) {
     </ParamsContext.Provider>
   )
 }
-
