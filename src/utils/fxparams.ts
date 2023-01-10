@@ -22,9 +22,6 @@ const hexToString = function (h: string) {
   return rtn
 }
 
-// @ts-ignore
-window.stringToHex = stringToHex
-
 export const ParameterProcessors: FxParamProcessors = {
   number: {
     // get the hexadecimal bytes representation of the float64 number
