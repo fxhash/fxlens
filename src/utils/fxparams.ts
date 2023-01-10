@@ -1,42 +1,46 @@
-import { FxParamDefinition, FxParamProcessors, FxParamType, FxParamTypeMap } from "types/fxparams";
-
+import {
+  FxParamDefinition,
+  FxParamProcessors,
+  FxParamTypeMap,
+} from "types/fxparams"
 
 const stringToHex = function (s: string) {
-  let rtn = "";
+  let rtn = ""
   for (let i = 0; i < s.length; i++) {
     rtn += s.charCodeAt(i).toString(16).padStart(4, "0")
   }
-  return rtn;
-};
+  return rtn
+}
 const hexToString = function (h: string) {
-  let hx = h.match(/.{1,4}/g) || [];
-  let rtn = "";
+  let hx = h.match(/.{1,4}/g) || []
+  let rtn = ""
   for (let i = 0; i < hx.length; i++) {
-    const int = parseInt(hx[i], 16);
+    const int = parseInt(hx[i], 16)
     if (int === 0) break
-    rtn += String.fromCharCode(int);
+    rtn += String.fromCharCode(int)
   }
-  return rtn;
-};
+  return rtn
+}
 
 // @ts-ignore
-window.stringToHex = stringToHex;
+window.stringToHex = stringToHex
 
 export const ParameterProcessors: FxParamProcessors = {
   number: {
     // get the hexadecimal bytes representation of the float64 number
     serialize: (input) => {
-      const view = new DataView(new ArrayBuffer(8));
-      view.setFloat64(0, input);
-      return view.getBigInt64(0).toString(16);
+      const view = new DataView(new ArrayBuffer(8))
+      view.setFloat64(0, input)
+      return view.getBigUint64(0).toString(16)
     },
     // this is for the snippet injected into fxhash pieces
     // convert hex from the string
     deserialize: (input) => {
-      const view = new DataView(new ArrayBuffer(8));
-      view.setBigInt64(0, BigInt(parseInt(input, 16)));
-      let r = view.getFloat64(0);
-      return r;
+      const view = new DataView(new ArrayBuffer(8))
+      for (let i = 0; i < 8; i++) {
+        view.setUint8(i, parseInt(input.substring(i * 2, i * 2 + 2), 16))
+      }
+      return view.getFloat64(0)
     },
     bytesLength: () => 8,
   },
@@ -52,11 +56,11 @@ export const ParameterProcessors: FxParamProcessors = {
         ? input === "true"
           ? "01"
           : "00"
-        : "00";
+        : "00"
     },
     // if value is "00" -> 0 -> false, otherwise we consider it's 1
     deserialize: (input) => {
-      return input === "00" ? false : true;
+      return input === "00" ? false : true
     },
     bytesLength: () => 1,
   },
@@ -64,11 +68,11 @@ export const ParameterProcessors: FxParamProcessors = {
   color: {
     serialize: (input) => {
       // remove the '#' at the beginning and convert to a byte string
-      return input.replace("#", "").padEnd(8, "f");
+      return input.replace("#", "").padEnd(8, "f")
     },
 
     deserialize: (input) => {
-      return input;
+      return input
     },
 
     bytesLength: () => 4,
@@ -76,13 +80,13 @@ export const ParameterProcessors: FxParamProcessors = {
 
   string: {
     serialize: (input) => {
-      let hex = stringToHex(input.substring(0, 64));
-      hex = hex.padEnd(64 * 4, "0");
-      return hex;
+      let hex = stringToHex(input.substring(0, 64))
+      hex = hex.padEnd(64 * 4, "0")
+      return hex
     },
 
     deserialize: (input) => {
-      return hexToString(input);
+      return hexToString(input)
     },
 
     bytesLength: () => 64 * 2, // maximum string length of 64?
@@ -91,10 +95,9 @@ export const ParameterProcessors: FxParamProcessors = {
   select: {
     serialize: (input, def) => {
       // find the index of the input in the array of options
-      return Math.min(
-        255, 
-        def.options?.indexOf(input) || 0
-      ).toString(16).padStart(2, "0")
+      return Math.min(255, def.options?.indexOf(input) || 0)
+        .toString(16)
+        .padStart(2, "0")
     },
 
     deserialize: (input, def) => {
@@ -105,7 +108,7 @@ export const ParameterProcessors: FxParamProcessors = {
 
     bytesLength: () => 1, // index between 0 and 255
   },
-};
+}
 
 // params are injected into the piece using the binary representation of the
 // numbers, to keep precision
@@ -134,10 +137,9 @@ export function serializeParams(
       bytes += serialized
     }
   }
-  
+
   return bytes
 }
-
 
 // takes an array of bytes, in hexadecimal format, and a parametric space
 // definition and outputs an array of parameters, mapping the definition and
@@ -163,21 +165,25 @@ export function deserializeParams(
 // Consolidates parameters from both a params object provided by the token
 // and the dat object of params, which is stored by the controls component.
 export function consolidateParams(params: any, datParams: any) {
-  if (!params) return [];
+  if (!params) return []
 
-  const rtn = [ ...params ];
+  const rtn = [...params]
 
-  if (!datParams) return rtn;
+  if (!datParams) return rtn
 
-  for(const p in rtn) {
-    const { name: key, type, default: def } = rtn[p];
-    if(Object.hasOwn(datParams, key)) {
-      rtn[p].value = datParams[key];
+  for (const p in rtn) {
+    const { name: key, type, default: def } = rtn[p]
+    if (Object.hasOwn(datParams, key)) {
+      rtn[p].value = datParams[key]
     } else {
       rtn[p].value =
-        type == "number" ? Number(def || 0) : type == "color" ? `#${(def+'000000').substring(0,6)}` : def;
+        type == "number"
+          ? Number(def || 0)
+          : type == "color"
+          ? `#${(def + "000000").substring(0, 6)}`
+          : def
     }
   }
 
-  return rtn;
+  return rtn
 }
