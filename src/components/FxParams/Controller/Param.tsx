@@ -1,5 +1,5 @@
 import {useMemo, ReactElement, ChangeEventHandler} from "react";
-import {FxParamDefinition, FxParamType} from "types/fxparams";
+import {FxParamDefinition, FxParamOptionsMap, FxParamType} from "types/fxparams";
 import {FxParamControllerProps} from "./Controller";
 import {BooleanController} from "./Boolean";
 import {ColorController} from "./Color";
@@ -47,16 +47,16 @@ export interface ParameterControllerProps {
 
 export function ParameterController(props: ParameterControllerProps) {
   const { parameter } = props;
+  const { controller: Controller } = useMemo(() => controllerDefinitions[parameter.type], [parameter.type]) 
   
-  const { controller: Controller } = useMemo(() => controllerDefinitions[parameter.type], [parameter.type])
-
   return (
     <Controller
       id={parameter.id}
       label={parameter.name}
       value={props.value}
       onChange={props.onChange}
-      options={parameter.options}
+      // TODO: This should be properly casted
+      options={parameter.options as any}
     /> 
   )
 }
