@@ -47,7 +47,7 @@ export const Controls = ({ params }: ControlsProps) => {
   };
 
   const handleUpdateParam = (id:string) => (event:ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    console.log(id, event.target.value) 
+    console.log(id, event.target.value, event.target.checked) 
     ctx.setDatParams({ ...ctx.datParams, [id]: event.target.value });
   }
 
