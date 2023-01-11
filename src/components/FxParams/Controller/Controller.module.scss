@@ -1,3 +1,5 @@
+$height: 20px;
+
 $controller-background: #d3d3d3;
 $controller-height: 25px;
 
@@ -31,6 +33,7 @@ $slider-thumb-border-radius: 4px;
 		color: black;
     border: none;
     padding: 0.25rem;
+    height: $height;
     &:focus-visible {
     }
 	}
@@ -38,8 +41,8 @@ $slider-thumb-border-radius: 4px;
 
 .checkbox {
   -webkit-appearance: none;
-  width: 20px;
-  height: 20px;
+  width: $height;
+  height: $height;
   border-radius: 5px;
   padding: 0;
   border-radius: $slider-thumb-border-radius;
@@ -95,14 +98,14 @@ $slider-thumb-border-radius: 4px;
     input, select {
       &:nth-child(1) {
         margin-right: 5px;
-        width: 20px;
+        width: $height;
       }
       &:nth-child(2) {
         margin-left: 5px;
-        width: calc(100% - 20px);
+        width: calc(100% - $height);
       }
       &:only-child {
-        width: 20px;
+        width: $height;
         margin-right: 0;
       }
     }    
@@ -112,7 +115,7 @@ $slider-thumb-border-radius: 4px;
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  height: $slider-track-height;
+  height: $slider-track-height !important;
   background: $slider-color;
   outline: none;
   opacity: 0.7;
@@ -142,23 +145,23 @@ $slider-thumb-border-radius: 4px;
 }
 
 .colorInput {
-  width: 20px !important;
-  height: 20px !important;
+  width: $height !important;
+  height: $height !important;
   padding: 0 !important;
   background: transparent;
   border-radius: $slider-thumb-border-radius;
 }
 
 .colorInput::-webkit-color-swatch-wrapper {
-  width: 20px !important;
-  height: 20px !important;
+  width: $height !important;
+  height: $height !important;
   border-radius: $slider-thumb-border-radius;
 	padding: 0;
   background: transparent;
 }
 .colorInput::-webkit-color-swatch {
-  width: 20px !important;
-  height: 20px !important;
+  width: $height !important;
+  height: $height !important;
   background: transparent;
 	border: none;
   border-radius: $slider-thumb-border-radius;
