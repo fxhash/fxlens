@@ -22,6 +22,43 @@ $slider-thumb-border-radius: 4px;
     width: 160px;
     display: flex;
     align-items: center;
+  }
+
+	input, select {
+    background: $controller-background;
+		font-family: monospace;
+    font-size: 1rem;
+		color: black;
+    border: none;
+    padding: 0.25rem;
+    &:focus-visible {
+    }
+	}
+}
+
+.checkbox {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  padding: 0;
+  border-radius: $slider-thumb-border-radius;
+  position: relative;
+  &:checked {
+    &:after {
+      content: "";
+      border-radius: $slider-thumb-border-radius;
+      width: 13px;
+      height: 13px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: black;
+    }
+  }
+}
+.default {
     input, select {
       &:nth-child(1) {
         margin-right: 5px;
@@ -36,18 +73,39 @@ $slider-thumb-border-radius: 4px;
         margin-right: 0;
       }
     }    
-  }
+}
 
-	input, select {
-    background: $controller-background;
-		font-family: monospace;
-    font-size: 1rem;
-		color: black;
-    border: none;
-    padding: 0.25rem;
-    &:focus-visible {
-    }
-	}
+.invert {
+    input, select {
+      &:nth-child(1) {
+        margin-right: 5px;
+        width: 30%;
+      }
+      &:nth-child(2) {
+        margin-left: 5px;
+        width: 70%;
+      }
+      &:only-child {
+        width: 100%;
+        margin-right: 0;
+      }
+    }    
+}
+.box {
+    input, select {
+      &:nth-child(1) {
+        margin-right: 5px;
+        width: 20px;
+      }
+      &:nth-child(2) {
+        margin-left: 5px;
+        width: calc(100% - 20px);
+      }
+      &:only-child {
+        width: 20px;
+        margin-right: 0;
+      }
+    }    
 }
 
 
@@ -80,5 +138,28 @@ $slider-thumb-border-radius: 4px;
   width: $slider-thumb-width;
   height: $slider-thumb-height;
   background: $slider-color;
+  border-radius: $slider-thumb-border-radius;
+}
+
+.colorInput {
+  width: 20px !important;
+  height: 20px !important;
+  padding: 0 !important;
+  background: transparent;
+  border-radius: $slider-thumb-border-radius;
+}
+
+.colorInput::-webkit-color-swatch-wrapper {
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: $slider-thumb-border-radius;
+	padding: 0;
+  background: transparent;
+}
+.colorInput::-webkit-color-swatch {
+  width: 20px !important;
+  height: 20px !important;
+  background: transparent;
+	border: none;
   border-radius: $slider-thumb-border-radius;
 }

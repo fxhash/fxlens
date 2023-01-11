@@ -1,8 +1,9 @@
-import { FxParamControllerProps, HTMLInputController } from "./Controller"
+import { FxParamControllerProps, HTMLInputController, HTMLInputControllerWithTextInput } from "./Controller"
+import classes from './Controller.module.scss'
 
 export function ColorController(props: FxParamControllerProps<"color">) {
 
   return (
-    <HTMLInputController type="color" {...props} />
+    <HTMLInputControllerWithTextInput type="color" layout="box" className={classes.colorInput}{...props} />
   )
 }
