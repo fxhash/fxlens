@@ -36,7 +36,7 @@ export function Frame({
         if ($fx?._params) {
           console.log('???', $fx._params)
           params.registerParams($fx._params)
-          // ctx.setParams($fx._params)
+          ctx.setParams($fx._params)
         }
 
         if ($fx?._features) {
