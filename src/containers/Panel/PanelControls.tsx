@@ -39,9 +39,9 @@ export function PanelControls({}: Props) {
 
   useEffect(() => {
     if (autoUpdate) {
-      updateIframeDebounced(ctx, params.data!, params.params!)
+      updateIframeDebounced(ctx, ctx.datParams, ctx.params)
     }
-  }, [ctx.hash, JSON.stringify(params.data)])
+  }, [ctx.hash, JSON.stringify(ctx.datParams)])
 
   return (
     <div className={style.controlPanel}>
@@ -59,7 +59,7 @@ export function PanelControls({}: Props) {
         type="button"
         onClick={() => {
           if (!params.params) return
-          const bytes = serializeParams(params.data, params.params)
+          const bytes = serializeParams(ctx.datParams, ctx.params)
           const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
           const target = `${ctx.baseUrl}?${p.join("&")}`
           window.open(target)
@@ -69,7 +69,7 @@ export function PanelControls({}: Props) {
       </button>
       <button
         type="button"
-        onClick={() => updateIframe(ctx, params.data, params.params)}
+        onClick={() => updateIframe(ctx, ctx.datParams, ctx.params)}
       >
         Refresh
       </button>
