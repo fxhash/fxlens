@@ -1,12 +1,6 @@
 import { createRef, useEffect, useContext, useState, useCallback, ChangeEvent } from "react";
 import { MainContext } from "context/MainContext";
 import { consolidateParams } from "utils/fxparams";
-import throttle from "lodash.throttle"
-import {NumberController} from "./Controller/Number";
-import {ColorController} from "./Controller/Color";
-import {BooleanController} from "./Controller/Boolean";
-import {SelectController} from "./Controller/Select";
-import {StringController} from "./Controller/String";
 import {ParameterController} from "./Controller/Param";
 
 
@@ -31,26 +25,10 @@ export const Controls = ({ params }: ControlsProps) => {
     }
   }, [params]);
   
-  const dbParamsUpdate = useCallback(
-    throttle(
-      () => {   
-        console.log("ss");
-        ctx.setDatParamsUpdate(Date.now);
-      },
-      1000
-    ),
-    []
-  );
-
-  const handleUpdate = (newData: any) => {
-    dbParamsUpdate();
-  };
-
-  const handleUpdateParam = (id:string) => (event:ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    console.log(id, event.target.value, event.target.checked) 
-    ctx.setDatParams({ ...ctx.datParams, [id]: event.target.value });
+  const handleChangeParam = (id:string, value: any) => {
+    console.log(id, value)
+    ctx.setDatParams({...ctx.datParams, [id]: value})
   }
-
 
   console.log('??', consolidatedParams, ctx.datParams)
 
@@ -62,7 +40,7 @@ export const Controls = ({ params }: ControlsProps) => {
             key={p.id}
             parameter={p}
             value={p.value}
-            onChange={handleUpdateParam(p.id)}
+            onChange={handleChangeParam}
           />
         );
         })

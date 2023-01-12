@@ -2,6 +2,9 @@ import { ChangeEventHandler, HTMLInputTypeAttribute, InputHTMLAttributes, ReactN
 import {FxParamDefinition, FxParamOptionsMap, FxParamType} from "types/fxparams"
 import classes from './Controller.module.scss'
 import cx from 'classnames'
+
+export type FxParamControllerChangeHandler = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => any
+
 export interface ControllerProps {
   label?: string
   id?: string
@@ -24,7 +27,7 @@ export function Controller(props: ControllerProps) {
 export interface HTMLInputControllerProps {
   id: string
   value: string
-  onChange: ChangeEventHandler<HTMLInputElement | HTMLSelectElement>
+  onChange: FxParamControllerChangeHandler
   type: HTMLInputTypeAttribute,
   inputOptions?: InputHTMLAttributes<HTMLInputElement | HTMLSelectElement>
   className?: string,
@@ -33,7 +36,7 @@ export interface HTMLInputControllerProps {
 }
 
 export type FxParamControllerProps<Type extends FxParamType> = Omit<HTMLInputControllerProps, "type"> 
-  & {value: any, options?: FxParamOptionsMap[Type] }
+& {value: any, options?: FxParamOptionsMap[Type]}
 
 export function HTMLInputController(props: HTMLInputControllerProps) {
   const { label, id, onChange, value, type, className, inputOptions = {}, layout="default" } = props;
