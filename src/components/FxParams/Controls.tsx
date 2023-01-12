@@ -11,7 +11,7 @@ interface ControlsProps {
 export const Controls = ({ params }: ControlsProps) => {
   const ctx = useContext(MainContext);
 
-  const consolidatedParams = consolidateParams(params, ctx.datParams);
+  const consolidatedParams = consolidateParams(params, ctx.data);
 
   const p: React.RefObject<HTMLDivElement> = createRef();
 
@@ -21,16 +21,16 @@ export const Controls = ({ params }: ControlsProps) => {
       consolidatedParams.forEach((p: any) => {
         ps[p.id] = p.type == "number" ? Number(p.value) : p.value;
       });
-      ctx.setDatParams(ps);
+      ctx.setData(ps);
     }
   }, [params]);
   
   const handleChangeParam = (id:string, value: any) => {
     console.log(id, value)
-    ctx.setDatParams({...ctx.datParams, [id]: value})
+    ctx.setData({...ctx.data, [id]: value})
   }
 
-  console.log('??', consolidatedParams, ctx.datParams)
+  console.log('??', consolidatedParams, ctx.data)
 
   return (
     <div ref={p}>
