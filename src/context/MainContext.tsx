@@ -23,8 +23,8 @@ export interface IMainContext {
   params: any
   setParams: (params: any) => void
   // params pulled the controls
-  datParams: any
-  setDatParams: (params: any) => void
+  data: any
+  setData: (params: any) => void
   // params update - used for auto refreshing
   datParamsUpdate: any
   setDatParamsUpdate: (params: any) => void
@@ -44,8 +44,8 @@ const defaultMainContext: IMainContext = {
   setUrl: () => {},
   params: [],
   setParams: () => {},
-  datParams: null,
-  setDatParams: () => {},
+  data: null,
+  setData: () => {},
   datParamsUpdate: null,
   setDatParamsUpdate: () => {},
   features: null,
@@ -71,7 +71,7 @@ export function MainProvider({ children }: Props) {
   const [features, setFeatures] = useState<any>(null)
   const [hash, setHash] = useState<any>(null)
 
-  const [datParams, setDatParams] = useState<any>(null)
+  const [data, setData] = useState<any>(null)
   const [datParamsUpdate, setDatParamsUpdate] = useState<any>(null)
 
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null)
@@ -82,8 +82,8 @@ export function MainProvider({ children }: Props) {
     setUrl,
     params,
     setParams,
-    datParams,
-    setDatParams,
+    data,
+    setData,
     datParamsUpdate,
     setDatParamsUpdate,
     features,
