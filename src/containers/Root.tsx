@@ -1,5 +1,4 @@
 import { MainProvider } from "context/MainContext"
-import { ParamsProvider } from "context/Params"
 import { PropsWithChildren } from "react"
 
 /**
@@ -15,9 +14,7 @@ export function Root({
 }: Props) {
   return (
     <MainProvider>
-      <ParamsProvider>
-        {children}
-      </ParamsProvider>
+      {children}
     </MainProvider>
   )
 }

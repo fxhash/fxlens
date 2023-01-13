@@ -1,7 +1,7 @@
 import { createRef, useEffect, useContext, useState, useCallback, ChangeEvent } from "react";
 import { MainContext } from "context/MainContext";
-import { consolidateParams } from "utils/fxparams";
-import {ParameterController} from "./Controller/Param";
+import { consolidateParams } from "components/FxParams/utils";
+import { ParameterController } from "./Controller/Param";
 
 
 
