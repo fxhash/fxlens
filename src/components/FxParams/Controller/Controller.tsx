@@ -1,5 +1,5 @@
-import { ChangeEventHandler, HTMLInputTypeAttribute, InputHTMLAttributes, ReactNode} from "react"
-import {FxParamDefinition, FxParamOptionsMap, FxParamType} from "types/fxparams"
+import { HTMLInputTypeAttribute, InputHTMLAttributes, ReactNode} from "react"
+import { FxParamOptionsMap, FxParamType} from "../types"
 import classes from './Controller.module.scss'
 import cx from 'classnames'
 

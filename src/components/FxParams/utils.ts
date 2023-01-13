@@ -2,7 +2,7 @@ import {
   FxParamDefinition,
   FxParamProcessors,
   FxParamTypeMap,
-} from "types/fxparams"
+} from "./types"
 
 const stringToHex = function (s: string) {
   let rtn = ""
@@ -161,17 +161,17 @@ export function deserializeParams(
 
 // Consolidates parameters from both a params object provided by the token
 // and the dat object of params, which is stored by the controls component.
-export function consolidateParams(params: any, datParams: any) {
+export function consolidateParams(params: any, data: any) {
   if (!params) return []
 
   const rtn = [...params]
 
-  if (!datParams) return rtn
+  if (!data) return rtn
 
   for (const p in rtn) {
     const { id, type, default: def } = rtn[p]
-    if (Object.hasOwn(datParams, id)) {
-      rtn[p].value = datParams[id]
+    if (Object.hasOwn(data, id)) {
+      rtn[p].value = data[id]
     } else {
       rtn[p].value =
         type == "number"

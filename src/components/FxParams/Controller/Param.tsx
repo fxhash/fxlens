@@ -1,5 +1,5 @@
-import {useMemo, ReactElement, ChangeEventHandler} from "react";
-import {FxParamDefinition, FxParamOptionsMap, FxParamType} from "types/fxparams";
+import {useMemo, ReactElement } from "react";
+import {FxParamDefinition, FxParamType} from "../types";
 import {FxParamControllerChangeHandler, FxParamControllerProps} from "./Controller";
 import {BooleanController} from "./Boolean";
 import {ColorController} from "./Color";
