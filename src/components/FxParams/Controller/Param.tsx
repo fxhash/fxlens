@@ -21,7 +21,7 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   number: {
     type: "number",
     controller: NumberController,
-    handler: (e) => e.target.value,
+    handler: (e) => Number(e.target.value),
   },
   string: {
     type: "string",
