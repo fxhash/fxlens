@@ -6,6 +6,6 @@ export function StringController(props: FxParamControllerProps<"string">) {
   const maxLength = Number(options?.maxLength) || undefined;
 
   return (
-    <HTMLInputController type="text" inputOptions={{ minLength, maxLength }} {...props} />
+    <HTMLInputController type="text" inputProps={{ minLength, maxLength }} {...props} />
   )
 }
