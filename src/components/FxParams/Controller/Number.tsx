@@ -7,6 +7,6 @@ export function NumberController(props: FxParamControllerProps<"number">) {
   const max = options?.max || 100;
   const step = options?.step || 1;
   return (
-    <HTMLInputControllerWithTextInput type="range" className={classes.slider} inputOptions={{ min, max, step}} {...props} />
+    <HTMLInputControllerWithTextInput type="range" className={classes.slider} inputProps={{ min, max, step}} {...props} />
   )
 }
