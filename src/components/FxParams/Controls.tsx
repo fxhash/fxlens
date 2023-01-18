@@ -1,9 +1,7 @@
-import { createRef, useEffect, useContext, useState, useCallback, ChangeEvent } from "react";
+import { createRef, useEffect, useContext } from "react";
 import { MainContext } from "context/MainContext";
 import { consolidateParams } from "components/FxParams/utils";
 import { ParameterController } from "./Controller/Param";
-
-
 
 interface ControlsProps {
   params: any;
@@ -19,14 +17,13 @@ export const Controls = ({ params }: ControlsProps) => {
     const ps: any = {};
     if (consolidatedParams) {
       consolidatedParams.forEach((p: any) => {
-        ps[p.id] = p.type == "number" ? Number(p.value) : p.value;
+        ps[p.id] = p.value;
       });
       ctx.setData(ps);
     }
   }, [params]);
   
   const handleChangeParam = (id:string, value: any) => {
-    console.log(id, value)
     ctx.setData({...ctx.data, [id]: value})
   }
 

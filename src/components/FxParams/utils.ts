@@ -173,12 +173,7 @@ export function consolidateParams(params: any, data: any) {
     if (Object.hasOwn(data, id)) {
       rtn[p].value = data[id]
     } else {
-      rtn[p].value =
-        type == "number"
-          ? Number(def || 0)
-          : type == "color"
-          ? `#${(def + "000000").substring(0, 6)}`
-          : def
+      rtn[p].value = def;
     }
   }
 
