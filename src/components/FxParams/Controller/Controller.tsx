@@ -26,7 +26,8 @@ export function Controller(props: ControllerProps) {
 
 export interface HTMLInputControllerProps {
   id: string
-  value: string
+  value: string,
+  checked?: boolean,
   onChange: FxParamControllerChangeHandler
   type: HTMLInputTypeAttribute,
   inputOptions?: InputHTMLAttributes<HTMLInputElement | HTMLSelectElement>
@@ -39,10 +40,10 @@ export type FxParamControllerProps<Type extends FxParamType> = Omit<HTMLInputCon
 & {value: any, options?: FxParamOptionsMap[Type]}
 
 export function HTMLInputController(props: HTMLInputControllerProps) {
-  const { label, id, onChange, value, type, className, inputOptions = {}, layout="default" } = props;
+  const { label, id, onChange, value, type, className, inputOptions = {}, layout="default", checked } = props;
   return (
     <Controller id={id} label={label} layout={layout}> 
-      <input className={className} type={type} name={id} id={id} onChange={onChange} value={value} {...inputOptions}/>
+      <input className={className} type={type} name={id} id={id} onChange={onChange} value={value} {...inputOptions} checked={checked}/>
     </Controller>
 
   )
