@@ -28,7 +28,7 @@ export const ParameterProcessors: FxParamProcessors = {
     serialize: (input) => {
       const view = new DataView(new ArrayBuffer(8))
       view.setFloat64(0, input)
-      return view.getBigUint64(0).toString(16)
+      return view.getBigUint64(0).toString(16).padStart(16, '0')
     },
     // this is for the snippet injected into fxhash pieces
     // convert hex from the string
