@@ -39,6 +39,26 @@ $slider-thumb-border-radius: 4px;
 	}
 }
 
+.square {
+  width: $height;
+  height: $height;
+  border-radius: 5px;
+  padding: 0;
+  border-radius: $slider-thumb-border-radius;
+  border: none;
+}
+
+.pickerWrapper {
+  position: relative;
+}
+
+.picker {
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  transform: translate(0, 100%);
+}
+
 .checkbox {
   -webkit-appearance: none;
   width: $height;
@@ -61,6 +81,7 @@ $slider-thumb-border-radius: 4px;
     }
   }
 }
+
 .default {
     input, select {
       &:nth-child(1) {
@@ -94,6 +115,7 @@ $slider-thumb-border-radius: 4px;
       }
     }    
 }
+
 .box {
     input, select {
       &:nth-child(1) {
