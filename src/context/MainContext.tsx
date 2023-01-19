@@ -1,6 +1,4 @@
 import { PropsWithChildren, useState } from "react"
-import { useMemo } from "react"
-import { useEffect } from "react"
 import { createContext } from "react"
 import { decodeUrl } from "utils/url"
 
@@ -19,12 +17,6 @@ export interface IMainContext {
   // the url currently loaded in the iframe
   url: string
   setUrl: (url: string) => void
-  // params pulled from the <iframe> element
-  params: any
-  setParams: (params: any) => void
-  // params pulled the controls
-  data: any
-  setData: (params: any) => void
   // params update - used for auto refreshing
   datParamsUpdate: any
   setDatParamsUpdate: (params: any) => void
@@ -42,10 +34,6 @@ const defaultMainContext: IMainContext = {
   baseUrl: "",
   url: "",
   setUrl: () => {},
-  params: [],
-  setParams: () => {},
-  data: null,
-  setData: () => {},
   datParamsUpdate: null,
   setDatParamsUpdate: () => {},
   features: null,
@@ -66,12 +54,9 @@ export function MainProvider({ children }: Props) {
   // initialize the URL from the query parameter target
   const [url, setUrl] = useState(baseUrl)
 
-  // params, features, and hash, will be pulled out of the iframe
-  const [params, setParams] = useState<any>(null)
   const [features, setFeatures] = useState<any>(null)
   const [hash, setHash] = useState<any>(null)
 
-  const [data, setData] = useState<any>(null)
   const [datParamsUpdate, setDatParamsUpdate] = useState<any>(null)
 
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null)
@@ -80,10 +65,6 @@ export function MainProvider({ children }: Props) {
     baseUrl,
     url,
     setUrl,
-    params,
-    setParams,
-    data,
-    setData,
     datParamsUpdate,
     setDatParamsUpdate,
     features,

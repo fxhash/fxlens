@@ -4,6 +4,7 @@ import { useRef } from "react"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { MainContext } from "context/MainContext"
+import {FxParamsContext} from "components/FxParams/Context"
 
 interface Props {
   url: string
@@ -13,6 +14,7 @@ export function Frame({
   url,
   className,
 }: Props) {
+  const paramsContext = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
   const ref = useRef<HTMLIFrameElement>(null)
 
@@ -32,7 +34,7 @@ export function Frame({
         }
 
         if ($fx?._params) {
-          ctx.setParams($fx._params)
+          paramsContext.setParams($fx._params)
         }
 
         if ($fx?._features) {

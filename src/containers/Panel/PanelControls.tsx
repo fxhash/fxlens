@@ -1,10 +1,10 @@
 import style from "./PanelControls.module.scss"
-import cs from "classnames"
 import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { IMainContext, MainContext } from "context/MainContext"
 import { serializeParams } from "components/FxParams/utils"
 import { FxParamDefinition } from "components/FxParams/types"
 import debounce from "lodash.debounce"
+import {FxParamsContext} from "components/FxParams/Context"
 
 type TUpdateIframe = (
   ctx: IMainContext,
@@ -23,6 +23,7 @@ const updateIframe: TUpdateIframe = (ctx, data, params) => {
 
 interface Props {}
 export function PanelControls({}: Props) {
+  const { data, params } = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
   const [autoUpdate, setAutoUpdate] = useState(false)
 
@@ -35,9 +36,9 @@ export function PanelControls({}: Props) {
 
   useEffect(() => {
     if (autoUpdate) {
-      updateIframeDebounced(ctx, ctx.data, ctx.params)
+      updateIframeDebounced(ctx, data, params)
     }
-  }, [ctx.hash, JSON.stringify(ctx.data)])
+  }, [ctx.hash, JSON.stringify(data)])
 
   return (
     <div className={style.controlPanel}>
@@ -54,8 +55,8 @@ export function PanelControls({}: Props) {
       <button
         type="button"
         onClick={() => {
-          if (!ctx.params) return
-          const bytes = serializeParams(ctx.data, ctx.params)
+          if (!params) return
+          const bytes = serializeParams(data, params)
           const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
           const target = `${ctx.baseUrl}?${p.join("&")}`
           window.open(target)
@@ -65,7 +66,7 @@ export function PanelControls({}: Props) {
       </button>
       <button
         type="button"
-        onClick={() => updateIframe(ctx, ctx.data, ctx.params)}
+        onClick={() => updateIframe(ctx, data, params)}
       >
         Refresh
       </button>
