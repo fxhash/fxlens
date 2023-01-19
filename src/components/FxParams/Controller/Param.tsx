@@ -1,16 +1,24 @@
 import {useMemo, ReactElement } from "react";
 import {FxParamDefinition, FxParamType} from "../types";
-import {FxParamControllerChangeHandler, FxParamControllerProps} from "./Controller";
+import { FxParamInputChangeHandler, FxParamControllerProps} from "./Controller";
 import {BooleanController} from "./Boolean";
 import {ColorController} from "./Color";
 import {NumberController} from "./Number";
 import {SelectController} from "./Select";
 import {StringController} from "./String";
 
+export interface FxParamControllerChangeHandlerMap {
+  number:  FxParamInputChangeHandler,
+  string:  FxParamInputChangeHandler,
+  boolean:  FxParamInputChangeHandler,
+  color: FxParamInputChangeHandler,
+  select:  FxParamInputChangeHandler,
+}
+
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type,
   controller: (props: FxParamControllerProps<Type>) => ReactElement
-  handler: FxParamControllerChangeHandler
+  handler: FxParamControllerChangeHandlerMap[Type]
 }
 
 export type FxParamControllerDefinitions = {
@@ -36,7 +44,7 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   color: {
     type: "color",
     controller: ColorController,
-    handler: (e) => e.target.value,
+    handler: (v) => v,
   },
   select: {
     type: "select",
@@ -55,7 +63,7 @@ export function ParameterController(props: ParameterControllerProps) {
   const { parameter, onChange } = props;
   const { controller: Controller, handler } = useMemo(() => controllerDefinitions[parameter.type], [parameter.type]) 
  
-  const handleChangeParam = (e:React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChangeParam = (e:any) => {
     const value = handler(e)
     onChange(parameter.id, value)
   }
