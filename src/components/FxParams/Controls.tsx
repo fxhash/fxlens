@@ -1,13 +1,13 @@
 import { createRef, useEffect, useContext } from "react";
-import { MainContext } from "context/MainContext";
 import { consolidateParams } from "components/FxParams/utils";
 import { ParameterController } from "./Controller/Param";
+import { FxParamsContext } from "./Context";
 
 interface ControlsProps {
   params: any;
 }
 export const Controls = ({ params }: ControlsProps) => {
-  const ctx = useContext(MainContext);
+  const ctx = useContext(FxParamsContext);
 
   const consolidatedParams = consolidateParams(params, ctx.data);
 
