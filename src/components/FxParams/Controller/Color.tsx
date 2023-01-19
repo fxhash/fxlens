@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, LegacyRef, MutableRefObject, RefObject, ChangeEvent } from "react";
 import { ChromePicker, ColorResult } from "react-color"
+import {rgbaToHex} from "../utils";
 import { FxParamControllerProps, Controller, BaseInput } from "./Controller"
 import classes from './Controller.module.scss'
 
@@ -11,7 +12,8 @@ export function ColorController(props: FxParamControllerProps<"color">) {
     setShowPicker(show => !show)
   }
   const handlePickerChange = (color: ColorResult) => {
-    onChange(color.hex)
+    const { rgb } = color;
+    onChange(rgbaToHex(rgb.r, rgb.g, rgb.b, rgb.a || 1))
   }
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value)
