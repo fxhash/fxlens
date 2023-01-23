@@ -16,7 +16,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "react": "^18.2.0",
-    "react-color": "^2.19.3",
+    "react-color": "^3.0.0-beta.3",
     "react-dat-gui": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
