@@ -2,8 +2,25 @@ import {
   FxParamDefinition,
   FxParamProcessors,
   FxParamTypeMap,
-} from "types/fxparams"
+} from "./types"
 
+export function rgbaToHex(r:number, g:number, b:number, a:number): string {
+  var outParts = [
+    r.toString(16),
+    g.toString(16),
+    b.toString(16),
+    Math.round(a * 255).toString(16).substring(0, 2)
+  ];
+
+  // Pad single-digit output values
+  outParts.forEach(function (part, i) {
+    if (part.length === 1) {
+      outParts[i] = '0' + part;
+    }
+  })
+
+  return ('#' + outParts.join(''));
+}
 const stringToHex = function (s: string) {
   let rtn = ""
   for (let i = 0; i < s.length; i++) {
@@ -28,7 +45,7 @@ export const ParameterProcessors: FxParamProcessors = {
     serialize: (input) => {
       const view = new DataView(new ArrayBuffer(8))
       view.setFloat64(0, input)
-      return view.getBigUint64(0).toString(16)
+      return view.getBigUint64(0).toString(16).padStart(16, '0')
     },
     // this is for the snippet injected into fxhash pieces
     // convert hex from the string
@@ -161,24 +178,19 @@ export function deserializeParams(
 
 // Consolidates parameters from both a params object provided by the token
 // and the dat object of params, which is stored by the controls component.
-export function consolidateParams(params: any, datParams: any) {
+export function consolidateParams(params: any, data: any) {
   if (!params) return []
 
   const rtn = [...params]
 
-  if (!datParams) return rtn
+  if (!data) return rtn
 
   for (const p in rtn) {
     const { id, type, default: def } = rtn[p]
-    if (Object.hasOwn(datParams, id)) {
-      rtn[p].value = datParams[id]
+    if (Object.hasOwn(data, id)) {
+      rtn[p].value = data[id]
     } else {
-      rtn[p].value =
-        type == "number"
-          ? Number(def || 0)
-          : type == "color"
-          ? `#${(def + "000000").substring(0, 6)}`
-          : def
+      rtn[p].value = def;
     }
   }
 

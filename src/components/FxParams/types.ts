@@ -1,4 +1,4 @@
-export type FxParamType = "number" | "boolean" | "color" | "string" | "select";
+export type FxParamType = "number" | "boolean" | "color" | "string" | "select"
 
 
 interface FxParamOption_number {
