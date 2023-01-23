@@ -88,8 +88,28 @@ export const ParameterProcessors: FxParamProcessors = {
     deserialize: (input) => {
       return input
     },
-
     bytesLength: () => 4,
+    transform: (input) => {
+      return "#" + input
+      const r = parseInt(input.slice(0,2), 16)
+      const g = parseInt(input.slice(2,4), 16)
+      const b = parseInt(input.slice(4,6), 16)
+      const a = parseInt(input.slice(6,8), 16)
+      return {
+        hex: {
+          rgb: '#' + input.slice(0,6),
+          rgba: '#' + input,
+        },
+        obj: {
+          rgb: { r, g, b},
+          rgba: { r, g, b, a},
+        },
+        arr: {
+          rgb: [r,g,b],
+          rgba: [r,g,b,a],
+        }
+      }
+    },
   },
 
   string: {
@@ -190,7 +210,9 @@ export function consolidateParams(params: any, data: any) {
     if (Object.hasOwn(data, id)) {
       rtn[p].value = data[id]
     } else {
-      rtn[p].value = def;
+      // @ts-ignore
+      const processor = ParameterProcessors[type]
+      rtn[p].value = processor.transform?.(def) || def;
     }
   }
 

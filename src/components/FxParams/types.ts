@@ -51,6 +51,7 @@ export interface FxParamProcessor<Type extends FxParamType> {
     definition: FxParamDefinition<Type>
   ) => FxParamTypeMap[Type]
   bytesLength: (options: FxParamOptionsMap[Type]) => number
+  transform?: (input: string) => any
 }
 
 export type FxParamProcessors = {
