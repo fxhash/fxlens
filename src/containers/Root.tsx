@@ -1,5 +1,5 @@
+import { FxParamsProvider } from "components/FxParams/Context"
 import { MainProvider } from "context/MainContext"
-import { ParamsProvider } from "context/Params"
 import { PropsWithChildren } from "react"
 
 /**
@@ -14,10 +14,10 @@ export function Root({
   children,
 }: Props) {
   return (
-    <MainProvider>
-      <ParamsProvider>
+    <FxParamsProvider>
+      <MainProvider>
         {children}
-      </ParamsProvider>
-    </MainProvider>
+      </MainProvider>
+    </FxParamsProvider>
   )
 }

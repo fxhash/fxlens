@@ -1,16 +1,14 @@
 import style from "./PanelControls.module.scss"
-import cs from "classnames"
 import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { IMainContext, MainContext } from "context/MainContext"
-import { serializeParams } from "utils/fxparams"
-import { ParamsContext } from "context/Params"
-import { ParameterValueMap } from "components/Params/tweakpane"
-import { FxParamDefinition } from "types/fxparams"
+import { serializeParams } from "components/FxParams/utils"
+import { FxParamDefinition } from "components/FxParams/types"
 import debounce from "lodash.debounce"
+import {FxParamsContext} from "components/FxParams/Context"
 
 type TUpdateIframe = (
   ctx: IMainContext,
-  data?: ParameterValueMap,
+  data?: Record<string, any>,
   params?: FxParamDefinition<any>[]
 ) => void
 
@@ -25,9 +23,8 @@ const updateIframe: TUpdateIframe = (ctx, data, params) => {
 
 interface Props {}
 export function PanelControls({}: Props) {
+  const { data, params } = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
-  const params = useContext(ParamsContext)
-
   const [autoUpdate, setAutoUpdate] = useState(false)
 
   const updateIframeDebounced = useCallback<TUpdateIframe>(
@@ -39,9 +36,9 @@ export function PanelControls({}: Props) {
 
   useEffect(() => {
     if (autoUpdate) {
-      updateIframeDebounced(ctx, params.data!, params.params!)
+      updateIframeDebounced(ctx, data, params)
     }
-  }, [ctx.hash, JSON.stringify(params.data)])
+  }, [ctx.hash, JSON.stringify(data)])
 
   return (
     <div className={style.controlPanel}>
@@ -58,8 +55,8 @@ export function PanelControls({}: Props) {
       <button
         type="button"
         onClick={() => {
-          if (!params.params) return
-          const bytes = serializeParams(params.data, params.params)
+          if (!params) return
+          const bytes = serializeParams(data, params)
           const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
           const target = `${ctx.baseUrl}?${p.join("&")}`
           window.open(target)
@@ -69,7 +66,7 @@ export function PanelControls({}: Props) {
       </button>
       <button
         type="button"
-        onClick={() => updateIframe(ctx, params.data, params.params)}
+        onClick={() => updateIframe(ctx, data, params)}
       >
         Refresh
       </button>
