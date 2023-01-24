@@ -25,7 +25,7 @@ export interface IMainContext {
   setFeatures: (features: any) => void
   // hash from the <iframe> element
   hash: any
-  setHash: (hash: string) => void
+  setHash: (hash: string | null) => void
   iframe: HTMLIFrameElement | null
   setIframe: (iframe: HTMLIFrameElement) => void
 }
