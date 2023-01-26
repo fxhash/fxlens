@@ -1,46 +1,37 @@
-# Getting Started with Create React App
+# fx(lens) 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Interactive environment to view, tweak and develop generative tokens for the fx(hash) platform.
 
-## Available Scripts
+### Scope
 
-In the project directory, you can run:
+- View a generative token
+- Inject a random seed
+- Tweak fx(params) values
+- Display genrative token features
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Prerequisites
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- node >= 14
+- npm >= 6.14.4
 
-### `npm test`
+### Getting started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Clone this repository: `npx degit fxhash/params-boilerplate your_project_name`
+- Install dependencies and fx(lens): `npm install`
 
-### `npm run build`
+## Start fx(lens) development environment
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- `npm start`: Starts a local http server with live reloading enabled.
+- Visit `http://localhost:3000/` to view the fx(lens) environment
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Inspect token with fx(lens)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+When visiting the local development you won't see anything usefull unless you provide a target fx(lens) is supposed to inspect. You can provide a target using queryParameters like. The target is the url of the token you want to inspect.
 
-### `npm run eject`
+If you are developing a token localy and it is running on `http://localhost:3301` you can connect fx(lens) to the token like this:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+```
+http://localhost:3000/?target=http://localhost:3301
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
