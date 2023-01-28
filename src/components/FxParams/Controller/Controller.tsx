@@ -3,15 +3,16 @@ import { FxParamOptionsMap, FxParamType} from "../types"
 import { FxParamControllerChangeHandlerMap } from "./Param"
 import classes from './Controller.module.scss'
 import cx from 'classnames'
+import {BaseInput} from "../BaseInput"
 
 /*
  * Providing a name starting or ending with `search` prevents
  * 1Password extension to appear in the input fields
  * https://1password.community/discussion/comment/606453/#Comment_606453
  */
-export function BaseInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  const { id } = props;
-  return <input name={`${id}-params-search`} autoComplete="off" {...props} /> 
+export function BaseParamsInput(props: InputHTMLAttributes<HTMLInputElement>) {
+  const { id} = props;
+  return <BaseInput name={`${id}-params-search`} autoComplete="off" {...props} /> 
 }
 
 export type FxParamInputChangeHandler = (e: any) => void
@@ -57,21 +58,23 @@ export function HTMLInputController(props: HTMLInputControllerProps) {
   const { label, id, onChange, value, type, className, inputProps = {}, layout="default" } = props;
   return (
     <Controller id={id} label={label} layout={layout}> 
-      <BaseInput className={className} type={type} id={id} onChange={onChange} value={value} {...inputProps} />
+      <BaseParamsInput className={className} type={type} id={id} onChange={onChange} value={value} {...inputProps} />
     </Controller>
 
   )
 }
 
 export interface HTMLInputControllerWithTextInputProps extends HTMLInputControllerProps {
+  textInputProps?: InputHTMLAttributes<HTMLInputElement>
 }
 
+
 export function HTMLInputControllerWithTextInput(props: HTMLInputControllerWithTextInputProps) {
-  const { label, id, onChange, value, type, className, inputProps = {}, layout = "default" } = props;
+  const { label, id, onChange, value, type, className, inputProps = {}, layout = "default", textInputProps } = props;
   return (
     <Controller id={id} label={label} layout={layout}>
-      <BaseInput className={className} type={type} id={id} onChange={onChange} value={value} autoComplete="off" {...inputProps}/>
-      <BaseInput type="text" id={`text-${id}`} onChange={onChange} value={value} autoComplete="off" />
+      <BaseParamsInput className={className} type={type} id={id} onChange={onChange} value={value} autoComplete="off" {...inputProps}/>
+      <BaseParamsInput type="text" id={`text-${id}`} onChange={onChange} value={value} autoComplete="off" {...textInputProps} />
     </Controller>
   )
 }

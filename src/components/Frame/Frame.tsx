@@ -17,8 +17,7 @@ export function Frame({
   const paramsContext = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
   const ref = useRef<HTMLIFrameElement>(null)
-
-  // attach event to window to get messages from
+  
   useEffect(() => {
     const listener = (e: any) => {
       if (e.data) {
@@ -46,10 +45,9 @@ export function Frame({
         }
       }
     }
-    // Listen to message from child window
+    
     window.addEventListener("message", listener, false)
 
-    // remove listener when component unmounts
     return () => {
       window.removeEventListener("message", listener, false)
     }

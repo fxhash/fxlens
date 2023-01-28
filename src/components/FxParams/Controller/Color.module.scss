@@ -1,0 +1,21 @@
+
+$height: 30px;
+
+.square {
+  width: $height;
+  height: $height;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
+.pickerWrapper {
+  position: relative;
+}
+
+.picker {
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  transform: translate(0, 100%);
+}

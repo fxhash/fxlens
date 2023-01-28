@@ -1,10 +1,13 @@
 .root {
   display: flex;
   flex-direction: column;
-  padding: 10px;
   height: 100%;
-
+  .scrollWrapper {
+    flex-grow: 1;
+    overflow: auto;
+    padding: var(--fxl-spacing) var(--fxl-spacing) 0 var(--fxl-spacing);
+  }
   .body {
-    flex-grow: 2;
+    flex-grow: 1;
   }
 }

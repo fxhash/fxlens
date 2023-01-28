@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef, LegacyRef, MutableRefObject, RefObject, ChangeEvent } from "react";
 import { ChromePicker, ColorResult } from "react-color"
 import {rgbaToHex} from "../utils";
-import { FxParamControllerProps, Controller, BaseInput } from "./Controller"
-import classes from './Controller.module.scss'
+import { FxParamControllerProps, Controller, BaseParamsInput } from "./Controller"
+import classes from './Color.module.scss'
 
 export function ColorController(props: FxParamControllerProps<"color">) {
   const ref = useRef<HTMLDivElement>(null);
@@ -32,7 +32,7 @@ export function ColorController(props: FxParamControllerProps<"color">) {
   return (
     <Controller id={id} label={label} layout={layout} className={classes.pickerWrapper} inputContainerProps={{ref}}>
       <button className={classes.square} style={{ background: value}} onClick={handleToggleShowPicker} />
-      <BaseInput type="text" id={`text-${id}`} onChange={handleInputChange} value={value} autoComplete="off" maxLength={9} minLength={2} />
+      <BaseParamsInput type="text" id={`text-${id}`} onChange={handleInputChange} value={value} autoComplete="off" maxLength={9} minLength={2} />
       {showPicker && <ChromePicker  color={value} onChange={handlePickerChange} className={classes.picker} />}
     </Controller>
   )
