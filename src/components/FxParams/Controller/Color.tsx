@@ -33,7 +33,7 @@ export function ColorController(props: FxParamControllerProps<"color">) {
     <Controller id={id} label={label} layout={layout} className={classes.pickerWrapper} inputContainerProps={{ref}}>
       <button className={classes.square} style={{ background: value}} onClick={handleToggleShowPicker} />
       <BaseParamsInput type="text" id={`text-${id}`} onChange={handleInputChange} value={value} autoComplete="off" maxLength={9} minLength={2} />
-      {showPicker && <ChromePicker  color={value} onChange={handlePickerChange} className={classes.picker} />}
+      {showPicker && <div className={classes.pickerAbsoluteWrapper}><ChromePicker  color={value} onChange={handlePickerChange} className={classes.picker} /></div>}
     </Controller>
   )
 }
