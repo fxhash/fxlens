@@ -4,15 +4,16 @@
 
   li {
     display: flex;
-    margin-bottom: 2px;
+    margin-bottom: var(--fxl-spacing-sm);
     align-items: center;
 
     & :first-child {
-      width: 150px;
+      flex-grow: 1;
     }
     & :last-child {
       margin-left: 10px;
-      flex-grow: 1;
+      width: 160px;
+      min-width: 160px;
     }
   }
 }

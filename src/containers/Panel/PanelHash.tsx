@@ -4,7 +4,7 @@ import { MainContext } from "context/MainContext"
 
 import RefreshIcon from "../../assets/rotate-right-solid.svg"
 import { PanelGroup } from "components/Panel/PanelGroup"
-
+import { BaseInput, IconButton } from "components/FxParams/BaseInput"
 const getNewHash = () => {
   let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
   return (
@@ -34,10 +34,10 @@ export function PanelHash({}: Props) {
       different seeds with your params."
     >
       <div className={styles.hashControls}>
-        <input type="text" value={ctx.hash} onChange={handleChange} />
-        <button onClick={handleRefresh}>
+        <BaseInput type="text" value={ctx.hash} onChange={handleChange} className={styles.hashInput} />
+        <IconButton onClick={handleRefresh}>
           <img src={RefreshIcon} />
-        </button>
+        </IconButton>
       </div>
     </PanelGroup>
   )

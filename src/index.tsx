@@ -1,6 +1,6 @@
 import React from "react"
 import ReactDOM from "react-dom/client"
-import "./index.scss"
+import "./styles/globals.scss"
 import { Root } from "containers/Root"
 import { App } from "containers/App"
 

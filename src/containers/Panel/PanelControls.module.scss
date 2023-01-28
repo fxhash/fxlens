@@ -1,14 +1,21 @@
 .controlPanel {
   display: flex;
   flex-direction: column;
-  > * {
-    margin: 5px;
+  padding: var(--fxl-spacing);
+  gap: var(--fxl-spacing);
+}
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  label {
+    margin-left: var(--fxl-spacing-sm)
   }
-  button {
-    border: none;
-    color: var(--color-light-1);
-    background: var(--color-dark-2);
-    padding: 5px;
+}
+.buttonsWrapper {
+  display: flex;
+  gap: var(--fxl-spacing);
+  & > button {
+    flex-grow: 1;
   }
 }
 
@@ -16,21 +23,8 @@
   display: none;
   &:checked ~ label {
     &::before {
-      background: var(--color-light1);
-      box-shadow: 3px 3px 0px var(--color-dark-2) inset, -3px -3px 0px var(--color-dark-2) inset;
+      background: var(--fxl-color-light1);
+      box-shadow: 3px 3px 0px var(--fxl-color-dark2) inset, -3px -3px 0px var(--fxl-color-dark2) inset;
     }
-  }
-}
-.checkbox {
-  display: flex;
-  align-items: center;
-  &::before {
-    background: var(--color-dark-2);
-    border: 1px solid var(--color-light2);
-    content: '';
-    display: inline-block;
-    height: 15px;
-    width: 15px;
-    margin-right: 10px;
   }
 }

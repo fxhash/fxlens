@@ -14,14 +14,15 @@ export function PanelRoot({
 }: Props) {
   return (
     <div className={cs(style.root)}>
-      <PanelHeader />
+      <div className={cs(style.scrollWrapper)}>
+        <PanelHeader />
 
-      <div className={cs(style.body)}>
-        <PanelHash />
-        <PanelParams />
-        <PanelFeatures />
+        <div className={cs(style.body)}>
+          <PanelHash />
+          <PanelParams />
+          <PanelFeatures />
+        </div>
       </div>
-
       <PanelControls />
     </div>
   );

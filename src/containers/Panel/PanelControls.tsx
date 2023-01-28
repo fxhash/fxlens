@@ -5,6 +5,7 @@ import { serializeParams } from "components/FxParams/utils"
 import { FxParamDefinition } from "components/FxParams/types"
 import debounce from "lodash.debounce"
 import {FxParamsContext} from "components/FxParams/Context"
+import {BaseButton, BaseInput} from "components/FxParams/BaseInput"
 
 type TUpdateIframe = (
   ctx: IMainContext,
@@ -16,6 +17,7 @@ const updateIframe: TUpdateIframe = (ctx, data, params) => {
   const bytes = serializeParams(data, params || [])
   const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
   const target = `${ctx.baseUrl}?${p.join("&")}`
+  console.log(target)
   if (ctx.iframe) {
     ctx.iframe.contentWindow?.location.replace(target)
   }
@@ -42,18 +44,19 @@ export function PanelControls({}: Props) {
 
   return (
     <div className={style.controlPanel}>
-      <input
-        className={style.updateCheckbox}
-        id="updateCheckbox"
-        type="checkbox"
-        checked={autoUpdate}
-        onClick={() => setAutoUpdate(!autoUpdate)}
-      />
-      <label htmlFor="updateCheckbox" className={style.checkbox}>
-        auto-apply on settings update
-      </label>
-      <button
-        type="button"
+      <div className={style.checkboxWrapper}>
+        <BaseInput
+          id="updateCheckbox"
+          type="checkbox"
+          checked={autoUpdate}
+          onClick={() => setAutoUpdate(!autoUpdate)}
+        />
+        <label htmlFor="updateCheckbox">
+          auto-apply on settings update
+        </label>
+      </div>
+      <div className={style.buttonsWrapper}>
+      <BaseButton
         onClick={() => {
           if (!params) return
           const bytes = serializeParams(data, params)
@@ -62,14 +65,14 @@ export function PanelControls({}: Props) {
           window.open(target)
         }}
       >
-        Open project in new tab
-      </button>
-      <button
-        type="button"
+        new tab
+      </BaseButton>
+      <BaseButton
         onClick={() => updateIframe(ctx, data, params)}
       >
         Refresh
-      </button>
+      </BaseButton>
+      </div>
     </div>
   )
 }

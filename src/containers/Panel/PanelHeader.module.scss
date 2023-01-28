@@ -1,10 +1,11 @@
 .root {
-  background-color: var(--color-dark-1);
-  // padding: 10px;
-
-  strong {
+  h1 {
     display: block;
-    font-size: var(--font-size-l);
-    margin-bottom: 3px;
+    font-size: var(--fxl-font-size-l);
+    margin-bottom: var(--fxl-spacing-xs);
+  }
+  small {
+    font-size: var(--fxl-font-size-sm);
+    color: var(--fxl-color-text-secondary);
   }
 }
