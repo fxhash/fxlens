@@ -6,16 +6,21 @@ $height: 30px;
   height: $height;
   padding: 0;
   border: none;
-  cursor: pointer;
 }
 
 .pickerWrapper {
   position: relative;
 }
 
-.picker {
-  z-index: 1;
+.pickerAbsoluteWrapper {
   position: absolute;
-  bottom: 0;
-  transform: translate(0, 100%);
+}
+
+.picker {
+  margin-top: var(--fxl-spacing-l);
+  z-index: 1;
+  position: fixed;
+  input {
+    background: var(--fxl-color-light);
+  }
 }

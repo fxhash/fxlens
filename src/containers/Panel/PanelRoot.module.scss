@@ -4,7 +4,8 @@
   height: 100%;
   .scrollWrapper {
     flex-grow: 1;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: var(--fxl-spacing) var(--fxl-spacing) 0 var(--fxl-spacing);
   }
   .body {
