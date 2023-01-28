@@ -70,8 +70,13 @@ html {
   background: var(--fxl-color-dark2);
 }
 
-h2 {
+h1, h2 {
+  font-size: var(--fxl-font-size-m);
   margin: var(--fxl-spacing-l) 0 var(--fxl-spacing-xs) 0;
+}
+
+h1 {
+  margin-top: 0;
 }
 
 p, ul, small {
