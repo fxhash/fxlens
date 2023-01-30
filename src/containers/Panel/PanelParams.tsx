@@ -13,7 +13,7 @@ export function PanelParams({
   return (
     <PanelGroup
       title="Params"
-      description="fx(params) can be defines in your code and are puilled in real time from the code running."
+      description="fx(params) can be defines in your code and are pulled in real time from the code running."
       >
       <Controls params={ctx.params} />
     </PanelGroup>
