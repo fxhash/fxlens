@@ -1,3 +1,7 @@
+> Disclaimer: This is the pre-release version of fx(lens)
+> All features should be working
+> You might encounter some inconveniences
+
 # fx(lens) 
 
 Interactive environment to view, tweak and develop generative tokens for the fx(hash) platform.
