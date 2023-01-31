@@ -1,6 +1,4 @@
-> Disclaimer: This is the pre-release version of fx(lens)
-> All features should be working
-> You might encounter some inconveniences
+> **⚠️ Disclaimer**: This project is still in development. Some changes will be introduced over the next weeks, so please use this project with caution.
 
 # fx(lens) 
 
