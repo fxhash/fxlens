@@ -19,7 +19,7 @@ const defaultParamsContext: IFxParamsContext = {
 
 export const FxParamsContext = createContext(defaultParamsContext)
 
-type Props = PropsWithChildren<{}>
+type Props = PropsWithChildren<any>
 export function FxParamsProvider({ children }: Props) {
   const [params, setParams] = useState<any>(null)
   const [data, setData] = useState<any>(null)
@@ -31,5 +31,9 @@ export function FxParamsProvider({ children }: Props) {
     setData,
   }
 
-  return <FxParamsContext.Provider value={context}>{children}</FxParamsContext.Provider>
+  return (
+    <FxParamsContext.Provider value={context}>
+      {children}
+    </FxParamsContext.Provider>
+  )
 }

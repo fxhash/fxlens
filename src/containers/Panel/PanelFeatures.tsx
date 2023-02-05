@@ -5,12 +5,7 @@ import { MainContext } from "context/MainContext"
 import { Features } from "components/Features"
 import { PanelGroup } from "components/Panel/PanelGroup"
 
-interface Props {
-  
-}
-export function PanelFeatures({
-  
-}: Props) {
+export function PanelFeatures() {
   const ctx = useContext(MainContext)
 
   return (
@@ -18,9 +13,7 @@ export function PanelFeatures({
       title="Features"
       description="Current features for this piece. Features are defined in your code and pulled in real time by this module."
     >
-      <Features
-        features={ctx.features}
-      />
+      <Features features={ctx.features} />
     </PanelGroup>
-  );
+  )
 }

@@ -1,21 +1,18 @@
-import styles from "./Features.module.scss";
+import styles from "./Features.module.scss"
 
 type Props = {
   features: any
 }
-export const Features = ({
-  features,
-}: Props) => {
+export const Features = ({ features }: Props) => {
   return (
     <ul className={styles.featureList}>
-      {features && Object.entries(features).map(
-        ([key, value]: any, idx: any) => (
+      {features &&
+        Object.entries(features).map(([key, value]: any, idx: any) => (
           <li key={idx}>
             <span>{key}</span>
             <span>{value.toString()}</span>
           </li>
-        )
-      )}
+        ))}
     </ul>
   )
-};
+}

@@ -4,20 +4,17 @@ import { useCallback, useRef } from "react"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { MainContext } from "context/MainContext"
-import {FxParamsContext} from "components/FxParams/Context"
+import { FxParamsContext } from "components/FxParams/Context"
 
 interface Props {
   url: string
   className?: string
 }
-export function Frame({
-  url,
-  className,
-}: Props) {
+export function Frame({ url, className }: Props) {
   const paramsContext = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
   const ref = useRef<HTMLIFrameElement>(null)
-  
+
   useEffect(() => {
     const listener = (e: any) => {
       if (e.data) {
@@ -45,7 +42,7 @@ export function Frame({
         }
       }
     }
-    
+
     window.addEventListener("message", listener, false)
 
     return () => {
@@ -63,7 +60,7 @@ export function Frame({
   }, [ref.current])
 
   return (
-    <iframe 
+    <iframe
       ref={ref}
       src={url}
       onLoad={handleOnIframeLoad}
