@@ -4,8 +4,8 @@ import { IMainContext, MainContext } from "context/MainContext"
 import { serializeParams } from "components/FxParams/utils"
 import { FxParamDefinition } from "components/FxParams/types"
 import debounce from "lodash.debounce"
-import {FxParamsContext} from "components/FxParams/Context"
-import {BaseButton, BaseInput} from "components/FxParams/BaseInput"
+import { FxParamsContext } from "components/FxParams/Context"
+import { BaseButton, BaseInput } from "components/FxParams/BaseInput"
 
 type TUpdateIframe = (
   ctx: IMainContext,
@@ -23,8 +23,7 @@ const updateIframe: TUpdateIframe = (ctx, data, params) => {
   }
 }
 
-interface Props {}
-export function PanelControls({}: Props) {
+export function PanelControls() {
   const { data, params } = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
   const [autoUpdate, setAutoUpdate] = useState(false)
@@ -51,27 +50,23 @@ export function PanelControls({}: Props) {
           checked={autoUpdate}
           onClick={() => setAutoUpdate(!autoUpdate)}
         />
-        <label htmlFor="updateCheckbox">
-          auto-apply on settings update
-        </label>
+        <label htmlFor="updateCheckbox">auto-apply on settings update</label>
       </div>
       <div className={style.buttonsWrapper}>
-      <BaseButton
-        onClick={() => {
-          if (!params) return
-          const bytes = serializeParams(data, params)
-          const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
-          const target = `${ctx.baseUrl}?${p.join("&")}`
-          window.open(target)
-        }}
-      >
-        new tab
-      </BaseButton>
-      <BaseButton
-        onClick={() => updateIframe(ctx, data, params)}
-      >
-        Refresh
-      </BaseButton>
+        <BaseButton
+          onClick={() => {
+            if (!params) return
+            const bytes = serializeParams(data, params)
+            const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
+            const target = `${ctx.baseUrl}?${p.join("&")}`
+            window.open(target)
+          }}
+        >
+          new tab
+        </BaseButton>
+        <BaseButton onClick={() => updateIframe(ctx, data, params)}>
+          Refresh
+        </BaseButton>
       </div>
     </div>
   )
