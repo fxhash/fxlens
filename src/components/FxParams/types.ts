@@ -1,6 +1,5 @@
 export type FxParamType = "number" | "boolean" | "color" | "string" | "select"
 
-
 interface FxParamOption_number {
   min?: string
   max?: string
@@ -43,7 +42,7 @@ export interface FxParamTypeMap {
 
 export interface FxParamProcessor<Type extends FxParamType> {
   serialize: (
-    input: FxParamTypeMap[Type], 
+    input: FxParamTypeMap[Type],
     definition: FxParamDefinition<Type>
   ) => string
   deserialize: (

@@ -6,12 +6,7 @@ import { PanelFeatures } from "./PanelFeatures"
 import { PanelControls } from "./PanelControls"
 import { PanelHash } from "./PanelHash"
 
-interface Props {
-  
-}
-export function PanelRoot({
-  
-}: Props) {
+export function PanelRoot() {
   return (
     <div className={cs(style.root)}>
       <div className={cs(style.scrollWrapper)}>
@@ -25,5 +20,5 @@ export function PanelRoot({
       </div>
       <PanelControls />
     </div>
-  );
+  )
 }

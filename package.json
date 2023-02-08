@@ -2,6 +2,18 @@
   "name": "fxlens",
   "version": "0.1.0",
   "private": true,
+  "devDependencies": {
+    "@types/dat.gui": "^0.7.7",
+    "@typescript-eslint/eslint-plugin": "^5.42.1",
+    "@typescript-eslint/parser": "^5.42.1",
+    "@types/lodash.debounce": "^4.0.7",
+    "@types/lodash.throttle": "^4.1.7",
+    "@types/react-slider": "^1.3.1",
+    "prettier": "^2.8.3",
+    "eslint": "^8.27.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1"
+  },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -12,7 +24,6 @@
     "@types/react-color": "^3.0.6",
     "@types/react-dom": "^18.0.6",
     "classnames": "^2.3.2",
-    "dat.gui": "^0.7.9",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "react": "^18.2.0",
@@ -22,7 +33,6 @@
     "react-scripts": "5.0.1",
     "react-slider": "^2.0.4",
     "sass": "^1.55.0",
-    "tweakpane": "^3.1.1",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4"
   },
@@ -30,7 +40,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -49,12 +61,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@tweakpane/core": "^1.1.1",
-    "@types/dat.gui": "^0.7.7",
-    "@types/lodash.debounce": "^4.0.7",
-    "@types/lodash.throttle": "^4.1.7",
-    "@types/react-slider": "^1.3.1"
   }
 }

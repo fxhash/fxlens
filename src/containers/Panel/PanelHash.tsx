@@ -6,7 +6,7 @@ import RefreshIcon from "../../assets/rotate-right-solid.svg"
 import { PanelGroup } from "components/Panel/PanelGroup"
 import { BaseInput, IconButton } from "components/FxParams/BaseInput"
 const getNewHash = () => {
-  let alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
+  const alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
   return (
     "oo" +
     Array(49)
@@ -16,8 +16,7 @@ const getNewHash = () => {
   )
 }
 
-interface Props {}
-export function PanelHash({}: Props) {
+export function PanelHash() {
   const ctx = useContext(MainContext)
 
   const handleChange = (e: any) => {
@@ -34,7 +33,12 @@ export function PanelHash({}: Props) {
       different seeds with your params."
     >
       <div className={styles.hashControls}>
-        <BaseInput type="text" value={ctx.hash} onChange={handleChange} className={styles.hashInput} />
+        <BaseInput
+          type="text"
+          value={ctx.hash}
+          onChange={handleChange}
+          className={styles.hashInput}
+        />
         <IconButton onClick={handleRefresh}>
           <img src={RefreshIcon} />
         </IconButton>

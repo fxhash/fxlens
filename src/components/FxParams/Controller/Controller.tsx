@@ -1,9 +1,16 @@
-import { HTMLInputTypeAttribute, InputHTMLAttributes, ReactNode, forwardRef, RefObject, ForwardedRef} from "react"
-import { FxParamOptionsMap, FxParamType} from "../types"
+import {
+  HTMLInputTypeAttribute,
+  InputHTMLAttributes,
+  ReactNode,
+  forwardRef,
+  RefObject,
+  ForwardedRef,
+} from "react"
+import { FxParamOptionsMap, FxParamType } from "../types"
 import { FxParamControllerChangeHandlerMap } from "./Param"
-import classes from './Controller.module.scss'
-import cx from 'classnames'
-import {BaseInput} from "../BaseInput"
+import classes from "./Controller.module.scss"
+import cx from "classnames"
+import { BaseInput } from "../BaseInput"
 
 /*
  * Providing a name starting or ending with `search` prevents
@@ -11,8 +18,10 @@ import {BaseInput} from "../BaseInput"
  * https://1password.community/discussion/comment/606453/#Comment_606453
  */
 export function BaseParamsInput(props: InputHTMLAttributes<HTMLInputElement>) {
-  const { id} = props;
-  return <BaseInput name={`${id}-params-search`} autoComplete="off" {...props} /> 
+  const { id } = props
+  return (
+    <BaseInput name={`${id}-params-search`} autoComplete="off" {...props} />
+  )
 }
 
 export type FxParamInputChangeHandler = (e: any) => void
@@ -21,18 +30,24 @@ export interface ControllerProps {
   label?: string
   id?: string
   children: ReactNode
-  layout?: "default" | "invert" | "box",
-  className?: string,
+  layout?: "default" | "invert" | "box"
+  className?: string
   inputContainerProps?: {
     ref: RefObject<HTMLDivElement>
   }
 }
 
-export function Controller(props: ControllerProps)  {
-  const { id , label, layout = "default", className, inputContainerProps } = props;
+export function Controller(props: ControllerProps) {
+  const {
+    id,
+    label,
+    layout = "default",
+    className,
+    inputContainerProps,
+  } = props
   return (
     <div className={cx(classes.controller, classes[layout], className)}>
-      { label && id && <label htmlFor={id}>{label}</label> }
+      {label && id && <label htmlFor={id}>{label}</label>}
       <div className={classes.inputContainer} {...inputContainerProps}>
         {props.children}
       </div>
@@ -42,40 +57,87 @@ export function Controller(props: ControllerProps)  {
 
 export interface HTMLInputControllerProps {
   id: string
-  value: string,
+  value: string
   onChange: FxParamInputChangeHandler
-  type: HTMLInputTypeAttribute,
+  type: HTMLInputTypeAttribute
   inputProps?: InputHTMLAttributes<HTMLInputElement | HTMLSelectElement>
-  className?: string,
+  className?: string
   label?: string
-  layout?: "default" | "invert" | "box",
+  layout?: "default" | "invert" | "box"
 }
 
-export type FxParamControllerProps<Type extends FxParamType> = Omit<HTMLInputControllerProps, "type"> 
-& {value: any, options?: FxParamOptionsMap[Type], onChange: FxParamControllerChangeHandlerMap[Type]}
+export type FxParamControllerProps<Type extends FxParamType> = Omit<
+  HTMLInputControllerProps,
+  "type"
+> & {
+  value: any
+  options?: FxParamOptionsMap[Type]
+  onChange: FxParamControllerChangeHandlerMap[Type]
+}
 
 export function HTMLInputController(props: HTMLInputControllerProps) {
-  const { label, id, onChange, value, type, className, inputProps = {}, layout="default" } = props;
+  const {
+    label,
+    id,
+    onChange,
+    value,
+    type,
+    className,
+    inputProps = {},
+    layout = "default",
+  } = props
   return (
-    <Controller id={id} label={label} layout={layout}> 
-      <BaseParamsInput className={className} type={type} id={id} onChange={onChange} value={value} {...inputProps} />
+    <Controller id={id} label={label} layout={layout}>
+      <BaseParamsInput
+        className={className}
+        type={type}
+        id={id}
+        onChange={onChange}
+        value={value}
+        {...inputProps}
+      />
     </Controller>
-
   )
 }
 
-export interface HTMLInputControllerWithTextInputProps extends HTMLInputControllerProps {
+export interface HTMLInputControllerWithTextInputProps
+  extends HTMLInputControllerProps {
   textInputProps?: InputHTMLAttributes<HTMLInputElement>
 }
 
-
-export function HTMLInputControllerWithTextInput(props: HTMLInputControllerWithTextInputProps) {
-  const { label, id, onChange, value, type, className, inputProps = {}, layout = "default", textInputProps } = props;
+export function HTMLInputControllerWithTextInput(
+  props: HTMLInputControllerWithTextInputProps
+) {
+  const {
+    label,
+    id,
+    onChange,
+    value,
+    type,
+    className,
+    inputProps = {},
+    layout = "default",
+    textInputProps,
+  } = props
   return (
     <Controller id={id} label={label} layout={layout}>
-      <BaseParamsInput className={className} type={type} id={id} onChange={onChange} value={value} autoComplete="off" {...inputProps}/>
-      <BaseParamsInput type="text" id={`text-${id}`} onChange={onChange} value={value} autoComplete="off" {...textInputProps} />
+      <BaseParamsInput
+        className={className}
+        type={type}
+        id={id}
+        onChange={onChange}
+        value={value}
+        autoComplete="off"
+        {...inputProps}
+      />
+      <BaseParamsInput
+        type="text"
+        id={`text-${id}`}
+        onChange={onChange}
+        value={value}
+        autoComplete="off"
+        {...textInputProps}
+      />
     </Controller>
   )
 }
-
