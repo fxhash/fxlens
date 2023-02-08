@@ -1,25 +1,29 @@
 import {
   FxParamDefinition,
+  FxParamProcessor,
   FxParamProcessors,
+  FxParamType,
   FxParamTypeMap,
 } from "./types"
 
-export function rgbaToHex(r:number, g:number, b:number, a:number): string {
-  var outParts = [
+export function rgbaToHex(r: number, g: number, b: number, a: number): string {
+  const outParts = [
     r.toString(16),
     g.toString(16),
     b.toString(16),
-    Math.round(a * 255).toString(16).substring(0, 2)
-  ];
+    Math.round(a * 255)
+      .toString(16)
+      .substring(0, 2),
+  ]
 
   // Pad single-digit output values
   outParts.forEach(function (part, i) {
     if (part.length === 1) {
-      outParts[i] = '0' + part;
+      outParts[i] = "0" + part
     }
   })
 
-  return ('#' + outParts.join(''));
+  return "#" + outParts.join("")
 }
 const stringToHex = function (s: string) {
   let rtn = ""
@@ -29,7 +33,7 @@ const stringToHex = function (s: string) {
   return rtn
 }
 const hexToString = function (h: string) {
-  let hx = h.match(/.{1,4}/g) || []
+  const hx = h.match(/.{1,4}/g) || []
   let rtn = ""
   for (let i = 0; i < hx.length; i++) {
     const int = parseInt(hx[i], 16)
@@ -45,7 +49,7 @@ export const ParameterProcessors: FxParamProcessors = {
     serialize: (input) => {
       const view = new DataView(new ArrayBuffer(8))
       view.setFloat64(0, input)
-      return view.getBigUint64(0).toString(16).padStart(16, '0')
+      return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
     // this is for the snippet injected into fxhash pieces
     // convert hex from the string
@@ -91,23 +95,23 @@ export const ParameterProcessors: FxParamProcessors = {
     bytesLength: () => 4,
     transform: (input) => {
       return "#" + input
-      const r = parseInt(input.slice(0,2), 16)
-      const g = parseInt(input.slice(2,4), 16)
-      const b = parseInt(input.slice(4,6), 16)
-      const a = parseInt(input.slice(6,8), 16)
+      const r = parseInt(input.slice(0, 2), 16)
+      const g = parseInt(input.slice(2, 4), 16)
+      const b = parseInt(input.slice(4, 6), 16)
+      const a = parseInt(input.slice(6, 8), 16)
       return {
         hex: {
-          rgb: '#' + input.slice(0,6),
-          rgba: '#' + input,
+          rgb: "#" + input.slice(0, 6),
+          rgba: "#" + input,
         },
         obj: {
-          rgb: { r, g, b},
-          rgba: { r, g, b, a},
+          rgb: { r, g, b },
+          rgba: { r, g, b, a },
         },
         arr: {
-          rgb: [r,g,b],
-          rgba: [r,g,b,a],
-        }
+          rgb: [r, g, b],
+          rgba: [r, g, b, a],
+        },
       }
     },
   },
@@ -157,8 +161,9 @@ export function serializeParams(
   // parameter as set on the UI
   for (const def of definition) {
     const { id, type } = def
-    // @ts-ignore
-    const processor = ParameterProcessors[type]
+    const processor = ParameterProcessors[
+      type as FxParamType
+    ] as FxParamProcessor<any>
     // if the param is definined in the object
     if (Object.hasOwn(params, id)) {
       const val = params[id] as FxParamTypeMap[]
@@ -184,8 +189,9 @@ export function deserializeParams(
 ) {
   const params: Record<string, any> = {}
   for (const def of definition) {
-    // @ts-ignore
-    const processor = ParameterProcessors[def.type]
+    const processor = ParameterProcessors[
+      def.type as FxParamType
+    ] as FxParamProcessor<any>
     // extract the length from the bytes & shift the initial bytes string
     const bytesLen = processor.bytesLength(def.options)
     const valueBytes = bytes.substring(0, bytesLen * 2)
@@ -210,9 +216,10 @@ export function consolidateParams(params: any, data: any) {
     if (Object.hasOwn(data, id)) {
       rtn[p].value = data[id]
     } else {
-      // @ts-ignore
-      const processor = ParameterProcessors[type]
-      rtn[p].value = processor.transform?.(def) || def;
+      const processor = ParameterProcessors[
+        type as FxParamType
+      ] as FxParamProcessor<any>
+      rtn[p].value = processor.transform?.(def) || def
     }
   }
 

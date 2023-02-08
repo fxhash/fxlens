@@ -46,7 +46,7 @@ const defaultMainContext: IMainContext = {
 
 export const MainContext = createContext(defaultMainContext)
 
-type Props = PropsWithChildren<{}>
+type Props = PropsWithChildren<any>
 export function MainProvider({ children }: Props) {
   const [baseUrl, _] = useState(
     decodeUrl(new URLSearchParams(window.location.search).get("target") || "")

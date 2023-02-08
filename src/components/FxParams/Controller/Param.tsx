@@ -1,22 +1,22 @@
-import {useMemo, ReactElement } from "react";
-import {FxParamDefinition, FxParamType} from "../types";
-import { FxParamInputChangeHandler, FxParamControllerProps} from "./Controller";
-import {BooleanController} from "./Boolean";
-import {ColorController} from "./Color";
-import {NumberController} from "./Number";
-import {SelectController} from "./Select";
-import {StringController} from "./String";
+import { useMemo, ReactElement } from "react"
+import { FxParamDefinition, FxParamType } from "../types"
+import { FxParamInputChangeHandler, FxParamControllerProps } from "./Controller"
+import { BooleanController } from "./Boolean"
+import { ColorController } from "./Color"
+import { NumberController } from "./Number"
+import { SelectController } from "./Select"
+import { StringController } from "./String"
 
 export interface FxParamControllerChangeHandlerMap {
-  number:  FxParamInputChangeHandler,
-  string:  FxParamInputChangeHandler,
-  boolean:  FxParamInputChangeHandler,
-  color: FxParamInputChangeHandler,
-  select:  FxParamInputChangeHandler,
+  number: FxParamInputChangeHandler
+  string: FxParamInputChangeHandler
+  boolean: FxParamInputChangeHandler
+  color: FxParamInputChangeHandler
+  select: FxParamInputChangeHandler
 }
 
 interface FxParamControllerDefiniton<Type extends FxParamType> {
-  type: Type,
+  type: Type
   controller: (props: FxParamControllerProps<Type>) => ReactElement
   handler: FxParamControllerChangeHandlerMap[Type]
 }
@@ -39,7 +39,7 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   boolean: {
     type: "boolean",
     controller: BooleanController,
-    handler:  (e) => (e as React.ChangeEvent<HTMLInputElement>).target.checked,
+    handler: (e) => (e as React.ChangeEvent<HTMLInputElement>).target.checked,
   },
   color: {
     type: "color",
@@ -54,16 +54,19 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
 }
 
 export interface ParameterControllerProps {
-  parameter: FxParamDefinition<FxParamType>,
-  value: any,
+  parameter: FxParamDefinition<FxParamType>
+  value: any
   onChange: (id: string, value: any) => void
 }
 
 export function ParameterController(props: ParameterControllerProps) {
-  const { parameter, onChange } = props;
-  const { controller: Controller, handler } = useMemo(() => controllerDefinitions[parameter.type], [parameter.type]) 
- 
-  const handleChangeParam = (e:any) => {
+  const { parameter, onChange } = props
+  const { controller: Controller, handler } = useMemo(
+    () => controllerDefinitions[parameter.type],
+    [parameter.type]
+  )
+
+  const handleChangeParam = (e: any) => {
     const value = handler(e)
     onChange(parameter.id, value)
   }
@@ -76,6 +79,6 @@ export function ParameterController(props: ParameterControllerProps) {
       onChange={handleChangeParam}
       // TODO: This should be properly casted
       options={parameter.options as any}
-    /> 
+    />
   )
 }
