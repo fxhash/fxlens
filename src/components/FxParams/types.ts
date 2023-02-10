@@ -1,4 +1,10 @@
-export type FxParamType = "number" | "boolean" | "color" | "string" | "select"
+export type FxParamType =
+  | "number"
+  | "boolean"
+  | "color"
+  | "string"
+  | "select"
+  | "integer"
 
 interface FxParamOption_number {
   min?: string
@@ -21,6 +27,7 @@ export interface FxParamOptionsMap {
   color: undefined
   string: FxParamOption_string
   select: FxParamOption_select
+  integer: FxParamOption_number
 }
 
 export interface FxParamDefinition<Type extends FxParamType> {
@@ -38,6 +45,7 @@ export interface FxParamTypeMap {
   color: string
   string: string
   select: string
+  integer: bigint
 }
 
 export interface FxParamProcessor<Type extends FxParamType> {

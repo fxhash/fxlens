@@ -18,7 +18,7 @@ export interface FxParamControllerChangeHandlerMap {
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type
   controller: (props: FxParamControllerProps<Type>) => ReactElement
-  handler: FxParamControllerChangeHandlerMap[Type]
+  handler: FxParamInputChangeHandler
 }
 
 export type FxParamControllerDefinitions = {
@@ -28,6 +28,11 @@ export type FxParamControllerDefinitions = {
 export const controllerDefinitions: FxParamControllerDefinitions = {
   number: {
     type: "number",
+    controller: NumberController,
+    handler: (e) => Number(e.target.value),
+  },
+  integer: {
+    type: "integer",
     controller: NumberController,
     handler: (e) => Number(e.target.value),
   },
