@@ -17,10 +17,21 @@ $height: 30px;
 }
 
 .picker {
-  margin-top: var(--fxl-spacing-l);
+  margin-top: calc(var(--fxl-spacing) + var(--fxl-spacing-xxs) );
   z-index: 1;
   position: fixed;
   input {
     background: var(--fxl-color-light);
+  }
+}
+
+.colorful {
+  :global {
+    .react-colorful__saturation {
+      border-radius: 0;
+    }
+    .react-colorful__last-control {
+      border-radius: 0;
+    }
   }
 }
