@@ -6,15 +6,16 @@ import {
   MutableRefObject,
   RefObject,
   ChangeEvent,
+  useMemo,
 } from "react"
-import { ChromePicker, ColorResult } from "react-color"
-import { rgbaToHex } from "../utils"
+import { hexToRgba, rgbaToHex } from "../utils"
 import {
   FxParamControllerProps,
   Controller,
   BaseParamsInput,
 } from "./Controller"
 import classes from "./Color.module.scss"
+import { RgbaColor, RgbaColorPicker } from "react-colorful"
 
 export function ColorController(props: FxParamControllerProps<"color">) {
   const ref = useRef<HTMLDivElement>(null)
@@ -22,10 +23,6 @@ export function ColorController(props: FxParamControllerProps<"color">) {
   const [showPicker, setShowPicker] = useState(false)
   const handleToggleShowPicker = () => {
     setShowPicker((show) => !show)
-  }
-  const handlePickerChange = (color: ColorResult) => {
-    const { rgb } = color
-    onChange(rgbaToHex(rgb.r, rgb.g, rgb.b, rgb.a || 1))
   }
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value)
@@ -41,6 +38,10 @@ export function ColorController(props: FxParamControllerProps<"color">) {
       window.removeEventListener("mousedown", handleClickOutside)
     }
   }, [ref])
+  const handleChangeColor = (newColor: RgbaColor) => {
+    onChange(rgbaToHex(newColor.r, newColor.g, newColor.b, newColor.a))
+  }
+  const color = useMemo(() => hexToRgba(value), [value])
   return (
     <Controller
       id={id}
@@ -65,11 +66,13 @@ export function ColorController(props: FxParamControllerProps<"color">) {
       />
       {showPicker && (
         <div className={classes.pickerAbsoluteWrapper}>
-          <ChromePicker
-            color={value}
-            onChange={handlePickerChange}
-            className={classes.picker}
-          />
+          <div className={classes.picker}>
+            <RgbaColorPicker
+              color={color}
+              onChange={handleChangeColor}
+              className={classes.colorful}
+            />
+          </div>
         </div>
       )}
     </Controller>
