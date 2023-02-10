@@ -70,7 +70,7 @@ export type FxParamControllerProps<Type extends FxParamType> = Omit<
 > & {
   value: any
   options?: FxParamOptionsMap[Type]
-  onChange: FxParamControllerChangeHandlerMap[Type]
+  onChange: FxParamInputChangeHandler
 }
 
 export function HTMLInputController(props: HTMLInputControllerProps) {
