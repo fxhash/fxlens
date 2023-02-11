@@ -1,0 +1,27 @@
+.progress {
+	position: relative;
+	width: 100%;
+	margin-bottom: var(--fxl-spacing);
+	display: flex;
+	flex-direction: column;
+	gap: var(--fxl-spacing-xxs);
+	span {
+    color: var(--fxl-color-text-primary);
+		font-size: var(--fxl-font-size-s);
+//		align-self: flex-end;
+		text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+	}
+}
+
+$border-width: 1px;
+$border-offset: 2px;
+.barWrapper{
+	border: $border-width solid var(--fxl-color-light2);
+	width: 100%;
+	padding: $border-offset;
+}
+
+.bar {
+	height: 10px;
+	background: var(--fxl-color-light2);
+}

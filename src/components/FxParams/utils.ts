@@ -2,8 +2,8 @@ import {
   FxParamDefinition,
   FxParamProcessor,
   FxParamProcessors,
-  FxParamType,
   FxParamTypeMap,
+  FxParamType,
 } from "./types"
 
 export function rgbaToHex(r: number, g: number, b: number, a: number): string {
@@ -25,6 +25,30 @@ export function rgbaToHex(r: number, g: number, b: number, a: number): string {
 
   return "#" + outParts.join("")
 }
+
+type hexString = `#${string}`
+
+export function hexToRgba(hexCode: hexString) {
+  let hex = hexCode.replace("#", "")
+
+  if (hex.length === 6) {
+    hex = `${hex}ff`
+  }
+  if (hex.length === 3) {
+    hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}ff`
+  }
+
+  const r = parseInt(hex.substring(0, 2), 16)
+  const g = parseInt(hex.substring(2, 4), 16)
+  const b = parseInt(hex.substring(4, 6), 16)
+  const a =
+    Math.round(
+      (parseInt(hex.substring(6, 8), 16) / 255 + Number.EPSILON) * 100
+    ) / 100
+
+  return { r, g, b, a }
+}
+
 const stringToHex = function (s: string) {
   let rtn = ""
   for (let i = 0; i < s.length; i++) {
@@ -191,7 +215,7 @@ export function deserializeParams(
   for (const def of definition) {
     const processor = ParameterProcessors[
       def.type as FxParamType
-    ] as FxParamProcessor<any>
+    ] as FxParamProcessor<FxParamType>
     // extract the length from the bytes & shift the initial bytes string
     const bytesLen = processor.bytesLength(def.options)
     const valueBytes = bytes.substring(0, bytesLen * 2)
@@ -224,4 +248,21 @@ export function consolidateParams(params: any, data: any) {
   }
 
   return rtn
+}
+
+export function sumBytesParams(
+  definitions: FxParamDefinition<FxParamType>[]
+): number {
+  return (
+    definitions?.reduce(
+      (acc, def) =>
+        acc +
+        (
+          ParameterProcessors[
+            def.type as FxParamType
+          ] as FxParamProcessor<FxParamType>
+        ).bytesLength(def?.options),
+      0
+    ) || 0
+  )
 }

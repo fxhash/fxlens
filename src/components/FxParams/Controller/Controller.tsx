@@ -2,9 +2,7 @@ import {
   HTMLInputTypeAttribute,
   InputHTMLAttributes,
   ReactNode,
-  forwardRef,
   RefObject,
-  ForwardedRef,
 } from "react"
 import { FxParamOptionsMap, FxParamType } from "../types"
 import { FxParamControllerChangeHandlerMap } from "./Param"
