@@ -1,6 +1,14 @@
 import { SafeParseError, SafeParseSuccess, z } from "zod"
 import { FxParamDefinition, FxParamType } from "./types"
 
+const ControllerTypeSchema = z.enum([
+  "number",
+  "color",
+  "string",
+  "boolean",
+  "select",
+])
+
 const FxParamOptions_numberSchema = z.object({
   min: z.number().optional(),
   max: z.number().optional(),
@@ -17,6 +25,7 @@ const FxParamOptions_selectSchema = z.object({
 })
 
 export const BaseControllerDefinitionSchema = z.object({
+  type: z.literal(ControllerTypeSchema.enum.color),
   id: z.string(),
   name: z.string().optional(),
   exposedAsFeature: z.string().optional(),
@@ -61,6 +70,20 @@ const ControllerDefinitionSchema = z.union([
 ])
 
 type ControllerDefinitionSchemaType = z.infer<typeof ControllerDefinitionSchema>
+type ControllerSchemaType = z.infer<typeof ControllerTypeSchema>
+
+const ControllerSchema = z.record(
+  ControllerTypeSchema,
+  ControllerDefinitionSchema
+)
+
+const controllerSchema = {
+  number: NumberControllerSchema,
+  color: ColorControllerSchema,
+  string: StringControllerSchema,
+  boolean: BooleanControllerSchema,
+  select: SelectControllerSchema,
+}
 
 export function validateParameterDefinition(
   parameterDefinition: FxParamDefinition<FxParamType>
@@ -68,24 +91,7 @@ export function validateParameterDefinition(
   | SafeParseError<ControllerDefinitionSchemaType>
   | SafeParseSuccess<ControllerDefinitionSchemaType>
   | undefined {
-  let schema
-  switch (parameterDefinition.type) {
-    case "number":
-      schema = NumberControllerSchema
-      break
-    case "color":
-      schema = ColorControllerSchema
-      break
-    case "string":
-      schema = StringControllerSchema
-      break
-    case "boolean":
-      schema = BooleanControllerSchema
-      break
-    case "select":
-      schema = SelectControllerSchema
-      break
-  }
-
-  return schema?.safeParse(parameterDefinition)
+  return controllerSchema[parameterDefinition.type]?.safeParse(
+    parameterDefinition
+  )
 }
