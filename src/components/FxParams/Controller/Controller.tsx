@@ -5,7 +5,6 @@ import {
   RefObject,
 } from "react"
 import { FxParamOptionsMap, FxParamType } from "../types"
-import { FxParamControllerChangeHandlerMap } from "./Param"
 import classes from "./Controller.module.scss"
 import cx from "classnames"
 import { BaseInput } from "../BaseInput"
