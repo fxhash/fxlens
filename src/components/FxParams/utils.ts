@@ -1,4 +1,5 @@
 import {
+  hexString,
   FxParamDefinition,
   FxParamProcessor,
   FxParamProcessors,
@@ -26,17 +27,19 @@ export function rgbaToHex(r: number, g: number, b: number, a: number): string {
   return "#" + outParts.join("")
 }
 
-type hexString = `#${string}`
-
-export function hexToRgba(hexCode: hexString) {
+function completeHexColor(hexCode: hexString): string {
   let hex = hexCode.replace("#", "")
-
   if (hex.length === 6) {
     hex = `${hex}ff`
   }
   if (hex.length === 3) {
     hex = `${hex[0]}${hex[0]}${hex[1]}${hex[1]}${hex[2]}${hex[2]}ff`
   }
+  return hex
+}
+
+export function hexToRgba(hexCode: hexString) {
+  const hex = completeHexColor(hexCode)
 
   const r = parseInt(hex.substring(0, 2), 16)
   const g = parseInt(hex.substring(2, 4), 16)
@@ -108,13 +111,13 @@ export const ParameterProcessors: FxParamProcessors = {
   },
 
   color: {
-    serialize: (input) => {
+    serialize: (input: hexString) => {
       // remove the '#' at the beginning and convert to a byte string
-      return input.replace("#", "").padEnd(8, "f")
+      return completeHexColor(input)
     },
 
-    deserialize: (input) => {
-      return input
+    deserialize: (input): hexString => {
+      return input as hexString
     },
     bytesLength: () => 4,
     transform: (input) => {

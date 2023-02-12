@@ -32,10 +32,12 @@ export interface FxParamDefinition<Type extends FxParamType> {
   exposedAsFeature?: string
 }
 
+export type hexString = `#${string}`
+
 export interface FxParamTypeMap {
   number: number
   boolean: boolean
-  color: string
+  color: hexString
   string: string
   select: string
 }
