@@ -33,7 +33,6 @@ export interface FxParamOptionsMap {
   color: undefined
   string: FxParamOption_string
   select: FxParamOption_select
-  integer: FxParamOption_number
 }
 
 export interface FxParamDefinition<Type extends FxParamType> {
@@ -54,7 +53,6 @@ export interface FxParamTypeMap {
   color: hexString
   string: string
   select: string
-  integer: bigint
 }
 
 export interface FxParamProcessor<Type extends FxParamType> {
