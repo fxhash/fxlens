@@ -27,7 +27,7 @@ export function rgbaToHex(r: number, g: number, b: number, a: number): string {
   return "#" + outParts.join("")
 }
 
-function completeHexColor(hexCode: hexString): string {
+function completeHexColor(hexCode: hexString | string): string {
   let hex = hexCode.replace("#", "")
   if (hex.length === 6) {
     hex = `${hex}ff`
@@ -121,25 +121,7 @@ export const ParameterProcessors: FxParamProcessors = {
     },
     bytesLength: () => 4,
     transform: (input) => {
-      return "#" + input
-      const r = parseInt(input.slice(0, 2), 16)
-      const g = parseInt(input.slice(2, 4), 16)
-      const b = parseInt(input.slice(4, 6), 16)
-      const a = parseInt(input.slice(6, 8), 16)
-      return {
-        hex: {
-          rgb: "#" + input.slice(0, 6),
-          rgba: "#" + input,
-        },
-        obj: {
-          rgb: { r, g, b },
-          rgba: { r, g, b, a },
-        },
-        arr: {
-          rgb: [r, g, b],
-          rgba: [r, g, b, a],
-        },
-      }
+      return `#${completeHexColor(input)}`
     },
   },
 
