@@ -5,7 +5,6 @@ import {
   RefObject,
 } from "react"
 import { FxParamOptionsMap, FxParamType } from "../types"
-import { FxParamControllerChangeHandlerMap } from "./Param"
 import classes from "./Controller.module.scss"
 import cx from "classnames"
 import { BaseInput } from "../BaseInput"
@@ -70,7 +69,7 @@ export type FxParamControllerProps<Type extends FxParamType> = Omit<
 > & {
   value: any
   options?: FxParamOptionsMap[Type]
-  onChange: FxParamControllerChangeHandlerMap[Type]
+  onChange: FxParamInputChangeHandler
 }
 
 export function HTMLInputController(props: HTMLInputControllerProps) {

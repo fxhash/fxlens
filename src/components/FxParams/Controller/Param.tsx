@@ -7,18 +7,10 @@ import { NumberController } from "./Number"
 import { SelectController } from "./Select"
 import { StringController } from "./String"
 
-export interface FxParamControllerChangeHandlerMap {
-  number: FxParamInputChangeHandler
-  string: FxParamInputChangeHandler
-  boolean: FxParamInputChangeHandler
-  color: FxParamInputChangeHandler
-  select: FxParamInputChangeHandler
-}
-
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type
   controller: (props: FxParamControllerProps<Type>) => ReactElement
-  handler: FxParamControllerChangeHandlerMap[Type]
+  handler: FxParamInputChangeHandler
 }
 
 export type FxParamControllerDefinitions = {
@@ -30,6 +22,11 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
     type: "number",
     controller: NumberController,
     handler: (e) => Number(e.target.value),
+  },
+  bigint: {
+    type: "bigint",
+    controller: NumberController,
+    handler: (e) => BigInt(e.target.value),
   },
   string: {
     type: "string",

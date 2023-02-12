@@ -1,14 +1,25 @@
-export type FxParamType = "number" | "boolean" | "color" | "string" | "select"
+export type FxParamType =
+  | "number"
+  | "bigint"
+  | "boolean"
+  | "color"
+  | "string"
+  | "select"
+
+interface FxParamOption_bigint {
+  min?: number
+  max?: number
+}
 
 interface FxParamOption_number {
-  min?: string
-  max?: string
-  step?: string
+  min?: number
+  max?: number
+  step?: number
 }
 
 interface FxParamOption_string {
-  minLength?: string
-  maxLength?: string
+  minLength?: number
+  maxLength?: number
 }
 
 interface FxParamOption_select {
@@ -17,6 +28,7 @@ interface FxParamOption_select {
 
 export interface FxParamOptionsMap {
   number: FxParamOption_number
+  bigint: FxParamOption_bigint
   boolean: undefined
   color: undefined
   string: FxParamOption_string
@@ -36,6 +48,7 @@ export type hexString = `#${string}`
 
 export interface FxParamTypeMap {
   number: number
+  bigint: bigint
   boolean: boolean
   color: hexString
   string: string
