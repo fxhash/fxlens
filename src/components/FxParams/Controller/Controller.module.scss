@@ -19,7 +19,7 @@ $slider-thumb-border-radius: 0px;
     font-size: 1rem;
 	}
   .inputContainer {
-    width: 160px;
+    width: 200px;
     display: flex;
     align-items: center;
   }
@@ -29,11 +29,11 @@ $slider-thumb-border-radius: 0px;
     input, select {
       &:nth-child(1) {
         margin-right: var(--fxl-spacing-xxs);
-        width: 70%;
+        width: 65%;
       }
       &:nth-child(2) {
         margin-left: var(--fxl-spacing-xxs);
-        width: 30%;
+        width: 35%;
       }
       &:only-child {
         width: 100%;
