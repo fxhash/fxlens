@@ -3,15 +3,21 @@ import { FxParamDefinition, FxParamType } from "./types"
 
 const ControllerTypeSchema = z.enum([
   "number",
+  "bigint",
   "color",
   "string",
   "boolean",
   "select",
 ])
 
-const FxParamOptions_numberSchema = z.object({
+const FxParamOptions_bigintSchema = z.object({
   min: z.number().optional(),
   max: z.number().optional(),
+})
+
+const FxParamOptions_numberSchema = z.object({
+  min: z.number().gte(Number.MIN_SAFE_INTEGER).optional(),
+  max: z.number().lte(Number.MAX_SAFE_INTEGER).optional(),
   step: z.number().optional(),
 })
 
@@ -43,6 +49,12 @@ const NumberControllerSchema = BaseControllerDefinitionSchema.extend({
   default: z.number(),
 })
 
+const BigIntControllerSchema = BaseControllerDefinitionSchema.extend({
+  type: z.literal("bigint"),
+  options: FxParamOptions_bigintSchema.optional(),
+  default: z.bigint(),
+})
+
 const SelectControllerSchema = BaseControllerDefinitionSchema.extend({
   type: z.literal("select"),
   options: FxParamOptions_selectSchema.optional(),
@@ -64,21 +76,17 @@ const ColorControllerSchema = BaseControllerDefinitionSchema.extend({
 const ControllerDefinitionSchema = z.union([
   StringControllerSchema,
   NumberControllerSchema,
+  BigIntControllerSchema,
   SelectControllerSchema,
   BooleanControllerSchema,
   ColorControllerSchema,
 ])
 
 type ControllerDefinitionSchemaType = z.infer<typeof ControllerDefinitionSchema>
-type ControllerSchemaType = z.infer<typeof ControllerTypeSchema>
-
-const ControllerSchema = z.record(
-  ControllerTypeSchema,
-  ControllerDefinitionSchema
-)
 
 const controllerSchema = {
   number: NumberControllerSchema,
+  bigint: BigIntControllerSchema,
   color: ColorControllerSchema,
   string: StringControllerSchema,
   boolean: BooleanControllerSchema,
