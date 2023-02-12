@@ -75,7 +75,7 @@ export const ParameterProcessors: FxParamProcessors = {
     // get the hexadecimal bytes representation of the float64 number
     serialize: (input) => {
       const view = new DataView(new ArrayBuffer(8))
-      view.setFloat64(0, input)
+      view.setFloat64(0, input as number)
       return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
     // this is for the snippet injected into fxhash pieces
@@ -89,7 +89,22 @@ export const ParameterProcessors: FxParamProcessors = {
     },
     bytesLength: () => 8,
   },
-
+  bigint: {
+    serialize: (input: any) => {
+      const view = new DataView(new ArrayBuffer(8))
+      console.log(input, typeof input)
+      view.setBigInt64(0, BigInt(input))
+      return view.getBigUint64(0).toString(16).padStart(16, "0")
+    },
+    deserialize: (input: any) => {
+      const view = new DataView(new ArrayBuffer(8))
+      for (let i = 0; i < 8; i++) {
+        view.setUint8(i, parseInt(input.substring(i * 2, i * 2 + 2), 16))
+      }
+      return view.getBigInt64(0)
+    },
+    bytesLength: () => 8,
+  },
   boolean: {
     // return 0 or 1 in hexadecimal - takes 1 byte instead of 1 bit but OK
     serialize: (input) => {

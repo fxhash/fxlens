@@ -39,7 +39,13 @@ export function PanelControls() {
     if (autoUpdate) {
       updateIframeDebounced(ctx, data, params)
     }
-  }, [ctx.hash, JSON.stringify(data)])
+  }, [
+    ctx.hash,
+    JSON.stringify(data, (key, value) => {
+      if (typeof value === "bigint") return value.toString()
+      return value
+    }),
+  ])
 
   return (
     <div className={style.controlPanel}>
