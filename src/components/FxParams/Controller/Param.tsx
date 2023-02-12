@@ -8,13 +8,6 @@ import { SelectController } from "./Select"
 import { StringController } from "./String"
 import { validateParameterDefinition } from "../validation"
 import { ControllerInvalid } from "./Invalid"
-export interface FxParamControllerChangeHandlerMap {
-  number: FxParamInputChangeHandler
-  string: FxParamInputChangeHandler
-  boolean: FxParamInputChangeHandler
-  color: FxParamInputChangeHandler
-  select: FxParamInputChangeHandler
-}
 
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type
@@ -32,10 +25,10 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
     controller: NumberController,
     handler: (e) => Number(e.target.value),
   },
-  integer: {
-    type: "integer",
+  bigint: {
+    type: "bigint",
     controller: NumberController,
-    handler: (e) => Number(e.target.value),
+    handler: (e) => BigInt(e.target.value),
   },
   string: {
     type: "string",

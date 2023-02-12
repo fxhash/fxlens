@@ -5,10 +5,11 @@ import {
 import classes from "./Controller.module.scss"
 
 export function NumberController(props: FxParamControllerProps<"number">) {
-  const { options } = props
+  const { options, value } = props
   const min = options?.min || 0
   const max = options?.max || 100
   const step = options?.step || 1
+  const stringValue = `${value}`
   return (
     <HTMLInputControllerWithTextInput
       type="range"
@@ -21,6 +22,7 @@ export function NumberController(props: FxParamControllerProps<"number">) {
         className: classes.numberInput,
       }}
       {...props}
+      value={stringValue}
     />
   )
 }

@@ -27,7 +27,7 @@ export function rgbaToHex(r: number, g: number, b: number, a: number): string {
   return "#" + outParts.join("")
 }
 
-function completeHexColor(hexCode: hexString): string {
+function completeHexColor(hexCode: hexString | string): string {
   let hex = hexCode.replace("#", "")
   if (hex.length === 6) {
     hex = `${hex}ff`
@@ -75,7 +75,7 @@ export const ParameterProcessors: FxParamProcessors = {
     // get the hexadecimal bytes representation of the float64 number
     serialize: (input) => {
       const view = new DataView(new ArrayBuffer(8))
-      view.setFloat64(0, input)
+      view.setFloat64(0, input as number)
       return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
     // this is for the snippet injected into fxhash pieces
@@ -89,14 +89,14 @@ export const ParameterProcessors: FxParamProcessors = {
     },
     bytesLength: () => 8,
   },
-  integer: {
-    serialize: (input) => {
+  bigint: {
+    serialize: (input: any) => {
       const view = new DataView(new ArrayBuffer(8))
       console.log(input, typeof input)
       view.setBigInt64(0, BigInt(input))
       return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
-    deserialize: (input) => {
+    deserialize: (input: any) => {
       const view = new DataView(new ArrayBuffer(8))
       for (let i = 0; i < 8; i++) {
         view.setUint8(i, parseInt(input.substring(i * 2, i * 2 + 2), 16))
@@ -136,25 +136,7 @@ export const ParameterProcessors: FxParamProcessors = {
     },
     bytesLength: () => 4,
     transform: (input) => {
-      return "#" + input
-      const r = parseInt(input.slice(0, 2), 16)
-      const g = parseInt(input.slice(2, 4), 16)
-      const b = parseInt(input.slice(4, 6), 16)
-      const a = parseInt(input.slice(6, 8), 16)
-      return {
-        hex: {
-          rgb: "#" + input.slice(0, 6),
-          rgba: "#" + input,
-        },
-        obj: {
-          rgb: { r, g, b },
-          rgba: { r, g, b, a },
-        },
-        arr: {
-          rgb: [r, g, b],
-          rgba: [r, g, b, a],
-        },
-      }
+      return `#${completeHexColor(input)}`
     },
   },
 
