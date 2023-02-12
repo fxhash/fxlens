@@ -19,6 +19,7 @@ import { RgbaColor, RgbaColorPicker } from "react-colorful"
 
 export function ColorController(props: FxParamControllerProps<"color">) {
   const ref = useRef<HTMLDivElement>(null)
+  const [scrollOffset, setScrollOffset] = useState(0)
   const { label, id, onChange, value, layout = "box" } = props
   const [showPicker, setShowPicker] = useState(false)
   const handleToggleShowPicker = () => {
@@ -42,6 +43,26 @@ export function ColorController(props: FxParamControllerProps<"color">) {
     onChange(rgbaToHex(newColor.r, newColor.g, newColor.b, newColor.a))
   }
   const color = useMemo(() => hexToRgba(value), [value])
+
+  useEffect(() => {
+    if (!ref.current) return
+    const findScrollingParent = (node: HTMLElement): HTMLElement | null => {
+      if (node.scrollHeight > node.clientHeight) return node
+      return findScrollingParent(
+        (node?.parentNode as HTMLElement) || document.body
+      )
+    }
+    const scrollingParent = findScrollingParent(ref.current)
+    if (!scrollingParent) return
+    const handleScroll = (e: Event) => {
+      const { scrollTop } = e.target as HTMLElement
+      if (scrollTop === scrollOffset) return
+      setScrollOffset(scrollTop)
+    }
+    scrollingParent.addEventListener("scroll", handleScroll)
+    return () => scrollingParent.removeEventListener("scroll", handleScroll)
+  }, [ref, scrollOffset])
+
   return (
     <Controller
       id={id}
@@ -66,7 +87,10 @@ export function ColorController(props: FxParamControllerProps<"color">) {
       />
       {showPicker && (
         <div className={classes.pickerAbsoluteWrapper}>
-          <div className={classes.picker}>
+          <div
+            className={classes.picker}
+            style={{ transform: `translate(0px, -${scrollOffset}px)` }}
+          >
             <RgbaColorPicker
               color={color}
               onChange={handleChangeColor}
