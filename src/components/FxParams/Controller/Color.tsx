@@ -16,6 +16,8 @@ import {
 } from "./Controller"
 import classes from "./Color.module.scss"
 import { RgbaColor, RgbaColorPicker } from "react-colorful"
+import cx from "classnames"
+import { BaseButton } from "../BaseInput"
 
 export function ColorController(props: FxParamControllerProps<"color">) {
   const ref = useRef<HTMLDivElement>(null)
@@ -71,8 +73,8 @@ export function ColorController(props: FxParamControllerProps<"color">) {
       className={classes.pickerWrapper}
       inputContainerProps={{ ref }}
     >
-      <button
-        className={classes.square}
+      <BaseButton
+        className={cx(classes.square, { [classes.active]: showPicker })}
         style={{ background: value }}
         onClick={handleToggleShowPicker}
       />
