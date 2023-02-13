@@ -31,44 +31,43 @@ const FxParamOptions_selectSchema = z.object({
 })
 
 export const BaseControllerDefinitionSchema = z.object({
-  type: z.literal(ControllerTypeSchema.enum.color),
   id: z.string(),
   name: z.string().optional(),
-  exposedAsFeature: z.string().optional(),
+  exposedAsFeature: z.boolean().optional(),
 })
 
 const StringControllerSchema = BaseControllerDefinitionSchema.extend({
-  type: z.literal("string"),
+  type: z.literal(ControllerTypeSchema.enum.string),
   options: FxParamOptions_stringSchema.optional(),
   default: z.string(),
 })
 
 const NumberControllerSchema = BaseControllerDefinitionSchema.extend({
-  type: z.literal("number"),
+  type: z.literal(ControllerTypeSchema.enum.number),
   options: FxParamOptions_numberSchema.optional(),
-  default: z.number(),
+  default: z.number().gte(Number.MIN_SAFE_INTEGER).lte(Number.MAX_SAFE_INTEGER),
 })
 
 const BigIntControllerSchema = BaseControllerDefinitionSchema.extend({
-  type: z.literal("bigint"),
+  type: z.literal(ControllerTypeSchema.enum.bigint),
   options: FxParamOptions_bigintSchema.optional(),
   default: z.bigint(),
 })
 
 const SelectControllerSchema = BaseControllerDefinitionSchema.extend({
-  type: z.literal("select"),
-  options: FxParamOptions_selectSchema.optional(),
+  type: z.literal(ControllerTypeSchema.enum.select),
+  options: FxParamOptions_selectSchema,
   default: z.string(),
 })
 
 const BooleanControllerSchema = BaseControllerDefinitionSchema.extend({
-  type: z.literal("boolean"),
+  type: z.literal(ControllerTypeSchema.enum.boolean),
   options: z.undefined(),
   default: z.boolean(),
 })
 
 const ColorControllerSchema = BaseControllerDefinitionSchema.extend({
-  type: z.literal("color"),
+  type: z.literal(ControllerTypeSchema.enum.color),
   options: z.undefined(),
   default: z.string(),
 })
