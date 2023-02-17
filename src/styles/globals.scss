@@ -49,6 +49,11 @@ html {
   box-sizing: border-box;
 }
 
+::selection {
+  color: var(--fxl-color-background);
+  background: var(--fxl-color-primary);
+}
+
 ::-webkit-scrollbar {
   width: 5px;
   height: 5px;
