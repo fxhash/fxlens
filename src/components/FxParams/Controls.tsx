@@ -39,7 +39,7 @@ export const Controls = ({
     <div className={classes.controls} ref={p}>
       {consolidatedParams?.map((p: any) => {
         return (
-          <div className={classes.blade}>
+          <div key={p.id} className={classes.blade}>
             <ParameterController
               key={p.id}
               parameter={p}
