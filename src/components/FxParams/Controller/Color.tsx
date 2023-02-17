@@ -74,10 +74,11 @@ export function ColorController(props: FxParamControllerProps<"color">) {
       inputContainerProps={{ ref }}
     >
       <BaseButton
-        className={cx(classes.square, { [classes.active]: showPicker })}
-        style={{ background: value }}
+        className={cx(classes.squaredButton, { [classes.active]: showPicker })}
         onClick={handleToggleShowPicker}
-      />
+      >
+        <div className={cx(classes.square)} style={{ background: value }} />
+      </BaseButton>
       <BaseParamsInput
         type="text"
         id={`text-${id}`}
