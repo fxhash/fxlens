@@ -2,11 +2,19 @@ import { createRef, useEffect, useContext } from "react"
 import { consolidateParams } from "components/FxParams/utils"
 import { ParameterController } from "./Controller/Param"
 import { FxParamsContext } from "./Context"
+import { LockButton } from "./LockButton/LockButton"
+import classes from "./Controls.module.scss"
 
 interface ControlsProps {
   params: any
+  onClickLockButton?: (id: string) => void
+  lockedParamIds?: string[]
 }
-export const Controls = ({ params }: ControlsProps) => {
+export const Controls = ({
+  params,
+  onClickLockButton,
+  lockedParamIds,
+}: ControlsProps) => {
   const ctx = useContext(FxParamsContext)
 
   const consolidatedParams = consolidateParams(params, ctx.data)
@@ -15,7 +23,7 @@ export const Controls = ({ params }: ControlsProps) => {
 
   useEffect(() => {
     const ps: any = {}
-    if (consolidatedParams) {
+    if (consolidatedParams?.length > 0) {
       consolidatedParams.forEach((p: any) => {
         ps[p.id] = p.value
       })
@@ -27,18 +35,25 @@ export const Controls = ({ params }: ControlsProps) => {
     ctx.setData({ ...ctx.data, [id]: value })
   }
 
-  console.log("??", consolidatedParams, ctx.data)
-
   return (
-    <div ref={p}>
+    <div className={classes.controls} ref={p}>
       {consolidatedParams?.map((p: any) => {
         return (
-          <ParameterController
-            key={p.id}
-            parameter={p}
-            value={p.value}
-            onChange={handleChangeParam}
-          />
+          <div className={classes.blade}>
+            <ParameterController
+              key={p.id}
+              parameter={p}
+              value={p.value}
+              onChange={handleChangeParam}
+            />
+            {onClickLockButton && (
+              <LockButton
+                title={`toggle lock ${p.id} param`}
+                isLocked={lockedParamIds?.includes(p.id)}
+                onClick={(e) => onClickLockButton(p.id)}
+              />
+            )}
+          </div>
         )
       })}
     </div>

@@ -3,8 +3,8 @@ $height: 30px;
 .baseInput, .baseSelect, .baseButton {
   font-family: var(--fxl-font-family);
   font-size: var(--fxl-font-size-regular);
-  color: var(--fxl-color-text-primary);
   height: $height;
+  color: var(--fxl-color-text-primary);
   background: var(--fxl-color-dark1);
   border: 1px solid var(--fxl-color-light2);
   padding: 0 var(--fxl-spacing-xxs);
@@ -13,7 +13,12 @@ $height: 30px;
     background: var(--fxl-color-dark2);
   }
   &:focus-visible {
-    outline: 1px solid var(--fxl-color-primary)
+    outline: 1px solid var(--fxl-color-primary);
+  
+  }
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
   }
 }
 
@@ -27,23 +32,32 @@ $height: 30px;
     color: var(--fxl-color-light);
     outline: 1px solid var(--fxl-color-primary);
   }
+  &:focus-visible {
+    outline: 1px solid var(--fxl-color-primary);
+    outline-offset: 2px;
+  }
+  &.color-secondary {
+    background: var(--fxl-color-dark1);
+    color: var(--fxl-color-light);
+    &:hover {
+      background: var(--fxl-color-dark2);
+      color: var(--fxl-color-light);
+      outline: 1px solid var(--fxl-color-primary);
+    }
+  }
 }
 
 .iconButton {
-  width: $height; 
+  width: $height !important; 
   cursor: pointer;
-  background: var(--fxl-color-light2);
-  color: var(--fxl-color-text-primary);
-  &:hover {
-    background: var(--fxl-color-light1);
-    outline: none;
-  }
-  & img {
-    color: #FFF;
-    height: 100%;
-    width: 100%;
-  }
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  flex-shrink: 0;
 }
+
 $slider-track-height: 3px;
 $slider-thumb-height: 15px;
 $slider-thumb-width: 15px;

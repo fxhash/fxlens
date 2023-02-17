@@ -20,16 +20,19 @@
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.8.3"
   },
-  "dependencies": {
+  "dependencies": {  
+    "@fortawesome/fontawesome-free": "^6.2.1",
+    "@fortawesome/fontawesome-svg-core": "^6.2.1",
+    "@fortawesome/free-brands-svg-icons": "^6.2.1",
+    "@fortawesome/free-solid-svg-icons": "^6.2.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "classnames": "^2.3.2",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "react": "^18.2.0",
     "react-colorful": "^5.6.1",
-    "react-dat-gui": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
-    "react-slider": "^2.0.4",
     "sass": "^1.55.0",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4"

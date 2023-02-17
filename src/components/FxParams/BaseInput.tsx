@@ -1,5 +1,6 @@
 import {
   ButtonHTMLAttributes,
+  HtmlHTMLAttributes,
   InputHTMLAttributes,
   SelectHTMLAttributes,
 } from "react"
@@ -16,18 +17,23 @@ export function BaseSelect(props: SelectHTMLAttributes<HTMLSelectElement>) {
   return <select className={cx(classes.baseSelect, className)} {...rest} />
 }
 
-export function BaseButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
-  const { className, ...rest } = props
+export interface BaseButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement> {
+  color?: "primary" | "secondary" | undefined
+}
+
+export function BaseButton(props: BaseButtonProps) {
+  const { className, color = "primary", ...rest } = props
   return (
     <button
       type="button"
-      className={cx(classes.baseButton, className)}
+      className={cx(classes.baseButton, classes[`color-${color}`], className)}
       {...rest}
     />
   )
 }
 
-export function IconButton(props: ButtonHTMLAttributes<HTMLButtonElement>) {
+export function IconButton(props: BaseButtonProps) {
   const { className, ...rest } = props
   return <BaseButton className={cx(classes.iconButton, className)} {...rest} />
 }
