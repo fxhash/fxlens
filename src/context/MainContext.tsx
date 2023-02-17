@@ -33,7 +33,7 @@ const defaultMainContext: IMainContext = {
   setUrl: () => {},
   features: null,
   setFeatures: () => {},
-  hash: null,
+  hash: "",
   setHash: () => {},
   iframe: null,
   setIframe: () => {},
@@ -50,7 +50,7 @@ export function MainProvider({ children }: Props) {
   const [url, setUrl] = useState(baseUrl)
 
   const [features, setFeatures] = useState<any>(null)
-  const [hash, setHash] = useState<any>(null)
+  const [hash, setHash] = useState<any>("")
 
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null)
 

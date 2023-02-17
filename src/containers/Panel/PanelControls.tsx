@@ -48,7 +48,7 @@ export function PanelControls() {
           id="updateCheckbox"
           type="checkbox"
           checked={autoUpdate}
-          onClick={() => setAutoUpdate(!autoUpdate)}
+          onChange={() => setAutoUpdate(!autoUpdate)}
         />
         <label htmlFor="updateCheckbox">auto-apply on settings update</label>
       </div>
