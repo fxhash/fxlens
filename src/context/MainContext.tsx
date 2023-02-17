@@ -17,9 +17,6 @@ export interface IMainContext {
   // the url currently loaded in the iframe
   url: string
   setUrl: (url: string) => void
-  // params update - used for auto refreshing
-  datParamsUpdate: any
-  setDatParamsUpdate: (params: any) => void
   // features from the <iframe> element
   features: any
   setFeatures: (features: any) => void
@@ -34,8 +31,6 @@ const defaultMainContext: IMainContext = {
   baseUrl: "",
   url: "",
   setUrl: () => {},
-  datParamsUpdate: null,
-  setDatParamsUpdate: () => {},
   features: null,
   setFeatures: () => {},
   hash: null,
@@ -57,16 +52,12 @@ export function MainProvider({ children }: Props) {
   const [features, setFeatures] = useState<any>(null)
   const [hash, setHash] = useState<any>(null)
 
-  const [datParamsUpdate, setDatParamsUpdate] = useState<any>(null)
-
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null)
 
   const context: IMainContext = {
     baseUrl,
     url,
     setUrl,
-    datParamsUpdate,
-    setDatParamsUpdate,
     features,
     setFeatures,
     hash,

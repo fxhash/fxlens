@@ -40,7 +40,7 @@ export interface FxParamDefinition<Type extends FxParamType> {
   name?: string
   type: Type
   default: string
-  options?: FxParamOptionsMap[Type]
+  options: FxParamOptionsMap[Type]
   exposedAsFeature?: string
 }
 
@@ -50,7 +50,7 @@ export interface FxParamTypeMap {
   number: number
   bigint: bigint
   boolean: boolean
-  color: hexString
+  color: string
   string: string
   select: string
 }
@@ -66,6 +66,7 @@ export interface FxParamProcessor<Type extends FxParamType> {
   ) => FxParamTypeMap[Type]
   bytesLength: (options: FxParamOptionsMap[Type]) => number
   transform?: (input: string) => any
+  random: (definition: FxParamDefinition<Type>) => FxParamTypeMap[Type]
 }
 
 export type FxParamProcessors = {

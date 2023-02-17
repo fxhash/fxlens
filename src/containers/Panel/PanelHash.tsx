@@ -1,10 +1,11 @@
 import styles from "./PanelHash.module.scss"
 import { useContext } from "react"
 import { MainContext } from "context/MainContext"
-
-import RefreshIcon from "../../assets/rotate-right-solid.svg"
+import { faRotate } from "@fortawesome/free-solid-svg-icons"
 import { PanelGroup } from "components/Panel/PanelGroup"
 import { BaseInput, IconButton } from "components/FxParams/BaseInput"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+
 const getNewHash = () => {
   const alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
   return (
@@ -39,8 +40,8 @@ export function PanelHash() {
           onChange={handleChange}
           className={styles.hashInput}
         />
-        <IconButton onClick={handleRefresh}>
-          <img src={RefreshIcon} />
+        <IconButton onClick={handleRefresh} color="secondary">
+          <FontAwesomeIcon icon={faRotate} size="xl" />
         </IconButton>
       </div>
     </PanelGroup>
