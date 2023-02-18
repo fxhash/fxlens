@@ -41,7 +41,6 @@ export interface FxParamDefinition<Type extends FxParamType> {
   type: Type
   default: string
   options: FxParamOptionsMap[Type]
-  exposedAsFeature?: string
 }
 
 export type hexString = `#${string}`
