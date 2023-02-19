@@ -10,7 +10,7 @@ export const Features = ({ features }: Props) => {
         Object.entries(features).map(([key, value]: any, idx: any) => (
           <li key={idx}>
             <span>{key}</span>
-            <span>{value.toString()}</span>
+            <span>{value?.toString()}</span>
           </li>
         ))}
     </ul>

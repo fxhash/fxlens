@@ -7,6 +7,8 @@ import { NumberController } from "./Number"
 import { BigIntController } from "./BigInt"
 import { SelectController } from "./Select"
 import { StringController } from "./String"
+import { validateParameterDefinition } from "../validation"
+import { ControllerInvalid } from "./Invalid"
 
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type
@@ -59,6 +61,11 @@ export interface ParameterControllerProps {
 
 export function ParameterController(props: ParameterControllerProps) {
   const { parameter, onChange } = props
+
+  const parsed = useMemo(
+    () => validateParameterDefinition(parameter),
+    [parameter]
+  )
   const { controller: Controller, handler } = useMemo(
     () => controllerDefinitions[parameter.type],
     [parameter.type]
@@ -68,6 +75,9 @@ export function ParameterController(props: ParameterControllerProps) {
     const value = handler(e)
     onChange(parameter.id, value)
   }
+
+  if (parsed && !parsed.success)
+    return <ControllerInvalid definition={parameter} error={parsed.error} />
 
   return (
     <Controller
