@@ -1,15 +1,50 @@
-import { createRef, useEffect, useContext } from "react"
+import { createRef, useEffect, useContext, useMemo } from "react"
 import { consolidateParams } from "components/FxParams/utils"
 import { ParameterController } from "./Controller/Param"
 import { FxParamsContext } from "./Context"
 import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"
+import { validateParameterDefinition } from "./validation"
+
+interface ControllerBladeProps {
+  parameter: any
+  onClickLockButton?: (id: string) => void
+  lockedParamIds?: string[]
+  onChangeParam: (id: string, value: any) => void
+}
+
+function ControllerBlade(props: ControllerBladeProps) {
+  const { parameter, onClickLockButton, lockedParamIds, onChangeParam } = props
+  const parsed = useMemo(
+    () => validateParameterDefinition(parameter),
+    [parameter]
+  )
+  const isValid = useMemo(() => parsed && parsed.success, [parsed])
+  return (
+    <div className={classes.blade}>
+      <ParameterController
+        parameter={parameter}
+        value={parameter.value}
+        onChange={onChangeParam}
+      />
+      {onClickLockButton && isValid && (
+        <LockButton
+          className={classes.lockButton}
+          title={`toggle lock ${parameter.id} param`}
+          isLocked={lockedParamIds?.includes(parameter.id)}
+          onClick={(e) => onClickLockButton(parameter.id)}
+        />
+      )}
+    </div>
+  )
+}
 
 interface ControlsProps {
   params: any
   onClickLockButton?: (id: string) => void
   lockedParamIds?: string[]
 }
+
 export const Controls = ({
   params,
   onClickLockButton,
@@ -39,21 +74,12 @@ export const Controls = ({
     <div className={classes.controls} ref={p}>
       {consolidatedParams?.map((p: any) => {
         return (
-          <div key={p.id} className={classes.blade}>
-            <ParameterController
-              key={p.id}
-              parameter={p}
-              value={p.value}
-              onChange={handleChangeParam}
-            />
-            {onClickLockButton && (
-              <LockButton
-                title={`toggle lock ${p.id} param`}
-                isLocked={lockedParamIds?.includes(p.id)}
-                onClick={(e) => onClickLockButton(p.id)}
-              />
-            )}
-          </div>
+          <ControllerBlade
+            parameter={p}
+            onChangeParam={handleChangeParam}
+            lockedParamIds={lockedParamIds}
+            onClickLockButton={onClickLockButton}
+          />
         )
       })}
     </div>

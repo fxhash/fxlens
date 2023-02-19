@@ -7,7 +7,11 @@ import { NumberController } from "./Number"
 import { BigIntController } from "./BigInt"
 import { SelectController } from "./Select"
 import { StringController } from "./String"
-import { validateParameterDefinition } from "../validation"
+import {
+  validateParameterDefinition,
+  ControllerDefinitionSchemaType,
+} from "../validation"
+import { SafeParseError, SafeParseSuccess, z } from "zod"
 import { ControllerInvalid } from "./Invalid"
 
 interface FxParamControllerDefiniton<Type extends FxParamType> {
@@ -57,14 +61,17 @@ export interface ParameterControllerProps {
   parameter: FxParamDefinition<FxParamType>
   value: any
   onChange: (id: string, value: any) => void
+  parsed?:
+    | SafeParseError<ControllerDefinitionSchemaType>
+    | SafeParseSuccess<ControllerDefinitionSchemaType>
 }
 
 export function ParameterController(props: ParameterControllerProps) {
-  const { parameter, onChange } = props
+  const { parameter, onChange, parsed } = props
 
-  const parsed = useMemo(
-    () => validateParameterDefinition(parameter),
-    [parameter]
+  const parsedDefinition = useMemo(
+    () => parsed || validateParameterDefinition(parameter),
+    [parameter, parsed]
   )
   const { controller: Controller, handler } = useMemo(
     () => controllerDefinitions[parameter.type],
@@ -76,8 +83,13 @@ export function ParameterController(props: ParameterControllerProps) {
     onChange(parameter.id, value)
   }
 
-  if (parsed && !parsed.success)
-    return <ControllerInvalid definition={parameter} error={parsed.error} />
+  if (parsedDefinition && !parsedDefinition.success)
+    return (
+      <ControllerInvalid
+        definition={parameter}
+        error={parsedDefinition.error}
+      />
+    )
 
   return (
     <Controller

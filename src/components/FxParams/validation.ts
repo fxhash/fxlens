@@ -22,8 +22,8 @@ const FxParamOptions_numberSchema = z.object({
 })
 
 const FxParamOptions_stringSchema = z.object({
-  minLength: z.number().optional(),
-  maxLength: z.number().optional(),
+  minLength: z.number().gte(0).optional(),
+  maxLength: z.number().lte(64).optional(),
 })
 
 const FxParamOptions_selectSchema = z.object({
@@ -81,7 +81,9 @@ const ControllerDefinitionSchema = z.union([
   ColorControllerSchema,
 ])
 
-type ControllerDefinitionSchemaType = z.infer<typeof ControllerDefinitionSchema>
+export type ControllerDefinitionSchemaType = z.infer<
+  typeof ControllerDefinitionSchema
+>
 
 const controllerSchema = {
   number: NumberControllerSchema,
