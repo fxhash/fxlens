@@ -70,16 +70,16 @@ const hexToString = function (h: string) {
   return rtn
 }
 
+export const MIN_SAFE_INT64 = -9223372036854775808n
+export const MAX_SAFE_INT64 = 9223372036854775807n
+
 export const ParameterProcessors: FxParamProcessors = {
   number: {
-    // get the hexadecimal bytes representation of the float64 number
     serialize: (input) => {
       const view = new DataView(new ArrayBuffer(8))
       view.setFloat64(0, input as number)
       return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
-    // this is for the snippet injected into fxhash pieces
-    // convert hex from the string
     deserialize: (input) => {
       const view = new DataView(new ArrayBuffer(8))
       for (let i = 0; i < 8; i++) {
@@ -88,6 +88,16 @@ export const ParameterProcessors: FxParamProcessors = {
       return view.getFloat64(0)
     },
     bytesLength: () => 8,
+    random: (definition) => {
+      const min = definition?.options?.min || Number.MIN_SAFE_INTEGER
+      const max = definition?.options?.max || Number.MAX_SAFE_INTEGER
+      const v = Math.random() * (max - min) + min
+      if (definition?.options?.step) {
+        const t = 1.0 / definition?.options?.step
+        return Math.round(v * t) / t
+      }
+      return v
+    },
   },
   bigint: {
     serialize: (input: any) => {
@@ -104,9 +114,28 @@ export const ParameterProcessors: FxParamProcessors = {
       return view.getBigInt64(0)
     },
     bytesLength: () => 8,
+    random: (definition) => {
+      let min = definition?.options?.min || MIN_SAFE_INT64
+      let max = definition?.options?.max || MAX_SAFE_INT64
+      min = BigInt(min)
+      max = BigInt(max)
+      const range = max - min
+      const bits = range.toString(2).length
+      let random
+      do {
+        random = BigInt(
+          "0b" +
+            Array.from(
+              crypto.getRandomValues(new Uint8Array(Math.ceil(bits / 8)))
+            )
+              .map((b) => b.toString(2).padStart(8, "0"))
+              .join("")
+        )
+      } while (random > range)
+      return random + min
+    },
   },
   boolean: {
-    // return 0 or 1 in hexadecimal - takes 1 byte instead of 1 bit but OK
     serialize: (input) => {
       return typeof input === "boolean"
         ? input
@@ -118,16 +147,15 @@ export const ParameterProcessors: FxParamProcessors = {
           : "00"
         : "00"
     },
-    // if value is "00" -> 0 -> false, otherwise we consider it's 1
     deserialize: (input) => {
       return input === "00" ? false : true
     },
     bytesLength: () => 1,
+    random: () => Math.random() < 0.5,
   },
 
   color: {
-    serialize: (input: hexString) => {
-      // remove the '#' at the beginning and convert to a byte string
+    serialize: (input: string) => {
       return completeHexColor(input)
     },
 
@@ -138,6 +166,10 @@ export const ParameterProcessors: FxParamProcessors = {
     transform: (input) => {
       return `#${completeHexColor(input)}`
     },
+    random: () =>
+      `${[...Array(8)]
+        .map(() => Math.floor(Math.random() * 16).toString(16))
+        .join("")}`,
   },
 
   string: {
@@ -151,7 +183,15 @@ export const ParameterProcessors: FxParamProcessors = {
       return hexToString(input)
     },
 
-    bytesLength: () => 64 * 2, // maximum string length of 64?
+    bytesLength: () => 64 * 2,
+    random: (definition) => {
+      const min = definition?.options?.minLength || 3
+      const max = definition?.options?.maxLength || 8
+      const length = Math.round(Math.random() * (max - min) + min)
+      return [...Array(length)]
+        .map((i) => (~~(Math.random() * 36)).toString(36))
+        .join("")
+    },
   },
 
   select: {
@@ -169,6 +209,13 @@ export const ParameterProcessors: FxParamProcessors = {
     },
 
     bytesLength: () => 1, // index between 0 and 255
+    random: (definition) => {
+      const index = Math.round(
+        Math.random() * (definition?.options?.options?.length - 1) + 0
+      )
+      console.log(index)
+      return definition?.options?.options[index]
+    },
   },
 }
 
@@ -233,21 +280,34 @@ export function consolidateParams(params: any, data: any) {
 
   const rtn = [...params]
 
-  if (!data) return rtn
-
   for (const p in rtn) {
-    const { id, type, default: def } = rtn[p]
-    if (Object.hasOwn(data, id)) {
+    const definition = rtn[p]
+    const { id, type, default: def } = definition
+    if (data && Object.hasOwn(data, id)) {
       rtn[p].value = data[id]
     } else {
       const processor = ParameterProcessors[
         type as FxParamType
       ] as FxParamProcessor<any>
-      rtn[p].value = processor.transform?.(def) || def
+      const v = def || processor.random(definition)
+      rtn[p].value = processor.transform?.(v) || v
     }
   }
 
   return rtn
+}
+
+export function getRandomParamValues(
+  params: FxParamDefinition<FxParamType>[]
+): any {
+  return params.reduce((acc, definition) => {
+    const processor = ParameterProcessors[
+      definition.type as FxParamType
+    ] as FxParamProcessor<FxParamType>
+    const v = processor.random(definition) as FxParamType
+    acc[definition.id] = processor.transform?.(v) || v
+    return acc
+  }, {} as Record<string, any>)
 }
 
 export function sumBytesParams(
@@ -265,4 +325,11 @@ export function sumBytesParams(
       0
     ) || 0
   )
+}
+
+export function strinigfyParams(data: any) {
+  return JSON.stringify(data, (key, value) => {
+    if (typeof value === "bigint") return value.toString()
+    return value
+  })
 }

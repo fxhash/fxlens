@@ -7,8 +7,8 @@ export type FxParamType =
   | "select"
 
 interface FxParamOption_bigint {
-  min?: number
-  max?: number
+  min?: number | bigint
+  max?: number | bigint
 }
 
 interface FxParamOption_number {
@@ -35,25 +35,24 @@ export interface FxParamOptionsMap {
   select: FxParamOption_select
 }
 
-export interface FxParamDefinition<Type extends FxParamType> {
-  id: string
-  name?: string
-  type: Type
-  default: string
-  options?: FxParamOptionsMap[Type]
-  exposedAsFeature?: string
-}
-
-export type hexString = `#${string}`
-
 export interface FxParamTypeMap {
   number: number
   bigint: bigint
   boolean: boolean
-  color: hexString
+  color: string
   string: string
   select: string
 }
+
+export interface FxParamDefinition<Type extends FxParamType> {
+  id: string
+  name?: string
+  type: Type
+  default: FxParamTypeMap[Type]
+  options: FxParamOptionsMap[Type]
+}
+
+export type hexString = `#${string}`
 
 export interface FxParamProcessor<Type extends FxParamType> {
   serialize: (
@@ -66,6 +65,7 @@ export interface FxParamProcessor<Type extends FxParamType> {
   ) => FxParamTypeMap[Type]
   bytesLength: (options: FxParamOptionsMap[Type]) => number
   transform?: (input: string) => any
+  random: (definition: FxParamDefinition<Type>) => FxParamTypeMap[Type]
 }
 
 export type FxParamProcessors = {
