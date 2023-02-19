@@ -1,7 +1,7 @@
 import style from "./PanelControls.module.scss"
 import { useCallback, useContext, useEffect, useRef, useState } from "react"
 import { IMainContext, MainContext } from "context/MainContext"
-import { serializeParams } from "components/FxParams/utils"
+import { serializeParams, strinigfyParams } from "components/FxParams/utils"
 import { FxParamDefinition } from "components/FxParams/types"
 import debounce from "lodash.debounce"
 import { FxParamsContext } from "components/FxParams/Context"
@@ -39,13 +39,7 @@ export function PanelControls() {
     if (autoUpdate) {
       updateIframeDebounced(ctx, data, params)
     }
-  }, [
-    ctx.hash,
-    JSON.stringify(data, (key, value) => {
-      if (typeof value === "bigint") return value.toString()
-      return value
-    }),
-  ])
+  }, [ctx.hash, strinigfyParams(data)])
 
   return (
     <div className={style.controlPanel}>
@@ -54,7 +48,7 @@ export function PanelControls() {
           id="updateCheckbox"
           type="checkbox"
           checked={autoUpdate}
-          onClick={() => setAutoUpdate(!autoUpdate)}
+          onChange={() => setAutoUpdate(!autoUpdate)}
         />
         <label htmlFor="updateCheckbox">auto-apply on settings update</label>
       </div>

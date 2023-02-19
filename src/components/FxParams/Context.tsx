@@ -1,11 +1,12 @@
 import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
+import { FxParamDefinition, FxParamType } from "./types"
 import { sumBytesParams } from "./utils"
 
 export interface IFxParamsContext {
   // params pulled from the <iframe> element
-  params: any
-  setParams: (params: any) => void
+  params: FxParamDefinition<FxParamType>[]
+  setParams: (params: FxParamDefinition<FxParamType>[] | null) => void
   // params pulled the controls
   data: any
   setData: (params: any) => void
