@@ -10,6 +10,9 @@ Interactive environment to view, tweak and develop generative tokens for the fx(
 - Inject a random seed
 - Tweak fx(params) values
 - Display genrative token features
+- Randmomize fx(params) values with individual parameter locking
+- Undo/redo stack for fx(params) values
+- Schema validation of parameters with hints
 
 
 ### Prerequisites
@@ -37,3 +40,10 @@ If you are developing a token localy and it is running on `http://localhost:3301
 http://localhost:3000/?target=http://localhost:3301
 ```
 
+## Randomization
+
+You can explore randomness of the parameters by using the "Randomize params"-Button. Each parameter change is being kept inside the undo/redo stack; Making sure you don't loose any beloved configuration. When you like one of the parameters you can use the "lock"-button to not randomize this parameter and keep it "frozen". 
+
+## Validation
+
+The injested parameter configuration is being validated. The UI will give you hints on invalid parameter configuration and what attributes need to be adjusted in order to provide a valid parameter configuration.
