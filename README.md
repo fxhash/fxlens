@@ -40,6 +40,11 @@ If you are developing a token localy and it is running on `http://localhost:3301
 http://localhost:3000/?target=http://localhost:3301
 ```
 
+## Available fx(params) types
+
+Checkout the [boilerplate documentation](https://github.com/fxhash/params-boilerplate#available-fxparams-types) for more info about the different fx(params) types.
+
+
 ## Randomization
 
 You can explore randomness of the parameters by using the "Randomize params"-Button. Each parameter change is being kept inside the undo/redo stack; Making sure you don't loose any beloved configuration. When you like one of the parameters you can use the "lock"-button to not randomize this parameter and keep it "frozen". 
