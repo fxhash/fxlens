@@ -4,6 +4,7 @@ import { FxParamInputChangeHandler, FxParamControllerProps } from "./Controller"
 import { BooleanController } from "./Boolean"
 import { ColorController } from "./Color"
 import { NumberController } from "./Number"
+import { BigIntController } from "./BigInt"
 import { SelectController } from "./Select"
 import { StringController } from "./String"
 
@@ -25,7 +26,7 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   },
   bigint: {
     type: "bigint",
-    controller: NumberController,
+    controller: BigIntController,
     handler: (e) => BigInt(e.target.value),
   },
   string: {
