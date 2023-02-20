@@ -89,8 +89,14 @@ export const ParameterProcessors: FxParamProcessors = {
     },
     bytesLength: () => 8,
     random: (definition) => {
-      const min = definition?.options?.min || Number.MIN_SAFE_INTEGER
-      const max = definition?.options?.max || Number.MAX_SAFE_INTEGER
+      let min = Number.MIN_SAFE_INTEGER
+      if (typeof definition.options?.min !== "undefined")
+        min = Number(definition.options.min)
+      let max = Number.MAX_SAFE_INTEGER
+      if (typeof definition.options?.max !== "undefined")
+        max = Number(definition.options.max)
+      max = Math.min(max, Number.MAX_SAFE_INTEGER)
+      min = Math.max(min, Number.MIN_SAFE_INTEGER)
       const v = Math.random() * (max - min) + min
       if (definition?.options?.step) {
         const t = 1.0 / definition?.options?.step
@@ -115,10 +121,12 @@ export const ParameterProcessors: FxParamProcessors = {
     },
     bytesLength: () => 8,
     random: (definition) => {
-      let min = definition?.options?.min || MIN_SAFE_INT64
-      let max = definition?.options?.max || MAX_SAFE_INT64
-      min = BigInt(min)
-      max = BigInt(max)
+      let min = MIN_SAFE_INT64
+      let max = MAX_SAFE_INT64
+      if (typeof definition.options?.min !== "undefined")
+        min = BigInt(definition.options.min)
+      if (typeof definition.options?.max !== "undefined")
+        max = BigInt(definition.options.max)
       const range = max - min
       const bits = range.toString(2).length
       let random
@@ -185,8 +193,12 @@ export const ParameterProcessors: FxParamProcessors = {
 
     bytesLength: () => 64 * 2,
     random: (definition) => {
-      const min = definition?.options?.minLength || 3
-      const max = definition?.options?.maxLength || 8
+      let min = 0
+      if (typeof definition.options?.minLength !== "undefined")
+        min = definition.options.minLength
+      let max = 64
+      if (typeof definition.options?.maxLength !== "undefined")
+        max = definition.options.maxLength
       const length = Math.round(Math.random() * (max - min) + min)
       return [...Array(length)]
         .map((i) => (~~(Math.random() * 36)).toString(36))
@@ -211,7 +223,7 @@ export const ParameterProcessors: FxParamProcessors = {
     bytesLength: () => 1, // index between 0 and 255
     random: (definition) => {
       const index = Math.round(
-        Math.random() * (definition?.options?.options?.length - 1) + 0
+        Math.random() * (definition.options.options.length - 1) + 0
       )
       console.log(index)
       return definition?.options?.options[index]
@@ -289,7 +301,9 @@ export function consolidateParams(params: any, data: any) {
       const processor = ParameterProcessors[
         type as FxParamType
       ] as FxParamProcessor<any>
-      const v = def || processor.random(definition)
+      let v
+      if (typeof def === "undefined") v = processor.random(definition)
+      else v = def
       rtn[p].value = processor.transform?.(v) || v
     }
   }

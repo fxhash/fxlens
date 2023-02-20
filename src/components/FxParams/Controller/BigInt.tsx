@@ -3,11 +3,19 @@ import {
   HTMLInputControllerWithTextInput,
 } from "./Controller"
 import classes from "./Controller.module.scss"
+import { MAX_SAFE_INT64, MIN_SAFE_INT64 } from "../utils"
+import { useMemo } from "react"
 
 export function BigIntController(props: FxParamControllerProps<"bigint">) {
   const { options, value } = props
-  const min = options?.min || 0
-  const max = options?.max || 100
+  const min = useMemo(() => {
+    if (typeof options?.min === "undefined") return MIN_SAFE_INT64
+    return options.min
+  }, [options?.min])
+  const max = useMemo(() => {
+    if (typeof options?.max === "undefined") return MAX_SAFE_INT64
+    return options.max
+  }, [options?.max])
   const stringValue = `${value}`
   return (
     <HTMLInputControllerWithTextInput
