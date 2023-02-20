@@ -75,6 +75,7 @@ export const Controls = ({
       {consolidatedParams?.map((p: any) => {
         return (
           <ControllerBlade
+            key={p.id}
             parameter={p}
             onChangeParam={handleChangeParam}
             lockedParamIds={lockedParamIds}
