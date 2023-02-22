@@ -103,6 +103,7 @@ $checkbox-thumb-spacing: 15px;
   width: calc($slider-thumb-width + $checkbox-thumb-spacing) !important;
   height: calc($slider-thumb-height + $checkbox-thumb-spacing) !important;
   padding: 0;
+  margin: 0;
   position: relative;
   &:checked {
     &:after {
