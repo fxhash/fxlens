@@ -1,7 +1,6 @@
-import { createRef, useEffect, useContext, useMemo } from "react"
+import { createRef, useEffect, useMemo, useState } from "react"
 import { consolidateParams } from "components/FxParams/utils"
 import { ParameterController } from "./Controller/Param"
-import { FxParamsContext } from "./Context"
 import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"
 import { validateParameterDefinition } from "./validation"
@@ -43,16 +42,18 @@ interface ControlsProps {
   params: any
   onClickLockButton?: (id: string) => void
   lockedParamIds?: string[]
+  setData: (newData: Record<string, any>) => void
+  data: Record<string, any>
 }
 
 export const Controls = ({
   params,
+  data,
   onClickLockButton,
   lockedParamIds,
+  setData,
 }: ControlsProps) => {
-  const ctx = useContext(FxParamsContext)
-
-  const consolidatedParams = consolidateParams(params, ctx.data)
+  const consolidatedParams = consolidateParams(params, data)
 
   const p: React.RefObject<HTMLDivElement> = createRef()
 
@@ -62,12 +63,13 @@ export const Controls = ({
       consolidatedParams.forEach((p: any) => {
         ps[p.id] = p.value
       })
-      ctx.setData(ps)
+      setData(ps)
     }
   }, [params])
 
   const handleChangeParam = (id: string, value: any) => {
-    ctx.setData({ ...ctx.data, [id]: value })
+    const newData = { ...data, [id]: value }
+    setData(newData)
   }
 
   return (
