@@ -108,7 +108,7 @@ export function PanelParams() {
           params={params}
           onClickLockButton={handleClickLockButton}
           lockedParamIds={lockedParamIds}
-          setData={(newData) => setData(newData)}
+          onChangeData={(newData) => setData(newData)}
           data={data}
         />
       </div>

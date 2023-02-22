@@ -42,7 +42,7 @@ interface ControlsProps {
   params: any
   onClickLockButton?: (id: string) => void
   lockedParamIds?: string[]
-  setData: (newData: Record<string, any>) => void
+  onChangeData: (newData: Record<string, any>) => void
   data: Record<string, any>
 }
 
@@ -51,7 +51,7 @@ export const Controls = ({
   data,
   onClickLockButton,
   lockedParamIds,
-  setData,
+  onChangeData,
 }: ControlsProps) => {
   const consolidatedParams = consolidateParams(params, data)
 
@@ -63,13 +63,13 @@ export const Controls = ({
       consolidatedParams.forEach((p: any) => {
         ps[p.id] = p.value
       })
-      setData(ps)
+      onChangeData(ps)
     }
   }, [params])
 
   const handleChangeParam = (id: string, value: any) => {
     const newData = { ...data, [id]: value }
-    setData(newData)
+    onChangeData(newData)
   }
 
   return (
