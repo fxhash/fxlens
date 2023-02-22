@@ -31,12 +31,12 @@ $height: 30px;
 
 .pickerAbsoluteWrapper {
   position: absolute;
+  bottom: 0;
+  transform: translate(0, calc(100% + var(--fxl-spacing-xxs)));
+  z-index: 1;
 }
 
 .picker {
-  margin-top: calc(var(--fxl-spacing) + var(--fxl-spacing-xxs) );
-  z-index: 1;
-  position: fixed;
   border: 1px solid var(--fxl-color-light2);
   input {
     background: var(--fxl-color-light);
@@ -53,3 +53,4 @@ $height: 30px;
     }
   }
 }
+
