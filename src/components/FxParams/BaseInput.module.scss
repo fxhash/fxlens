@@ -5,12 +5,12 @@ $height: 30px;
   font-size: var(--fxl-font-size-regular);
   height: $height;
   color: var(--fxl-color-text-primary);
-  background: var(--fxl-color-dark1);
+  background: var(--fxl-color-background2);
   border: 1px solid var(--fxl-color-light2);
   padding: 0 var(--fxl-spacing-xxs);
   outline-offset: -1px;
   &:hover {
-    background: var(--fxl-color-dark2);
+    background: var(--fxl-color-background3);
   }
   &:focus-visible {
     outline: 1px solid var(--fxl-color-primary);
