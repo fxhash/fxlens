@@ -63,7 +63,7 @@ export function PanelParams() {
   return (
     <PanelGroup
       title="Params"
-      description={`fx(params) can be defines in your code and are pulled in real time from the code running. ${
+      description={`fx(params) can be defined in your code and are pulled in real time from the code running. ${
         byteAttention ? `Parameter value space is limited to 50kb.` : ""
       }`}
       descriptionClassName={classes.description}
