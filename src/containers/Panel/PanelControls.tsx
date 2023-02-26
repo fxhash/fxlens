@@ -15,8 +15,10 @@ type TUpdateIframe = (
 
 const updateIframe: TUpdateIframe = (ctx, data, params) => {
   const bytes = serializeParams(data, params || [])
-  const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
-  const target = `${ctx.baseUrl}?${p.join("&")}`
+  const url = new URL(ctx.baseUrl)
+  url.searchParams.append("fxhash", ctx.hash)
+  url.searchParams.append("fxparams", `0x${bytes}`)
+  const target = url.toString()
   console.log(target)
   if (ctx.iframe) {
     ctx.iframe.contentWindow?.location.replace(target)
