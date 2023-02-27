@@ -19,7 +19,6 @@ const updateIframe: TUpdateIframe = (ctx, data, params) => {
   url.searchParams.append("fxhash", ctx.hash)
   url.searchParams.append("fxparams", `0x${bytes}`)
   const target = url.toString()
-  console.log(target)
   if (ctx.iframe) {
     ctx.iframe.contentWindow?.location.replace(target)
   }
