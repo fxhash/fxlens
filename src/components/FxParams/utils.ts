@@ -70,8 +70,8 @@ const hexToString = function (h: string) {
   return rtn
 }
 
-export const MIN_SAFE_INT64 = -9223372036854775808n
-export const MAX_SAFE_INT64 = 9223372036854775807n
+export const MIN_SAFE_INT64 = BigInt("-9223372036854775808")
+export const MAX_SAFE_INT64 = BigInt("9223372036854775807")
 
 export const ParameterProcessors: FxParamProcessors = {
   number: {
