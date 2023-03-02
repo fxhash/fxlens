@@ -108,7 +108,6 @@ export const ParameterProcessors: FxParamProcessors = {
   bigint: {
     serialize: (input: any) => {
       const view = new DataView(new ArrayBuffer(8))
-      console.log(input, typeof input)
       view.setBigInt64(0, BigInt(input))
       return view.getBigUint64(0).toString(16).padStart(16, "0")
     },
@@ -225,7 +224,6 @@ export const ParameterProcessors: FxParamProcessors = {
       const index = Math.round(
         Math.random() * (definition.options.options.length - 1) + 0
       )
-      console.log(index)
       return definition?.options?.options[index]
     },
   },
@@ -248,14 +246,10 @@ export function serializeParams(
       type as FxParamType
     ] as FxParamProcessor<any>
     // if the param is definined in the object
-    if (Object.hasOwn(params, id)) {
-      const val = params[id] as FxParamTypeMap[]
+    if (Object.hasOwn(params, id) || def.default) {
+      const v = params[id] as FxParamTypeMap[]
+      const val = typeof v !== "undefined" ? v : def.default
       const serialized = processor.serialize(val, def)
-      console.log({
-        id,
-        val,
-        serialized,
-      })
       bytes += serialized
     }
   }
