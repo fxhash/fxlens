@@ -306,14 +306,17 @@ export function consolidateParams(params: any, data: any) {
 }
 
 export function getRandomParamValues(
-  params: FxParamDefinition<FxParamType>[]
+  params: FxParamDefinition<FxParamType>[],
+  options?: { noTransform: boolean }
 ): any {
   return params.reduce((acc, definition) => {
     const processor = ParameterProcessors[
       definition.type as FxParamType
     ] as FxParamProcessor<FxParamType>
     const v = processor.random(definition) as FxParamType
-    acc[definition.id] = processor.transform?.(v) || v
+    acc[definition.id] = options?.noTransform
+      ? v
+      : processor.transform?.(v) || v
     return acc
   }, {} as Record<string, any>)
 }
@@ -341,3 +344,4 @@ export function strinigfyParams(data: any) {
     return value
   })
 }
+
