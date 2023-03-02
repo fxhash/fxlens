@@ -235,9 +235,9 @@ export function serializeParams(
   params: any,
   definition: FxParamDefinition<any>[]
 ) {
-  console.log({ params, definition })
   // a single hex string will be used for all the params
   let bytes = ""
+  if (!definition) return bytes
   // loop through each parameter from the definition to find the associated
   // parameter as set on the UI
   for (const def of definition) {
@@ -246,7 +246,7 @@ export function serializeParams(
       type as FxParamType
     ] as FxParamProcessor<any>
     // if the param is definined in the object
-    if (Object.hasOwn(params, id) || def.default) {
+    if (params.hasOwnProperty(id) || def.default) {
       const v = params[id] as FxParamTypeMap[]
       const val = typeof v !== "undefined" ? v : def.default
       const serialized = processor.serialize(val, def)
@@ -262,9 +262,10 @@ export function serializeParams(
 // validating input based on the definition constraints
 export function deserializeParams(
   bytes: string,
-  definition: FxParamDefinition<any>[]
+  definition: FxParamDefinition<FxParamType>[],
+  options: { withTransform?: boolean }
 ) {
-  const params: Record<string, any> = {}
+  const params: Record<string, FxParamType> = {}
   for (const def of definition) {
     const processor = ParameterProcessors[
       def.type as FxParamType
@@ -274,7 +275,11 @@ export function deserializeParams(
     const valueBytes = bytes.substring(0, bytesLen * 2)
     bytes = bytes.substring(bytesLen * 2)
     // deserialize the bytes into the params
-    params[def.id] = processor.deserialize(valueBytes, def)
+    const val = processor.deserialize(valueBytes, def)
+    params[def.id] =
+      options?.withTransform && processor.transform
+        ? processor.transform(val as FxParamType)
+        : val
   }
   return params
 }
@@ -289,7 +294,7 @@ export function consolidateParams(params: any, data: any) {
   for (const p in rtn) {
     const definition = rtn[p]
     const { id, type, default: def } = definition
-    if (data && Object.hasOwn(data, id)) {
+    if (data && data.hasOwnProperty(id)) {
       rtn[p].value = data[id]
     } else {
       const processor = ParameterProcessors[
