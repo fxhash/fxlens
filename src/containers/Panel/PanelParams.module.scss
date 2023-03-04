@@ -4,7 +4,7 @@
 
 .randomContainer {
   position: sticky;
-  z-index: 1;
+  z-index: 20;
   top: calc(var(--fxl-spacing) * -1);
   display: flex;
   padding: var(--fxl-spacing-xs) 0;
