@@ -5,7 +5,7 @@ import { useEffect } from "react"
 import { useContext } from "react"
 import { MainContext } from "context/MainContext"
 import { FxParamsContext } from "components/FxParams/Context"
-
+import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 interface Props {
   url: string
   className?: string
@@ -35,7 +35,16 @@ export function Frame({ url, className }: Props) {
         }
         if (e.data.id === "fxhash_getParams") {
           if (e.data.data) {
-            paramsContext.setParams(e.data.data)
+            const { definitions, values } = e.data.data
+            if (definitions) {
+              const definitionsWithDefaults = definitions.map(
+                (d: FxParamDefinition<FxParamType>) => ({
+                  ...d,
+                  default: values?.[d.id],
+                })
+              )
+              paramsContext.setParams(definitionsWithDefaults)
+            }
           } else {
             paramsContext.setParams(null)
           }
