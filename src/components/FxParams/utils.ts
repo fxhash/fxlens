@@ -246,12 +246,16 @@ export function serializeParams(
       type as FxParamType
     ] as FxParamProcessor<any>
     // if the param is definined in the object
-    if (params.hasOwnProperty(id) || def.default) {
-      const v = params[id] as FxParamTypeMap[]
-      const val = typeof v !== "undefined" ? v : def.default
-      const serialized = processor.serialize(val, def)
-      bytes += serialized
-    }
+
+    const v = params[id] as FxParamTypeMap[]
+    const val =
+      typeof v !== "undefined"
+        ? v
+        : typeof def.default !== "undefined"
+        ? def.default
+        : processor.random(def)
+    const serialized = processor.serialize(val, def)
+    bytes += serialized
   }
 
   return bytes
