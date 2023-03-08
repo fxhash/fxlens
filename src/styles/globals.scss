@@ -2,13 +2,6 @@
 
 :root {
   --fxl-font-family: #{variables.$font-sans};
-  --fxl-color-primary: #{variables.$color-primary};
-  --fxl-color-primary-light: #{variables.$color-primary-light};
-  --fxl-color-secondary: #{variables.$color-secondary};
-  --fxl-color-secondary-light: #{variables.$color-secondary-light};
-  --fxl-color-background: #{variables.$color-background};
-  --fxl-color-text-primary: #{variables.$color-text-primary};
-  --fxl-color-text-secondary: #{variables.$color-text-secondary};
 
   --fxl-font-size-xs: #{variables.$font-size-xs};
   --fxl-font-size-s: #{variables.$font-size-s};
@@ -22,6 +15,14 @@
   --fxl-color-dark: #{variables.$color-dark};
   --fxl-color-dark1: #{variables.$color-dark1};
   --fxl-color-dark2: #{variables.$color-dark2};
+  
+  --fxl-color-primary: #{variables.$color-primary};
+  --fxl-color-primary-light: #{variables.$color-primary-light};
+  --fxl-color-secondary: #{variables.$color-secondary};
+  --fxl-color-secondary-light: #{variables.$color-secondary-light};
+  --fxl-color-background: #{variables.$color-background};
+  --fxl-color-text-primary: #{variables.$color-text-primary};
+  --fxl-color-text-secondary: #{variables.$color-text-secondary};
 
   --fxl-color-background2: #{variables.$color-dark1};
   --fxl-color-background3: #{variables.$color-dark2};
@@ -45,7 +46,7 @@ body, button, input {
 }
 
 html {
-  font-size: var(--fxl-font-size-regular);
+  font-size: 16px;
 }
 
 * {
