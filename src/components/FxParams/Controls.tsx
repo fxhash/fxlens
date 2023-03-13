@@ -4,6 +4,7 @@ import { ParameterController } from "./Controller/Param"
 import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"
 import { validateParameterDefinition } from "./validation"
+import { stringifyParamsData } from "./utils"
 
 interface ControllerBladeProps {
   parameter: any
@@ -63,7 +64,8 @@ export const Controls = ({
       consolidatedParams.forEach((p: any) => {
         ps[p.id] = p.value
       })
-      onChangeData(ps)
+      if (stringifyParamsData(data) !== stringifyParamsData(ps))
+        onChangeData(ps)
     }
   }, [params])
 
