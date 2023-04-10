@@ -18,7 +18,25 @@ export function Frame({ url, className }: Props) {
   useEffect(() => {
     const listener = (e: any) => {
       if (e.data) {
-        console.log(e.data)
+        if (e.data.id === "fxhash_getInfo") {
+          const {
+            version,
+            params: { definitions, values },
+            features,
+            hash,
+          } = e.data.data
+          const definitionsWithDefaults = definitions.map(
+            (d: FxParamDefinition<FxParamType>) => ({
+              ...d,
+              default: values?.[d.id],
+            })
+          )
+          paramsContext.setParams(definitionsWithDefaults)
+          paramsContext.setVersion(version)
+          ctx.setFeatures(features)
+          ctx.setHash(hash)
+        }
+
         if (e.data.id === "fxhash_getHash") {
           if (e.data.data) {
             ctx.setHash(e.data.data)
@@ -61,6 +79,7 @@ export function Frame({ url, className }: Props) {
 
   const handleOnIframeLoad = useCallback(() => {
     if (ref.current) {
+      ref.current.contentWindow?.postMessage("fxhash_getInfo", "*")
       ctx.setIframe(ref.current)
       ref.current.contentWindow?.postMessage("fxhash_getFeatures", "*")
       ref.current.contentWindow?.postMessage("fxhash_getParams", "*")
