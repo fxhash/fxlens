@@ -41,7 +41,7 @@ export function PanelHash() {
           className={styles.hashInput}
         />
         <IconButton onClick={handleRefresh} color="secondary">
-          <FontAwesomeIcon icon={faRotate} size="xl" />
+          <FontAwesomeIcon icon={faRotate} size="1x" />
         </IconButton>
       </div>
     </PanelGroup>
