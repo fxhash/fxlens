@@ -24,6 +24,7 @@ export function Frame({ url, className }: Props) {
             params: { definitions, values },
             features,
             hash,
+            minter,
           } = e.data.data
           const definitionsWithDefaults = definitions.map(
             (d: FxParamDefinition<FxParamType>) => ({
@@ -35,6 +36,7 @@ export function Frame({ url, className }: Props) {
           paramsContext.setVersion(version)
           ctx.setFeatures(features)
           ctx.setHash(hash)
+          ctx.setMinter(minter)
         }
 
         if (e.data.id === "fxhash_getHash") {
@@ -42,6 +44,13 @@ export function Frame({ url, className }: Props) {
             ctx.setHash(e.data.data)
           } else {
             ctx.setHash(null)
+          }
+        }
+        if (e.data.id === "fxhash_getMinter") {
+          if (e.data.data) {
+            ctx.setMinter(e.data.data)
+          } else {
+            ctx.setMinter(null)
           }
         }
         if (e.data.id === "fxhash_getFeatures") {
@@ -84,6 +93,7 @@ export function Frame({ url, className }: Props) {
       ref.current.contentWindow?.postMessage("fxhash_getFeatures", "*")
       ref.current.contentWindow?.postMessage("fxhash_getParams", "*")
       ref.current.contentWindow?.postMessage("fxhash_getHash", "*")
+      ref.current.contentWindow?.postMessage("fxhash_getMinter", "*")
     }
   }, [ref.current])
 

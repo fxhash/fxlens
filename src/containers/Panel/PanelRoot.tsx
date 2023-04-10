@@ -5,6 +5,7 @@ import { PanelParams } from "./PanelParams"
 import { PanelFeatures } from "./PanelFeatures"
 import { PanelControls } from "./PanelControls"
 import { PanelHash } from "./PanelHash"
+import { PanelAddress } from "./PanelAddress"
 
 export function PanelRoot() {
   return (
@@ -14,6 +15,7 @@ export function PanelRoot() {
 
         <div className={cs(style.body)}>
           <PanelHash />
+          <PanelAddress />
           <PanelParams />
           <PanelFeatures />
         </div>
