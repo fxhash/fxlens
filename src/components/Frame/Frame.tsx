@@ -18,12 +18,18 @@ export function Frame({ url, className }: Props) {
   useEffect(() => {
     const listener = (e: any) => {
       if (e.data) {
-        console.log(e.data)
         if (e.data.id === "fxhash_getHash") {
           if (e.data.data) {
             ctx.setHash(e.data.data)
           } else {
             ctx.setHash(null)
+          }
+        }
+        if (e.data.id === "fxhash_getMinter") {
+          if (e.data.data) {
+            ctx.setMinter(e.data.data)
+          } else {
+            ctx.setMinter(null)
           }
         }
         if (e.data.id === "fxhash_getFeatures") {
@@ -65,6 +71,7 @@ export function Frame({ url, className }: Props) {
       ref.current.contentWindow?.postMessage("fxhash_getFeatures", "*")
       ref.current.contentWindow?.postMessage("fxhash_getParams", "*")
       ref.current.contentWindow?.postMessage("fxhash_getHash", "*")
+      ref.current.contentWindow?.postMessage("fxhash_getMinter", "*")
     }
   }, [ref.current])
 
