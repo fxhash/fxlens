@@ -26,13 +26,15 @@ export function Frame({ url, className }: Props) {
             hash,
             minter,
           } = e.data.data
-          const definitionsWithDefaults = definitions.map(
-            (d: FxParamDefinition<FxParamType>) => ({
-              ...d,
-              default: values?.[d.id],
-            })
-          )
-          paramsContext.setParams(definitionsWithDefaults)
+          if (definitions) {
+            const definitionsWithDefaults = definitions.map(
+              (d: FxParamDefinition<FxParamType>) => ({
+                ...d,
+                default: values?.[d.id],
+              })
+            )
+            paramsContext.setParams(definitionsWithDefaults)
+          }
           paramsContext.setVersion(version)
           ctx.setFeatures(features)
           ctx.setHash(hash)
