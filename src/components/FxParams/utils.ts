@@ -216,24 +216,18 @@ export const ParameterProcessors: FxParamProcessors = {
   },
 
   select: {
-    serialize: (input, def) => {
-      // find the index of the input in the array of options
-      return U8(
-        Math.max(0, Math.min(255, def.options?.options?.indexOf(input) || 0))
-      )
-    },
+    // clamp to [0..255] even if input isn't part of options
+    serialize: (input, { options }) =>
+      U8(Math.max(0, Math.min(255, options?.options.indexOf(input) || 0))),
 
-    deserialize: (input, { options }) => {
-      // get the index, which is the input
-      const idx = parseInt(input, 16)
-      return options?.options?.[idx] || options?.options?.[0] || ""
-    },
+    deserialize: (input, def) =>
+      def.options?.options[parseInt(input, 16)] || def.default,
 
     bytesLength: () => 1, // index between 0 and 255
-    random: ({ options }) => {
-      const index = (Math.random() * options.options.length) | 0
-      return options?.options[index]
-    },
+
+    random: (def) =>
+      def.options?.options[~~(Math.random() * def.options.options.length)] ||
+      def.default,
   },
 }
 
