@@ -174,24 +174,38 @@ export const ParameterProcessors: FxParamProcessors = {
   },
 
   string: {
-    serialize: (input, { options }) => {
-      const max = options?.maxLength !== undefined ? Number(options.maxLength) : 64;
+    /**
+     * strings are encoded as UTF-8 and however JS uses UTF-16. Therefore the
+     * {@link FxParamOption_string.maxLength} is to be understood as number of
+     * bytes and WILL differ from `inputs.length` if the encoded string uses
+     * multi-byte characters (emojis etc.).
+     *
+     * Using the native TextEncoder ensures all chars are encoded properly and
+     * completely (unlike the earlier custom encoder used here)...
+     */
+    serialize: (input, def) => {
+      const max = ParameterProcessors.string.bytesLength(def)
       const buf = new Uint8Array(max)
       new TextEncoder().encodeInto(input, buf)
       return Array.from(buf).map(U8).join("")
     },
-    deserialize: (input) => {
-      const buf = new Uint8Array(asBytes(input, 64))
+
+    deserialize: (input, def) => {
+      const max = ParameterProcessors.string.bytesLength(def)
+      const buf = new Uint8Array(asBytes(input, max))
       const idx = buf.indexOf(0)
-      return new TextDecoder().decode(idx !== -1 ? buf.slice(0, idx) : buf)
+      // only decode until 1st ASCII 0 char (if any)
+      return new TextDecoder().decode(idx !== -1 ? buf.subarray(0, idx) : buf)
     },
 
-    bytesLength: (def) => {
-      if (!def.version) return 64
-      return def.options?.maxLength !== undefined
-        ? Number(def.options.maxLength)
-        : 64
-    },
+    // TODO impose limit on user provided maxLength
+    bytesLength: (def) =>
+      def.version
+        ? def.options?.maxLength !== undefined
+          ? Number(def.options.maxLength)
+          : 64
+        : 64,
+
     random: ({ options }) => {
       const { min, max } = minmax(options?.minLength, options?.maxLength, 0, 64)
       const length = Math.round(Math.random() * (max - min) + min)
@@ -282,6 +296,7 @@ export function deserializeParams(
     ] as FxParamProcessor<FxParamType>
     // extract the length from the bytes & shift the initial bytes string
     const bytesLen = processor.bytesLength(def)
+    // (times two because 1 hexbyte = 2 chars)
     const valueBytes = bytes.substring(0, bytesLen * 2)
     bytes = bytes.substring(bytesLen * 2)
     // deserialize the bytes into the params
