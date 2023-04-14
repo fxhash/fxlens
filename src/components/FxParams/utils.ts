@@ -73,22 +73,34 @@ function* asBytes(hex: string, n: number) {
 
 /**
  * Takes optional min/max values and their defaults. Returns new min/max
- * (clamped to interval defined by defaults).
+ * (by default both clamped to the interval defined by given defaults).
  *
  * @param $min
  * @param $max
  * @param minDef
  * @param maxDef
+ * @param clamp
  */
 function minmax(
   $min?: number,
   $max?: number,
   minDef = Number.MIN_SAFE_INTEGER,
-  maxDef = Number.MAX_SAFE_INTEGER
+  maxDef = Number.MAX_SAFE_INTEGER,
+  clamp = true
 ) {
   return {
-    min: $min !== undefined ? Math.max(Number($min), minDef) : minDef,
-    max: $max !== undefined ? Math.min(Number($max), maxDef) : maxDef,
+    min:
+      $min !== undefined
+        ? clamp
+          ? Math.max(Number($min), minDef)
+          : Number($min)
+        : minDef,
+    max:
+      $max !== undefined
+        ? clamp
+          ? Math.min(Number($max), maxDef)
+          : Number($max)
+        : maxDef,
   }
 }
 
@@ -207,7 +219,13 @@ export const ParameterProcessors: FxParamProcessors = {
         : 64,
 
     random: ({ options }) => {
-      const { min, max } = minmax(options?.minLength, options?.maxLength, 0, 64)
+      const { min, max } = minmax(
+        options?.minLength,
+        options?.maxLength,
+        0,
+        64,
+        false
+      )
       const length = Math.round(Math.random() * (max - min) + min)
       return [...Array(length)]
         .map(() => (~~(Math.random() * 36)).toString(36))
