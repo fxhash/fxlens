@@ -18,12 +18,41 @@ export function Frame({ url, className }: Props) {
   useEffect(() => {
     const listener = (e: any) => {
       if (e.data) {
-        console.log(e.data)
+        if (e.data.id === "fxhash_getInfo") {
+          const {
+            version,
+            params: { definitions, values },
+            features,
+            hash,
+            minter,
+          } = e.data.data
+          if (definitions) {
+            const definitionsWithDefaults = definitions.map(
+              (d: FxParamDefinition<FxParamType>) => ({
+                ...d,
+                default: values?.[d.id],
+              })
+            )
+            paramsContext.setParams(definitionsWithDefaults)
+          }
+          paramsContext.setVersion(version)
+          ctx.setFeatures(features)
+          ctx.setHash(hash)
+          ctx.setMinter(minter)
+        }
+
         if (e.data.id === "fxhash_getHash") {
           if (e.data.data) {
             ctx.setHash(e.data.data)
           } else {
             ctx.setHash(null)
+          }
+        }
+        if (e.data.id === "fxhash_getMinter") {
+          if (e.data.data) {
+            ctx.setMinter(e.data.data)
+          } else {
+            ctx.setMinter(null)
           }
         }
         if (e.data.id === "fxhash_getFeatures") {
@@ -61,10 +90,12 @@ export function Frame({ url, className }: Props) {
 
   const handleOnIframeLoad = useCallback(() => {
     if (ref.current) {
+      ref.current.contentWindow?.postMessage("fxhash_getInfo", "*")
       ctx.setIframe(ref.current)
       ref.current.contentWindow?.postMessage("fxhash_getFeatures", "*")
       ref.current.contentWindow?.postMessage("fxhash_getParams", "*")
       ref.current.contentWindow?.postMessage("fxhash_getHash", "*")
+      ref.current.contentWindow?.postMessage("fxhash_getMinter", "*")
     }
   }, [ref.current])
 
