@@ -38,7 +38,7 @@ export function hexToRgba(hexCode: hexString) {
  */
 function U8(x: number) {
   x >>>= 0
-  return x < 10 ? "0" + x : x.toString(16)
+  return x < 16 ? "0" + x : x.toString(16)
 }
 
 /**
