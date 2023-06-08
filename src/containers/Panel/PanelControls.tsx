@@ -48,13 +48,15 @@ export function PanelControls() {
   return (
     <div className={style.controlPanel}>
       <div className={style.checkboxWrapper}>
-        <BaseInput
-          id="updateCheckbox"
-          type="checkbox"
-          checked={autoUpdate}
-          onChange={() => setAutoUpdate(!autoUpdate)}
-        />
-        <label htmlFor="updateCheckbox">auto-apply on settings update</label>
+        <>
+          <BaseInput
+            id="updateCheckbox"
+            type="checkbox"
+            checked={autoUpdate}
+            onChange={() => setAutoUpdate(!autoUpdate)}
+          />
+          <label htmlFor="updateCheckbox">auto-apply on settings update</label>
+        </>
       </div>
       <div className={style.buttonsWrapper}>
         <BaseButton
