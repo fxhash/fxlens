@@ -1,28 +1,85 @@
-import { Controls } from "components/FxParams/Controls"
+import {
+  Controls,
+  ControlsOnChangeDataHandler,
+} from "components/FxParams/Controls"
 import { PanelGroup } from "components/Panel/PanelGroup"
-import { useContext, useMemo } from "react"
+import { useCallback, useContext, useMemo } from "react"
 import { FxParamsContext } from "components/FxParams/Context"
 import { ProgressBar } from "components/ProgressBar/ProgressBar"
 import { BaseButton, IconButton } from "components/FxParams/BaseInput"
 import classes from "./PanelParams.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons"
-import { getRandomParamValues } from "components/FxParams/utils"
+import {
+  getRandomParamValues,
+  serializeParams,
+} from "components/FxParams/utils"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { ParamsHistoryContext } from "components/FxParams/ParamsHistory"
 import { LockButton } from "components/FxParams/LockButton/LockButton"
 import cx from "classnames"
 import { useState } from "react"
+import { MainContext } from "context/MainContext"
+import { createIframeUrl } from "utils/url"
+import { useMessageListener } from "components/FxParams/hooks"
 
 const MAX_BYTES = 50000
 
 export function PanelParams() {
-  const { byteSize, params, setData, data } = useContext(FxParamsContext)
+  const { iframe, hash, minter, baseUrl } = useContext(MainContext)
+  const { byteSize, params, setData, data, flags } = useContext(FxParamsContext)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const { history, offset, undo, redo } = useContext(ParamsHistoryContext)
 
   const bytes = byteSize || 0
   const byteAttention = bytes >= MAX_BYTES / 2
+
+  const handleChangeData: ControlsOnChangeDataHandler = (
+    newData,
+    changedParam
+  ) => {
+    setData(newData)
+    const isLive = params.find((d) => d.id === changedParam?.id)?.isLive
+    if (isLive) {
+      iframe?.contentWindow?.postMessage(
+        {
+          id: "fxhash_update",
+          data: {
+            bytes: serializeParams(newData, params || []),
+            id: changedParam?.id,
+            value: changedParam?.value,
+          },
+        },
+        "*"
+      )
+    } else {
+      const url = createIframeUrl(baseUrl, {
+        hash: hash,
+        minter: minter,
+        data: newData,
+        params,
+      })
+      const target = url.toString()
+      if (iframe) {
+        iframe.contentWindow?.location.replace(target)
+      }
+    }
+  }
+
+  const updateData = useCallback(
+    (e: any) => {
+      const { id, value } = e.data.data
+      const newData = {
+        ...data,
+        [id]: value,
+      }
+      setData(newData)
+    },
+    [data]
+  )
+
+  useMessageListener("fxhash_syncParam", updateData)
+
   const handleRandomizeParams = () => {
     const randomValues = getRandomParamValues(
       params?.filter((p: FxParamDefinition<FxParamType>) =>
@@ -60,6 +117,7 @@ export function PanelParams() {
     () => lockedParamIds?.length === params?.length,
     [lockedParamIds?.length, params?.length]
   )
+
   return (
     <PanelGroup
       title="Params"
@@ -108,7 +166,7 @@ export function PanelParams() {
           params={params}
           onClickLockButton={handleClickLockButton}
           lockedParamIds={lockedParamIds}
-          onChangeData={(newData) => setData(newData)}
+          onChangeData={handleChangeData}
           data={data}
         />
       </div>

@@ -48,6 +48,7 @@ export interface FxParamDefinition<Type extends FxParamType> {
   id: string
   name?: string
   type: Type
+  isLive?: boolean
   default: FxParamTypeMap[Type]
   options: FxParamOptionsMap[Type]
   version?: string
