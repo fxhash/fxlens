@@ -5,6 +5,7 @@ import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"
 import { validateParameterDefinition } from "./validation"
 import { stringifyParamsData } from "./utils"
+import { FxParamType, FxParamTypeMap } from "./types.js"
 
 interface ControllerBladeProps {
   parameter: any
@@ -39,11 +40,19 @@ function ControllerBlade(props: ControllerBladeProps) {
   )
 }
 
+export type ControlsOnChangeDataHandler = (
+  newData: Record<string, any>,
+  changedParam?: {
+    id: string
+    value: FxParamTypeMap[FxParamType]
+  }
+) => void
+
 interface ControlsProps {
   params: any
   onClickLockButton?: (id: string) => void
   lockedParamIds?: string[]
-  onChangeData: (newData: Record<string, any>) => void
+  onChangeData: ControlsOnChangeDataHandler
   data: Record<string, any>
 }
 
@@ -71,7 +80,7 @@ export const Controls = ({
 
   const handleChangeParam = (id: string, value: any) => {
     const newData = { ...data, [id]: value }
-    onChangeData(newData)
+    onChangeData(newData, { id, value })
   }
 
   return (

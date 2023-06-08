@@ -6,6 +6,7 @@ import { FxParamDefinition } from "components/FxParams/types"
 import debounce from "lodash.debounce"
 import { FxParamsContext } from "components/FxParams/Context"
 import { BaseButton, BaseInput } from "components/FxParams/BaseInput"
+import { createIframeUrl } from "utils/url"
 
 type TUpdateIframe = (
   ctx: IMainContext,
@@ -14,11 +15,12 @@ type TUpdateIframe = (
 ) => void
 
 const updateIframe: TUpdateIframe = (ctx, data, params) => {
-  const bytes = serializeParams(data, params || [])
-  const url = new URL(ctx.baseUrl)
-  url.searchParams.append("fxhash", ctx.hash)
-  url.searchParams.append("fxminter", ctx.minter)
-  url.searchParams.append("fxparams", `0x${bytes}`)
+  const url = createIframeUrl(ctx.baseUrl, {
+    hash: ctx.hash,
+    minter: ctx.minter,
+    data,
+    params,
+  })
   const target = url.toString()
   if (ctx.iframe) {
     ctx.iframe.contentWindow?.location.replace(target)
