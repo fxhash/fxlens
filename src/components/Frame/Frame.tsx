@@ -69,7 +69,6 @@ export function Frame({ url, className }: Props) {
       features,
       hash,
       minter,
-      flags,
     } = e.data.data
     if (definitions) {
       const definitionsWithDefaults = definitions.map(
@@ -84,7 +83,6 @@ export function Frame({ url, className }: Props) {
     ctx.setFeatures(features)
     ctx.setHash(hash)
     ctx.setMinter(minter)
-    if (flags) paramsContext.setFlags(flags)
   })
 
   return <iframe ref={ref} src={url} className={cs(style.root, className)} />

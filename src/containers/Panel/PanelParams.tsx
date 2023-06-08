@@ -27,7 +27,7 @@ const MAX_BYTES = 50000
 
 export function PanelParams() {
   const { iframe, hash, minter, baseUrl } = useContext(MainContext)
-  const { byteSize, params, setData, data, flags } = useContext(FxParamsContext)
+  const { byteSize, params, setData, data } = useContext(FxParamsContext)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const { history, offset, undo, redo } = useContext(ParamsHistoryContext)
 
@@ -52,17 +52,6 @@ export function PanelParams() {
         },
         "*"
       )
-    } else {
-      const url = createIframeUrl(baseUrl, {
-        hash: hash,
-        minter: minter,
-        data: newData,
-        params,
-      })
-      const target = url.toString()
-      if (iframe) {
-        iframe.contentWindow?.location.replace(target)
-      }
     }
   }
 
