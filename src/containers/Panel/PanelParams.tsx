@@ -39,11 +39,12 @@ export function PanelParams() {
     changedParam
   ) => {
     setData(newData)
-    const isLive = params.find((d) => d.id === changedParam?.id)?.isLive
-    if (isLive) {
+    const realtimeSync =
+      params.find((d) => d.id === changedParam?.id)?.mode === "sync"
+    if (realtimeSync) {
       iframe?.contentWindow?.postMessage(
         {
-          id: "fxhash_update",
+          id: "fxhash_updateParams",
           data: {
             bytes: serializeParams(newData, params || []),
             id: changedParam?.id,
@@ -57,17 +58,17 @@ export function PanelParams() {
 
   const updateData = useCallback(
     (e: any) => {
-      const { id, value } = e.data.data
+      const { params } = e.data.data
       const newData = {
         ...data,
-        [id]: value,
+        ...params,
       }
       setData(newData)
     },
     [data]
   )
 
-  useMessageListener("fxhash_syncParam", updateData)
+  useMessageListener("fxhash_syncParams", updateData)
 
   const handleRandomizeParams = () => {
     const randomValues = getRandomParamValues(
