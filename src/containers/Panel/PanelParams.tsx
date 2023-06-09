@@ -40,7 +40,7 @@ export function PanelParams() {
   ) => {
     setData(newData)
     const realtimeSync =
-      params.find((d) => d.id === changedParam?.id)?.mode === "sync"
+      params.find((d) => d.id === changedParam?.id)?.update === "sync"
     if (realtimeSync) {
       iframe?.contentWindow?.postMessage(
         {
