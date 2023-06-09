@@ -68,7 +68,7 @@ export function PanelParams() {
     [data]
   )
 
-  useMessageListener("fxhash_syncParams", updateData)
+  useMessageListener("fxhash_emitParams", updateData)
 
   const handleRandomizeParams = () => {
     const randomValues = getRandomParamValues(
