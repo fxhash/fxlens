@@ -41,14 +41,14 @@ export function PanelParams() {
     setData(newData)
     const realtimeSync =
       params.find((d) => d.id === changedParam?.id)?.update === "sync"
-    if (realtimeSync) {
+    if (realtimeSync && changedParam) {
       iframe?.contentWindow?.postMessage(
         {
           id: "fxhash_updateParams",
           data: {
-            bytes: serializeParams(newData, params || []),
-            id: changedParam?.id,
-            value: changedParam?.value,
+            params: {
+              [changedParam.id]: changedParam.value,
+            },
           },
         },
         "*"
