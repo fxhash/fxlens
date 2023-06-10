@@ -52,6 +52,7 @@ export interface FxParamDefinition<Type extends FxParamType> {
   type: Type
   update?: FxParamUpdateMode
   default: FxParamTypeMap[Type]
+  value: FxParamTypeMap[Type]
   options: FxParamOptionsMap[Type]
   version?: string
 }
