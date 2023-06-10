@@ -44,7 +44,7 @@ export function PanelParams() {
     if (realtimeSync && changedParam) {
       iframe?.contentWindow?.postMessage(
         {
-          id: "fxhash_updateParams",
+          id: "params:update",
           data: {
             params: {
               [changedParam.id]: changedParam.value,
