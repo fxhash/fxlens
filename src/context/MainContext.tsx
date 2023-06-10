@@ -1,3 +1,4 @@
+import { IUseRuntimeState, useRuntimeState } from "hooks/useRuntimeState"
 import { PropsWithChildren, useState } from "react"
 import { createContext } from "react"
 import { decodeUrl } from "utils/url"
@@ -20,12 +21,6 @@ export interface IMainContext {
   // features from the <iframe> element
   features: any
   setFeatures: (features: any) => void
-  // hash from the <iframe> element
-  hash: any
-  setHash: (hash: string | null) => void
-  // minter address from the <iframe> element
-  minter: any
-  setMinter: (address: string | null) => void
   iframe: HTMLIFrameElement | null
   setIframe: (iframe: HTMLIFrameElement) => void
 }
@@ -36,10 +31,6 @@ const defaultMainContext: IMainContext = {
   setUrl: () => {},
   features: null,
   setFeatures: () => {},
-  hash: "",
-  setHash: () => {},
-  minter: "",
-  setMinter: () => {},
   iframe: null,
   setIframe: () => {},
 }
@@ -55,8 +46,6 @@ export function MainProvider({ children }: Props) {
   const [url, setUrl] = useState(baseUrl)
 
   const [features, setFeatures] = useState<any>(null)
-  const [hash, setHash] = useState<any>("")
-  const [minter, setMinter] = useState<any>("")
 
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null)
 
@@ -66,10 +55,6 @@ export function MainProvider({ children }: Props) {
     setUrl,
     features,
     setFeatures,
-    hash,
-    setHash,
-    minter,
-    setMinter,
     iframe,
     setIframe,
   }

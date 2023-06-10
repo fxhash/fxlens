@@ -1,20 +1,22 @@
 import style from "./Frame.module.scss"
 import cs from "classnames"
-import { RefObject, useCallback, useRef } from "react"
+import { useRef } from "react"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { MainContext } from "context/MainContext"
-import { FxParamsContext } from "components/FxParams/Context"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { usePostMessageListener } from "components/FxParams/hooks"
+import { RuntimeDefinitionUpdate } from "hooks/useRuntimeState"
+import { RuntimeContext } from "context/RuntimeContext"
+
 interface Props {
   url: string
   className?: string
 }
 
 export function Frame({ url, className }: Props) {
-  const paramsContext = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
+  const runtime = useContext(RuntimeContext)
   const ref = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
@@ -22,27 +24,19 @@ export function Frame({ url, className }: Props) {
   }, [url, ref.current])
 
   usePostMessageListener(ref, "fxhash_getMinter", (e) => {
-    if (e.data.data) {
-      ctx.setMinter(e.data.data)
-    } else {
-      ctx.setMinter(null)
-    }
+    runtime.state.update({
+      minter: e.data.data || null,
+    })
   })
 
   usePostMessageListener(ref, "fxhash_getHash", (e) => {
-    if (e.data.data) {
-      ctx.setHash(e.data.data)
-    } else {
-      ctx.setHash(null)
-    }
+    runtime.state.update({
+      hash: e.data.data || null,
+    })
   })
 
   usePostMessageListener(ref, "fxhash_getFeatures", (e) => {
-    if (e.data.data) {
-      ctx.setFeatures(e.data.data)
-    } else {
-      ctx.setFeatures(null)
-    }
+    ctx.setFeatures(e.data.data || null)
   })
 
   usePostMessageListener(ref, "fxhash_getParams", (e) => {
@@ -55,10 +49,10 @@ export function Frame({ url, className }: Props) {
             default: values?.[d.id],
           })
         )
-        paramsContext.setDefinition(definitionsWithDefaults)
+        runtime.definition.update({ params: definitionsWithDefaults })
       }
     } else {
-      paramsContext.setDefinition(null)
+      runtime.definition.update({ params: null })
     }
   })
 
@@ -70,6 +64,7 @@ export function Frame({ url, className }: Props) {
       hash,
       minter,
     } = e.data.data
+    const defUpdate: RuntimeDefinitionUpdate = {}
     if (definitions) {
       const definitionsWithDefaults = definitions.map(
         (d: FxParamDefinition<FxParamType>) => ({
@@ -77,12 +72,14 @@ export function Frame({ url, className }: Props) {
           default: values?.[d.id],
         })
       )
-      paramsContext.setDefinition(definitionsWithDefaults)
+      defUpdate.params = definitionsWithDefaults
     }
-    paramsContext.setVersion(version)
-    ctx.setFeatures(features)
-    ctx.setHash(hash)
-    ctx.setMinter(minter)
+    defUpdate.version = version
+    runtime.definition.update(defUpdate)
+    runtime.state.update({
+      hash,
+      minter,
+    })
   })
 
   return <iframe ref={ref} src={url} className={cs(style.root, className)} />

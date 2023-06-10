@@ -12,10 +12,10 @@ export function decodeUrl(url: string) {
 export function createIframeUrl(
   baseUrl: string,
   options?: {
-    hash?: string
-    minter?: string
-    data?: Record<string, FxParamType>
-    params?: FxParamDefinition<FxParamType>[]
+    hash?: string | null
+    minter?: string | null
+    data?: Record<string, FxParamType> | null
+    params?: FxParamDefinition<FxParamType>[] | null
   }
 ) {
   const url = new URL(baseUrl)
