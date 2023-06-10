@@ -1,8 +1,7 @@
 import style from "./PanelControls.module.scss"
-import { useCallback, useContext, useEffect, useRef, useState } from "react"
+import { useCallback, useContext, useEffect, useState } from "react"
 import { IMainContext, MainContext } from "context/MainContext"
-import { serializeParams, stringifyParamsData } from "components/FxParams/utils"
-import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import { serializeParams } from "components/FxParams/utils"
 import debounce from "lodash.debounce"
 import { BaseButton, BaseInput } from "components/FxParams/BaseInput"
 import { createIframeUrl } from "utils/url"
@@ -35,6 +34,7 @@ export function PanelControls() {
     []
   )
 
+  // if auto-update, refresh when hard state changes
   useEffect(() => {
     if (autoUpdate) {
       updateIframeDebounced(ctx, runtime)

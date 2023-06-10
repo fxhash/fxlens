@@ -7,11 +7,14 @@ import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
 import sha1 from "sha1"
 import { sumBytesParams } from "components/FxParams/utils"
+import { TUpdateStateFn, TUpdateableState } from "types/utils"
 
 /**
  * The Runtime Context is responsible for managing the state of a project ran
  * in a frame. It centralizes any source of data to derive the project and
- * manipulate it from the outside.
+ * facilitate their manipulation from the outside.
+ *
+ * See comments on IRuntimeContext for more details.
  */
 
 interface RuntimeState {
@@ -19,18 +22,25 @@ interface RuntimeState {
   minter: string
   params: FxParamsData
 }
-type RuntimeStateUpdate = Partial<RuntimeState>
 
 interface RuntimeDefinition {
   params: FxParamDefinition<FxParamType>[] | null
   version: string | null
 }
-export type RuntimeDefinitionUpdate = Partial<RuntimeDefinition>
 
+/**
+ * Hashes a runtime state using sha1
+ */
 function hashRuntimeState(state: RuntimeState) {
   return sha1(JSON.stringify(state))
 }
 
+/**
+ * Hashes the hard-refresh properties of a runtime state:
+ * - hash
+ * - minter address
+ * - params in update mode "page-reload"
+ */
 function hashRuntimeHardState(
   state: RuntimeState,
   definition: FxParamDefinition<FxParamType>[] | null
@@ -38,6 +48,7 @@ function hashRuntimeHardState(
   const staticParams: FxParamsData = {}
   for (const id in state.params) {
     const def = definition?.find((def) => def.id === id)
+    // if no definition, or update == "page-reload" (which is default value)
     if (!def || !def.update || def.update === "page-reload") {
       staticParams[id] = state.params[id]
     }
@@ -49,12 +60,11 @@ function hashRuntimeHardState(
 }
 
 export interface IRuntimeContext {
-  state: RuntimeState & {
-    update: (data: RuntimeStateUpdate) => void
-  }
-  definition: RuntimeDefinition & {
-    update: (data: RuntimeDefinitionUpdate) => void
-  }
+  // the base state of the runtime
+  state: TUpdateableState<RuntimeState>
+  // definitions, used to manipulate the state
+  definition: TUpdateableState<RuntimeDefinition>
+  // extra details derived from the state & definition
   details: {
     paramsByteSize: number
     stateHash: {
@@ -99,20 +109,21 @@ export function RuntimeProvider({ children }: Props) {
     version: null,
   })
 
-  const update = (data: RuntimeStateUpdate) => {
+  const update: TUpdateStateFn<RuntimeState> = (data) => {
     setState({
       ...state,
       ...data,
     })
   }
 
-  const updateDefinition = (data: RuntimeDefinitionUpdate) => {
+  const updateDefinition: TUpdateStateFn<RuntimeDefinition> = (data) => {
     setDefinition({
       ...definition,
       ...data,
     })
   }
 
+  // enhance each param definition with the version (useful for serialization)
   const definitionEnhanced = useMemo(
     () => ({
       ...definition,
