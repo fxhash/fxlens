@@ -6,7 +6,7 @@ import {
 import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
 import sha1 from "sha1"
-import { sumBytesParams } from "components/FxParams/utils"
+import { jsonStringifyBigint, sumBytesParams } from "components/FxParams/utils"
 import { TUpdateStateFn, TUpdateableState } from "types/utils"
 
 /**
@@ -32,7 +32,7 @@ export interface RuntimeDefinition {
  * Hashes a runtime state using sha1
  */
 function hashRuntimeState(state: RuntimeState) {
-  return sha1(JSON.stringify(state))
+  return sha1(jsonStringifyBigint(state))
 }
 
 /**
