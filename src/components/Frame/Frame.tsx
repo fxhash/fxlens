@@ -6,8 +6,7 @@ import { useContext } from "react"
 import { MainContext } from "context/MainContext"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { usePostMessageListener } from "components/FxParams/hooks"
-import { RuntimeDefinitionUpdate } from "hooks/useRuntimeState"
-import { RuntimeContext } from "context/RuntimeContext"
+import { RuntimeContext, RuntimeDefinition } from "context/RuntimeContext"
 
 interface Props {
   url: string
@@ -64,7 +63,7 @@ export function Frame({ url, className }: Props) {
       hash,
       minter,
     } = e.data.data
-    const defUpdate: RuntimeDefinitionUpdate = {}
+    const defUpdate: Partial<RuntimeDefinition> = {}
     if (definitions) {
       const definitionsWithDefaults = definitions.map(
         (d: FxParamDefinition<FxParamType>) => ({
