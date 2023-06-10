@@ -1,25 +1,25 @@
 import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
-import { FxParamDefinition, FxParamType } from "./types"
+import { FxParamDefinition, FxParamType, FxParamsData } from "./types"
 import { sumBytesParams } from "./utils"
 
 export interface IFxParamsContext {
-  // params pulled from the <iframe> element
-  params: FxParamDefinition<FxParamType>[]
-  setParams: (params: FxParamDefinition<FxParamType>[] | null) => void
+  // definition pulled from the <iframe> element
+  definition: FxParamDefinition<FxParamType>[]
+  setDefinition: (definition: FxParamDefinition<FxParamType>[] | null) => void
   // params pulled the controls
-  data: any
-  setData: (params: any) => void
+  paramValues: FxParamsData
+  setParamValues: (params: FxParamsData) => void
   byteSize: number | null
   setVersion: (params: string) => void
   version: string | null
 }
 
 const defaultParamsContext: IFxParamsContext = {
-  params: [],
-  setParams: () => {},
-  data: null,
-  setData: () => {},
+  definition: [],
+  setDefinition: () => {},
+  paramValues: {},
+  setParamValues: () => {},
   byteSize: null,
   version: null,
   setVersion: () => {},
@@ -30,25 +30,25 @@ export const FxParamsContext = createContext(defaultParamsContext)
 type Props = PropsWithChildren<any>
 export function FxParamsProvider({ children }: Props) {
   const [version, setVersion] = useState<string | null>(null)
-  const [params, setParams] = useState<any>(null)
-  const [data, setData] = useState<any>(null)
+  const [definition, setDefinition] = useState<any>(null)
+  const [paramValues, setParamValues] = useState<any>(null)
 
-  const byteSize = useMemo(() => sumBytesParams(params), [params])
+  const byteSize = useMemo(() => sumBytesParams(definition), [definition])
 
-  const paramsWithVersion = useMemo(
+  const definitionWithVersion = useMemo(
     () =>
-      params?.map((p: FxParamDefinition<FxParamType>) => ({
+      definition?.map((p: FxParamDefinition<FxParamType>) => ({
         ...p,
         version: version,
       })),
-    [params, version]
+    [definition, version]
   )
 
   const context: IFxParamsContext = {
-    params: paramsWithVersion,
-    setParams,
-    data,
-    setData,
+    definition: definitionWithVersion,
+    setDefinition,
+    paramValues,
+    setParamValues,
     byteSize,
     version,
     setVersion,

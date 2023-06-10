@@ -27,7 +27,8 @@ const MAX_BYTES = 50000
 
 export function PanelParams() {
   const { iframe, hash, minter, baseUrl } = useContext(MainContext)
-  const { byteSize, params, setData, data } = useContext(FxParamsContext)
+  const { byteSize, definition, paramValues, setParamValues } =
+    useContext(FxParamsContext)
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const { history, offset, undo, redo } = useContext(ParamsHistoryContext)
 
@@ -38,9 +39,9 @@ export function PanelParams() {
     newData,
     changedParam
   ) => {
-    setData(newData)
+    setParamValues(newData)
     const realtimeSync =
-      params.find((d) => d.id === changedParam?.id)?.update === "sync"
+      definition.find((d) => d.id === changedParam?.id)?.update === "sync"
     if (realtimeSync && changedParam) {
       iframe?.contentWindow?.postMessage(
         {
@@ -60,29 +61,29 @@ export function PanelParams() {
     (e: any) => {
       const { params } = e.data.data
       const newData = {
-        ...data,
+        ...paramValues,
         ...params,
       }
-      setData(newData)
+      setParamValues(newData)
     },
-    [data]
+    [paramValues]
   )
 
   useMessageListener("fxhash_emitParams", updateData)
 
   const handleRandomizeParams = () => {
     const randomValues = getRandomParamValues(
-      params?.filter((p: FxParamDefinition<FxParamType>) =>
+      definition?.filter((p: FxParamDefinition<FxParamType>) =>
         lockedParamIds ? !lockedParamIds.includes(p.id) : false
       )
     )
-    setData({ ...data, ...randomValues })
+    setParamValues({ ...paramValues, ...randomValues })
   }
   const handleToggleLockAllParams = () => {
     if (lockedParamIds.length > 0) {
       setLockedParamIds([])
     } else {
-      const allParamIds = params.map(
+      const allParamIds = definition.map(
         (d: FxParamDefinition<FxParamType>) => d.id
       )
       setLockedParamIds(allParamIds)
@@ -104,8 +105,8 @@ export function PanelParams() {
     redo()
   }
   const allLocked = useMemo(
-    () => lockedParamIds?.length === params?.length,
-    [lockedParamIds?.length, params?.length]
+    () => lockedParamIds?.length === definition?.length,
+    [lockedParamIds?.length, definition?.length]
   )
 
   return (
@@ -153,11 +154,11 @@ export function PanelParams() {
       </div>
       <div className={classes.controlsWrapper}>
         <Controls
-          params={params}
+          params={definition}
           onClickLockButton={handleClickLockButton}
           lockedParamIds={lockedParamIds}
           onChangeData={handleChangeData}
-          data={data}
+          data={paramValues}
         />
       </div>
     </PanelGroup>

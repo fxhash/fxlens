@@ -55,10 +55,10 @@ export function Frame({ url, className }: Props) {
             default: values?.[d.id],
           })
         )
-        paramsContext.setParams(definitionsWithDefaults)
+        paramsContext.setDefinition(definitionsWithDefaults)
       }
     } else {
-      paramsContext.setParams(null)
+      paramsContext.setDefinition(null)
     }
   })
 
@@ -77,7 +77,7 @@ export function Frame({ url, className }: Props) {
           default: values?.[d.id],
         })
       )
-      paramsContext.setParams(definitionsWithDefaults)
+      paramsContext.setDefinition(definitionsWithDefaults)
     }
     paramsContext.setVersion(version)
     ctx.setFeatures(features)
