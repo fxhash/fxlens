@@ -31,14 +31,14 @@ function hashRuntimeState(state: RuntimeState) {
   return sha1(JSON.stringify(state))
 }
 
-function hashRuntimeStaticState(
+function hashRuntimeHardState(
   state: RuntimeState,
   definition: FxParamDefinition<FxParamType>[] | null
 ) {
   const staticParams: FxParamsData = {}
   for (const id in state.params) {
     const def = definition?.find((def) => def.id === id)
-    if (!def || def?.update === "page-reload") {
+    if (!def || !def.update || def.update === "page-reload") {
       staticParams[id] = state.params[id]
     }
   }
@@ -139,7 +139,7 @@ export function RuntimeProvider({ children }: Props) {
         paramsByteSize: sumBytesParams(definition.params || []),
         stateHash: {
           soft: hashRuntimeState(state),
-          hard: hashRuntimeStaticState(state, definition.params),
+          hard: hashRuntimeHardState(state, definition.params),
         },
       }),
       [state, definition.params]
