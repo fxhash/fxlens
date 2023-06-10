@@ -4,15 +4,11 @@ import { IMainContext, MainContext } from "context/MainContext"
 import { serializeParams, stringifyParamsData } from "components/FxParams/utils"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import debounce from "lodash.debounce"
-import { FxParamsContext } from "components/FxParams/Context"
 import { BaseButton, BaseInput } from "components/FxParams/BaseInput"
 import { createIframeUrl } from "utils/url"
+import { IRuntimeContext, RuntimeContext } from "context/RuntimeContext"
 
-type TUpdateIframe = (
-  ctx: IMainContext,
-  data?: Record<string, any>,
-  params?: FxParamDefinition<any>[]
-) => void
+type TUpdateIframe = (ctx: IMainContext, runtime: IRuntimeContext) => void
 
 interface ITokenState {
   hash: string
@@ -28,7 +24,7 @@ interface ITokenState {
 function tokenStateChangeRequiresReload(
   prev: ITokenState,
   next: ITokenState,
-  definition: FxParamDefinition<FxParamType>[]
+  definition: FxParamDefinition<FxParamType>[] | null
 ): boolean {
   if (prev.hash !== next.hash) return true
   if (prev.minter !== next.minter) return true
@@ -39,7 +35,7 @@ function tokenStateChangeRequiresReload(
       prev.params[id] !== next.params[id]
     ) {
       // check if an update is required
-      const def = definition.find((d) => d.id === id)
+      const def = definition?.find((d) => d.id === id)
       if (!def || !def.update || def.update === "page-reload") {
         return true
       }
@@ -48,12 +44,12 @@ function tokenStateChangeRequiresReload(
   return false
 }
 
-const updateIframe: TUpdateIframe = (ctx, data, params) => {
+const updateIframe: TUpdateIframe = (ctx, runtime) => {
   const url = createIframeUrl(ctx.baseUrl, {
-    hash: ctx.hash,
-    minter: ctx.minter,
-    data,
-    params,
+    hash: runtime.state.hash,
+    minter: runtime.state.minter,
+    data: runtime.state.params,
+    params: runtime.definition.params,
   })
   const target = url.toString()
   if (ctx.iframe) {
@@ -62,25 +58,25 @@ const updateIframe: TUpdateIframe = (ctx, data, params) => {
 }
 
 export function PanelControls() {
-  const { paramValues, definition } = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
+  const runtime = useContext(RuntimeContext)
   const [autoUpdate, setAutoUpdate] = useState(false)
 
   // the latest state which was pushed to iframe
   const currentState = useRef<ITokenState>()
 
   const updateIframeDebounced = useCallback<TUpdateIframe>(
-    debounce<TUpdateIframe>((ctx, data, params) => {
-      updateIframe(ctx, data, params)
+    debounce<TUpdateIframe>((ctx, runtime) => {
+      updateIframe(ctx, runtime)
     }, 200),
     []
   )
 
   useEffect(() => {
     const nextState = {
-      hash: ctx.hash,
-      minter: ctx.minter,
-      params: { ...paramValues },
+      hash: runtime.state.hash!,
+      minter: runtime.state.minter!,
+      params: { ...runtime.state.params },
     }
     if (
       autoUpdate &&
@@ -88,13 +84,17 @@ export function PanelControls() {
       tokenStateChangeRequiresReload(
         currentState.current,
         nextState,
-        definition
+        runtime.definition.params
       )
     ) {
-      updateIframeDebounced(ctx, paramValues, definition)
+      updateIframeDebounced(ctx, runtime)
     }
     currentState.current = nextState
-  }, [ctx.hash, ctx.minter, stringifyParamsData(paramValues)])
+  }, [
+    runtime.state.hash,
+    runtime.state.minter,
+    stringifyParamsData(runtime.state.params),
+  ])
 
   return (
     <div className={style.controlPanel}>
@@ -112,16 +112,19 @@ export function PanelControls() {
       <div className={style.buttonsWrapper}>
         <BaseButton
           onClick={() => {
-            if (!paramValues) return
-            const bytes = serializeParams(paramValues, definition)
-            const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
+            if (!runtime.state.params) return
+            const bytes = serializeParams(
+              runtime.state.params,
+              runtime.definition.params!
+            )
+            const p = [`fxhash=${runtime.state.hash}`, `fxparams=0x${bytes}`]
             const target = `${ctx.baseUrl}?${p.join("&")}`
             window.open(target)
           }}
         >
           new tab
         </BaseButton>
-        <BaseButton onClick={() => updateIframe(ctx, paramValues, definition)}>
+        <BaseButton onClick={() => updateIframe(ctx, runtime)}>
           Refresh
         </BaseButton>
       </div>

@@ -4,44 +4,41 @@ import {
 } from "components/FxParams/Controls"
 import { PanelGroup } from "components/Panel/PanelGroup"
 import { useCallback, useContext, useMemo } from "react"
-import { FxParamsContext } from "components/FxParams/Context"
 import { ProgressBar } from "components/ProgressBar/ProgressBar"
 import { BaseButton, IconButton } from "components/FxParams/BaseInput"
 import classes from "./PanelParams.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons"
-import {
-  getRandomParamValues,
-  serializeParams,
-} from "components/FxParams/utils"
+import { getRandomParamValues } from "components/FxParams/utils"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { ParamsHistoryContext } from "components/FxParams/ParamsHistory"
 import { LockButton } from "components/FxParams/LockButton/LockButton"
 import cx from "classnames"
 import { useState } from "react"
 import { MainContext } from "context/MainContext"
-import { createIframeUrl } from "utils/url"
 import { useMessageListener } from "components/FxParams/hooks"
+import { RuntimeContext } from "context/RuntimeContext"
 
 const MAX_BYTES = 50000
 
 export function PanelParams() {
-  const { iframe, hash, minter, baseUrl } = useContext(MainContext)
-  const { byteSize, definition, paramValues, setParamValues } =
-    useContext(FxParamsContext)
+  const { iframe } = useContext(MainContext)
+  const runtime = useContext(RuntimeContext)
+
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const { history, offset, undo, redo } = useContext(ParamsHistoryContext)
 
-  const bytes = byteSize || 0
+  const bytes = runtime.details.paramsByteSize
   const byteAttention = bytes >= MAX_BYTES / 2
 
   const handleChangeData: ControlsOnChangeDataHandler = (
     newData,
     changedParam
   ) => {
-    setParamValues(newData)
+    runtime.state.update({ params: newData })
     const realtimeSync =
-      definition.find((d) => d.id === changedParam?.id)?.update === "sync"
+      runtime.definition.params?.find((d) => d.id === changedParam?.id)
+        ?.update === "sync"
     if (realtimeSync && changedParam) {
       iframe?.contentWindow?.postMessage(
         {
@@ -61,29 +58,31 @@ export function PanelParams() {
     (e: any) => {
       const { params } = e.data.data
       const newData = {
-        ...paramValues,
+        ...runtime.state.params,
         ...params,
       }
-      setParamValues(newData)
+      runtime.state.update({ params: newData })
     },
-    [paramValues]
+    [runtime.state.params]
   )
 
   useMessageListener("fxhash_emitParams", updateData)
 
   const handleRandomizeParams = () => {
     const randomValues = getRandomParamValues(
-      definition?.filter((p: FxParamDefinition<FxParamType>) =>
+      runtime.definition.params!.filter((p: FxParamDefinition<FxParamType>) =>
         lockedParamIds ? !lockedParamIds.includes(p.id) : false
       )
     )
-    setParamValues({ ...paramValues, ...randomValues })
+    runtime.state.update({
+      params: { ...runtime.state.params, ...randomValues },
+    })
   }
   const handleToggleLockAllParams = () => {
     if (lockedParamIds.length > 0) {
       setLockedParamIds([])
     } else {
-      const allParamIds = definition.map(
+      const allParamIds = runtime.definition.params!.map(
         (d: FxParamDefinition<FxParamType>) => d.id
       )
       setLockedParamIds(allParamIds)
@@ -105,8 +104,8 @@ export function PanelParams() {
     redo()
   }
   const allLocked = useMemo(
-    () => lockedParamIds?.length === definition?.length,
-    [lockedParamIds?.length, definition?.length]
+    () => lockedParamIds?.length === runtime.definition.params?.length,
+    [lockedParamIds?.length, runtime.definition.params?.length]
   )
 
   return (
@@ -154,11 +153,11 @@ export function PanelParams() {
       </div>
       <div className={classes.controlsWrapper}>
         <Controls
-          params={definition}
+          params={runtime.definition.params}
           onClickLockButton={handleClickLockButton}
           lockedParamIds={lockedParamIds}
           onChangeData={handleChangeData}
-          data={paramValues}
+          data={runtime.state.params}
         />
       </div>
     </PanelGroup>
