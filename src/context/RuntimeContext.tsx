@@ -17,13 +17,13 @@ import { TUpdateStateFn, TUpdateableState } from "types/utils"
  * See comments on IRuntimeContext for more details.
  */
 
-interface RuntimeState {
+export interface RuntimeState {
   hash: string
   minter: string
   params: FxParamsData
 }
 
-interface RuntimeDefinition {
+export interface RuntimeDefinition {
   params: FxParamDefinition<FxParamType>[] | null
   version: string | null
 }
