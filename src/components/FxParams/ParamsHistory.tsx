@@ -47,13 +47,13 @@ type Props = PropsWithChildren<any>
 
 export function ParamsHistoryProvider({ children }: Props) {
   const lastActionData = useRef(null)
-  const { setData, data } = useContext(FxParamsContext)
+  const { paramValues, setParamValues } = useContext(FxParamsContext)
   const [history, setHistory] = useState<IParamsHistoryEntry[]>([])
   const [offset, setOffset] = useState<number>(0)
 
   const historyActions: Record<ParamsHistoryActionType, ParamsHistoryAction> = {
     "params-update": (entry: IParamsHistoryEntry) => {
-      setData(entry.data)
+      setParamValues(entry.data)
     },
   }
 
@@ -87,10 +87,10 @@ export function ParamsHistoryProvider({ children }: Props) {
 
   // observe data changes and add them to history
   useEffect(() => {
-    if (isEqual(data, lastActionData?.current)) return
-    if (!data) return
-    pushHistory({ type: "params-update", data })
-  }, [data, lastActionData.current])
+    if (isEqual(paramValues, lastActionData?.current)) return
+    if (!paramValues) return
+    pushHistory({ type: "params-update", data: paramValues })
+  }, [paramValues, lastActionData.current])
 
   const context: IParamsHistoryContext = {
     history,

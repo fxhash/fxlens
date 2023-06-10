@@ -62,7 +62,7 @@ const updateIframe: TUpdateIframe = (ctx, data, params) => {
 }
 
 export function PanelControls() {
-  const { data, params } = useContext(FxParamsContext)
+  const { paramValues, definition } = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
   const [autoUpdate, setAutoUpdate] = useState(false)
 
@@ -80,17 +80,21 @@ export function PanelControls() {
     const nextState = {
       hash: ctx.hash,
       minter: ctx.minter,
-      params: { ...data },
+      params: { ...paramValues },
     }
     if (
       autoUpdate &&
       currentState.current &&
-      tokenStateChangeRequiresReload(currentState.current, nextState, params)
+      tokenStateChangeRequiresReload(
+        currentState.current,
+        nextState,
+        definition
+      )
     ) {
-      updateIframeDebounced(ctx, data, params)
+      updateIframeDebounced(ctx, paramValues, definition)
     }
     currentState.current = nextState
-  }, [ctx.hash, ctx.minter, stringifyParamsData(data)])
+  }, [ctx.hash, ctx.minter, stringifyParamsData(paramValues)])
 
   return (
     <div className={style.controlPanel}>
@@ -108,8 +112,8 @@ export function PanelControls() {
       <div className={style.buttonsWrapper}>
         <BaseButton
           onClick={() => {
-            if (!params) return
-            const bytes = serializeParams(data, params)
+            if (!paramValues) return
+            const bytes = serializeParams(paramValues, definition)
             const p = [`fxhash=${ctx.hash}`, `fxparams=0x${bytes}`]
             const target = `${ctx.baseUrl}?${p.join("&")}`
             window.open(target)
@@ -117,7 +121,7 @@ export function PanelControls() {
         >
           new tab
         </BaseButton>
-        <BaseButton onClick={() => updateIframe(ctx, data, params)}>
+        <BaseButton onClick={() => updateIframe(ctx, paramValues, definition)}>
           Refresh
         </BaseButton>
       </div>
