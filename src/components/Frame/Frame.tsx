@@ -73,6 +73,7 @@ export function Frame({ url, className }: Props) {
       )
       defUpdate.params = definitionsWithDefaults
     }
+    ctx.setFeatures(features)
     defUpdate.version = version
     runtime.definition.update(defUpdate)
     runtime.state.update({
