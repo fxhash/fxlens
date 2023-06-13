@@ -7,9 +7,9 @@ import {
   useRef,
 } from "react"
 import { createContext } from "react"
-import { FxParamsContext } from "./Context"
 import debounce from "lodash.debounce"
 import { stringifyParamsData } from "./utils"
+import { RuntimeContext } from "context/RuntimeContext"
 
 const isEqual = (a: any, b: any) =>
   stringifyParamsData(a) === stringifyParamsData(b)
@@ -47,13 +47,13 @@ type Props = PropsWithChildren<any>
 
 export function ParamsHistoryProvider({ children }: Props) {
   const lastActionData = useRef(null)
-  const { setData, data } = useContext(FxParamsContext)
+  const runtime = useContext(RuntimeContext)
   const [history, setHistory] = useState<IParamsHistoryEntry[]>([])
   const [offset, setOffset] = useState<number>(0)
 
   const historyActions: Record<ParamsHistoryActionType, ParamsHistoryAction> = {
     "params-update": (entry: IParamsHistoryEntry) => {
-      setData(entry.data)
+      runtime.state.update({ params: entry.data })
     },
   }
 
@@ -87,10 +87,10 @@ export function ParamsHistoryProvider({ children }: Props) {
 
   // observe data changes and add them to history
   useEffect(() => {
-    if (isEqual(data, lastActionData?.current)) return
-    if (!data) return
-    pushHistory({ type: "params-update", data })
-  }, [data, lastActionData.current])
+    if (isEqual(runtime.state.params, lastActionData?.current)) return
+    if (!runtime.state.params) return
+    pushHistory({ type: "params-update", data: runtime.state.params })
+  }, [runtime.state.params, lastActionData.current])
 
   const context: IParamsHistoryContext = {
     history,
