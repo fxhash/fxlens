@@ -7,6 +7,42 @@ import {
   FxParamType,
   FxParamsData,
 } from "./types"
+import semver from "semver"
+
+const stringToHex = function (s: string) {
+  let rtn = ""
+  for (let i = 0; i < s.length; i++) {
+    rtn += s.charCodeAt(i).toString(16).padStart(4, "0")
+  }
+  return rtn
+}
+const hexToString = function (h: string) {
+  const hx = h.match(/.{1,4}/g) || []
+  let rtn = ""
+  for (let i = 0; i < hx.length; i++) {
+    const int = parseInt(hx[i], 16)
+    if (int === 0) break
+    rtn += String.fromCharCode(int)
+  }
+  return rtn
+}
+
+const serializeStringOld = (
+  input: string,
+  def: FxParamDefinition<"string">
+) => {
+  if (!def.version) {
+    let hex = stringToHex(input.substring(0, 64))
+    hex = hex.padEnd(64 * 4, "0")
+    return hex
+  }
+  let max = 64
+  if (typeof def.options?.maxLength !== "undefined")
+    max = Number(def.options.maxLength)
+  let hex = stringToHex(input.substring(0, max))
+  hex = hex.padEnd(max * 4, "0")
+  return hex
+}
 
 export function rgbaToHex(r: number, g: number, b: number, a: number) {
   return "#" + [r, g, b, (a * 255 + 0.5) | 0].map(U8).join("")
@@ -195,6 +231,14 @@ export const ParameterProcessors: FxParamProcessors = {
      * completely (unlike the earlier custom encoder used here)...
      */
     serialize: (input, def) => {
+      // for anything until v3.1.0 we use the old seralization
+      if (
+        !def.version ||
+        !semver.valid(def.version) ||
+        semver.lte(`${def.version}`, "3.1.0")
+      ) {
+        return serializeStringOld(input, def)
+      }
       const max = ParameterProcessors.string.bytesLength(def)
       const buf = new Uint8Array(max)
       new TextEncoder().encodeInto(input, buf)
@@ -202,6 +246,14 @@ export const ParameterProcessors: FxParamProcessors = {
     },
 
     deserialize: (input, def) => {
+      // for anything until v3.1.0 we use the old seralization
+      if (
+        !def.version ||
+        !semver.valid(def.version) ||
+        semver.lte(`${def.version}`, "3.1.0")
+      ) {
+        return hexToString(input)
+      }
       const max = ParameterProcessors.string.bytesLength(def)
       const buf = new Uint8Array(asBytes(input, max))
       const idx = buf.indexOf(0)
@@ -209,7 +261,6 @@ export const ParameterProcessors: FxParamProcessors = {
       return new TextDecoder().decode(idx !== -1 ? buf.subarray(0, idx) : buf)
     },
 
-    // TODO impose limit on user provided maxLength
     bytesLength: (def) =>
       def.version
         ? def.options?.maxLength !== undefined
