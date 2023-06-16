@@ -389,3 +389,10 @@ export function stringifyParamsData(data: FxParamsData) {
     typeof value === "bigint" ? value.toString() : value
   )
 }
+
+export function jsonStringifyBigint(data: any): string {
+  return JSON.stringify(data, (key, value) => {
+    if (typeof value === "bigint") return value.toString()
+    return value
+  })
+}

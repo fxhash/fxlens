@@ -1,10 +1,10 @@
 import styles from "./PanelAddress.module.scss"
 import { useContext } from "react"
-import { MainContext } from "context/MainContext"
 import { faRotate } from "@fortawesome/free-solid-svg-icons"
 import { PanelGroup } from "components/Panel/PanelGroup"
 import { BaseInput, IconButton } from "components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { RuntimeContext } from "context/RuntimeContext"
 
 const getNewAddress = () => {
   const alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
@@ -18,13 +18,13 @@ const getNewAddress = () => {
 }
 
 export function PanelAddress() {
-  const ctx = useContext(MainContext)
+  const runtime = useContext(RuntimeContext)
 
   const handleChange = (e: any) => {
-    ctx.setMinter(e.target.value)
+    runtime.state.update({ minter: e.target.value })
   }
   const handleRefresh = () => {
-    ctx.setMinter(getNewAddress())
+    runtime.state.update({ minter: getNewAddress() })
   }
 
   return (
@@ -35,7 +35,7 @@ export function PanelAddress() {
       <div className={styles.hashControls}>
         <BaseInput
           type="text"
-          value={ctx.minter}
+          value={runtime.state.minter}
           onChange={handleChange}
           className={styles.hashInput}
         />

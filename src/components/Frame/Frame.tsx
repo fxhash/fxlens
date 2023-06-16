@@ -1,110 +1,86 @@
 import style from "./Frame.module.scss"
 import cs from "classnames"
-import { useCallback, useRef } from "react"
+import { useRef } from "react"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { MainContext } from "context/MainContext"
-import { FxParamsContext } from "components/FxParams/Context"
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import { usePostMessageListener } from "components/FxParams/hooks"
+import { RuntimeContext, RuntimeDefinition } from "context/RuntimeContext"
+
 interface Props {
   url: string
   className?: string
 }
+
 export function Frame({ url, className }: Props) {
-  const paramsContext = useContext(FxParamsContext)
   const ctx = useContext(MainContext)
+  const runtime = useContext(RuntimeContext)
   const ref = useRef<HTMLIFrameElement>(null)
 
   useEffect(() => {
-    const listener = (e: any) => {
-      if (e.data) {
-        if (e.data.id === "fxhash_getInfo") {
-          const {
-            version,
-            params: { definitions, values },
-            features,
-            hash,
-            minter,
-          } = e.data.data
-          if (definitions) {
-            const definitionsWithDefaults = definitions.map(
-              (d: FxParamDefinition<FxParamType>) => ({
-                ...d,
-                default: values?.[d.id],
-              })
-            )
-            paramsContext.setParams(definitionsWithDefaults)
-          }
-          paramsContext.setVersion(version)
-          ctx.setFeatures(features)
-          ctx.setHash(hash)
-          ctx.setMinter(minter)
-        }
+    if (ref.current) ctx.setIframe(ref.current)
+  }, [url, ref.current])
 
-        if (e.data.id === "fxhash_getHash") {
-          if (e.data.data) {
-            ctx.setHash(e.data.data)
-          } else {
-            ctx.setHash(null)
-          }
-        }
-        if (e.data.id === "fxhash_getMinter") {
-          if (e.data.data) {
-            ctx.setMinter(e.data.data)
-          } else {
-            ctx.setMinter(null)
-          }
-        }
-        if (e.data.id === "fxhash_getFeatures") {
-          if (e.data.data) {
-            ctx.setFeatures(e.data.data)
-          } else {
-            ctx.setFeatures(null)
-          }
-        }
-        if (e.data.id === "fxhash_getParams") {
-          if (e.data.data) {
-            const { definitions, values } = e.data.data
-            if (definitions) {
-              const definitionsWithDefaults = definitions.map(
-                (d: FxParamDefinition<FxParamType>) => ({
-                  ...d,
-                  default: values?.[d.id],
-                })
-              )
-              paramsContext.setParams(definitionsWithDefaults)
-            }
-          } else {
-            paramsContext.setParams(null)
-          }
-        }
+  usePostMessageListener(ref, "fxhash_getMinter", (e) => {
+    runtime.state.update({
+      minter: e.data.data || null,
+    })
+  })
+
+  usePostMessageListener(ref, "fxhash_getHash", (e) => {
+    runtime.state.update({
+      hash: e.data.data || null,
+    })
+  })
+
+  usePostMessageListener(ref, "fxhash_getFeatures", (e) => {
+    ctx.setFeatures(e.data.data || null)
+  })
+
+  usePostMessageListener(ref, "fxhash_getParams", (e) => {
+    if (e.data.data) {
+      const { definitions, values } = e.data.data
+      if (definitions) {
+        const definitionsWithDefaults = definitions.map(
+          (d: FxParamDefinition<FxParamType>) => ({
+            ...d,
+            default: values?.[d.id],
+          })
+        )
+        runtime.definition.update({ params: definitionsWithDefaults })
       }
+    } else {
+      runtime.definition.update({ params: null })
     }
+  })
 
-    window.addEventListener("message", listener, false)
-
-    return () => {
-      window.removeEventListener("message", listener, false)
+  usePostMessageListener(ref, "fxhash_getInfo", (e) => {
+    const {
+      version,
+      params: { definitions, values },
+      features,
+      hash,
+      minter,
+    } = e.data.data
+    const defUpdate: Partial<RuntimeDefinition> = {}
+    if (definitions) {
+      const definitionsWithDefaults = definitions.map(
+        (d: FxParamDefinition<FxParamType>) => ({
+          ...d,
+          default: values?.[d.id],
+        })
+      )
+      defUpdate.params = definitionsWithDefaults
     }
-  }, [])
+    ctx.setFeatures(features)
+    defUpdate.version = version
+    runtime.definition.update(defUpdate)
+    runtime.state.update({
+      hash,
+      minter,
+    })
+  })
 
-  const handleOnIframeLoad = useCallback(() => {
-    if (ref.current) {
-      ref.current.contentWindow?.postMessage("fxhash_getInfo", "*")
-      ctx.setIframe(ref.current)
-      ref.current.contentWindow?.postMessage("fxhash_getFeatures", "*")
-      ref.current.contentWindow?.postMessage("fxhash_getParams", "*")
-      ref.current.contentWindow?.postMessage("fxhash_getHash", "*")
-      ref.current.contentWindow?.postMessage("fxhash_getMinter", "*")
-    }
-  }, [ref.current])
-
-  return (
-    <iframe
-      ref={ref}
-      src={url}
-      onLoad={handleOnIframeLoad}
-      className={cs(style.root, className)}
-    />
-  )
+  return <iframe ref={ref} src={url} className={cs(style.root, className)} />
 }
