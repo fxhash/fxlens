@@ -91,6 +91,8 @@ export function ParameterController(props: ParameterControllerProps) {
       />
     )
 
+  const isCodeDriven = parameter.update === "code-driven"
+
   return (
     <Controller
       id={parameter.id}
@@ -99,6 +101,10 @@ export function ParameterController(props: ParameterControllerProps) {
       onChange={handleChangeParam}
       // TODO: This should be properly casted
       options={parameter.options as any}
+      isCodeDriven={isCodeDriven}
+      inputProps={{
+        disabled: isCodeDriven,
+      }}
     />
   )
 }
