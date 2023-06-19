@@ -6,7 +6,7 @@ import classes from "./Controller.module.scss"
 import { useMemo } from "react"
 
 export function NumberController(props: FxParamControllerProps<"number">) {
-  const { options, value } = props
+  const { options, value, inputProps } = props
   const min = useMemo(() => {
     if (typeof options?.min === "undefined") return Number.MIN_SAFE_INTEGER
     return options.min

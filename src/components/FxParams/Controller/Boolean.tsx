@@ -2,12 +2,12 @@ import { FxParamControllerProps, HTMLInputController } from "./Controller"
 import classes from "./Controller.module.scss"
 
 export function BooleanController(props: FxParamControllerProps<"boolean">) {
-  const { inputProps, ...rest } = props
+  const { ...rest } = props
   return (
     <HTMLInputController
       type="checkbox"
       layout="box"
-      inputProps={{ checked: props.value, ...inputProps }}
+      inputProps={{ checked: props.value }}
       {...rest}
     />
   )

@@ -108,6 +108,11 @@ export function PanelParams() {
     [lockedParamIds?.length, runtime.definition.params?.length]
   )
 
+  const allParamsCodeDriven = useMemo(
+    () => runtime.definition.params?.every((p) => p.update === "code-driven"),
+    [runtime.definition.params]
+  )
+
   return (
     <PanelGroup
       title="Params"
@@ -122,7 +127,7 @@ export function PanelParams() {
           color="secondary"
           className={classes.randomButton}
           onClick={handleRandomizeParams}
-          disabled={allLocked}
+          disabled={allLocked || allParamsCodeDriven}
         >
           Randomize Params
         </BaseButton>
@@ -160,6 +165,12 @@ export function PanelParams() {
           data={runtime.state.params}
         />
       </div>
+      {allParamsCodeDriven && (
+        <p className={classes.codeDrivenNote}>
+          All params of this artwork are defined as "code-driven". This will
+          enable a dedicated minting experience for collectors on fxhash.xyz
+        </p>
+      )}
     </PanelGroup>
   )
 }
