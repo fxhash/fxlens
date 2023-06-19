@@ -107,6 +107,7 @@ export function HTMLInputController(props: HTMLInputControllerProps) {
         id={id}
         onChange={onChange}
         value={value}
+        disabled={isCodeDriven}
         {...inputProps}
       />
     </Controller>
@@ -131,9 +132,15 @@ export function HTMLInputControllerWithTextInput(
     inputProps = {},
     layout = "default",
     textInputProps,
+    isCodeDriven,
   } = props
   return (
-    <Controller id={id} label={label} layout={layout}>
+    <Controller
+      id={id}
+      label={label}
+      layout={layout}
+      isCodeDriven={isCodeDriven}
+    >
       <BaseParamsInput
         className={className}
         type={type}
@@ -141,6 +148,7 @@ export function HTMLInputControllerWithTextInput(
         onChange={onChange}
         value={value}
         autoComplete="off"
+        disabled={isCodeDriven}
         {...inputProps}
       />
       <BaseParamsInput
@@ -149,6 +157,7 @@ export function HTMLInputControllerWithTextInput(
         onChange={onChange}
         value={value}
         autoComplete="off"
+        disabled={isCodeDriven}
         {...textInputProps}
       />
     </Controller>

@@ -102,9 +102,6 @@ export function ParameterController(props: ParameterControllerProps) {
       // TODO: This should be properly casted
       options={parameter.options as any}
       isCodeDriven={isCodeDriven}
-      inputProps={{
-        disabled: isCodeDriven,
-      }}
     />
   )
 }
