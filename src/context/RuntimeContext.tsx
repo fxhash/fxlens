@@ -21,6 +21,7 @@ export interface RuntimeState {
   hash: string
   minter: string
   params: FxParamsData
+  iteration: number
 }
 
 export interface RuntimeDefinition {
@@ -80,6 +81,7 @@ const defaultRuntimeContext: IRuntimeContext = {
     minter: "",
     params: {},
     update: () => {},
+    iteration: 1,
   },
   definition: {
     params: null,
@@ -103,6 +105,7 @@ export function RuntimeProvider({ children }: Props) {
     hash: "",
     minter: "",
     params: {},
+    iteration: 1,
   })
   const [definition, setDefinition] = useState<RuntimeDefinition>({
     params: null,
