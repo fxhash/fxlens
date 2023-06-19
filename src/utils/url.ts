@@ -16,11 +16,14 @@ export function createIframeUrl(
     minter?: string | null
     data?: Record<string, FxParamType> | null
     params?: FxParamDefinition<FxParamType>[] | null
+    iteration?: number
   }
 ) {
   const url = new URL(baseUrl)
   if (options?.hash) url.searchParams.append("fxhash", options.hash)
   if (options?.minter) url.searchParams.append("fxminter", options.minter)
+  if (options?.iteration)
+    url.searchParams.append("fxiteration", `${options.iteration}`)
   if (options?.data) {
     const bytes = serializeParams(options?.data, options?.params || [])
     url.searchParams.append("fxparams", `0x${bytes}`)
