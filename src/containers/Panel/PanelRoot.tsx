@@ -7,6 +7,7 @@ import { PanelControls } from "./PanelControls"
 import { PanelHash } from "./PanelHash"
 import { PanelAddress } from "./PanelAddress"
 import { PanelIteration } from "./PanelIteration"
+import { PanelContext } from "./PanelContext"
 
 export function PanelRoot() {
   return (
@@ -17,6 +18,7 @@ export function PanelRoot() {
         <div className={cs(style.body)}>
           <PanelHash />
           <PanelAddress />
+          <PanelContext />
           <PanelParams />
           <PanelIteration />
           <PanelFeatures />
