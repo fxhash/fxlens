@@ -16,6 +16,7 @@ const updateIframe: TUpdateIframe = (ctx, runtime) => {
     data: runtime.state.params,
     params: runtime.definition.params,
     iteration: runtime.state.iteration,
+    context: runtime.state.context,
   })
   const target = url.toString()
   if (ctx.iframe) {
