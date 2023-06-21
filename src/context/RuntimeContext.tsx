@@ -113,17 +113,17 @@ export function RuntimeProvider({ children }: Props) {
   })
 
   const update: TUpdateStateFn<RuntimeState> = (data) => {
-    setState({
-      ...state,
+    setState((lastState) => ({
+      ...lastState,
       ...data,
-    })
+    }))
   }
 
   const updateDefinition: TUpdateStateFn<RuntimeDefinition> = (data) => {
-    setDefinition({
-      ...definition,
+    setDefinition((lastDefinition) => ({
+      ...lastDefinition,
       ...data,
-    })
+    }))
   }
 
   // enhance each param definition with the version (useful for serialization)
