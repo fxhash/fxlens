@@ -1,5 +1,6 @@
 import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { serializeParams } from "components/FxParams/utils"
+import { TExecutionContext } from "context/RuntimeContext"
 
 export function encodeUrl(url: string) {
   return encodeURIComponent(url)
@@ -17,6 +18,7 @@ export function createIframeUrl(
     data?: Record<string, FxParamType> | null
     params?: FxParamDefinition<FxParamType>[] | null
     iteration?: number
+    context?: TExecutionContext
   }
 ) {
   const url = new URL(baseUrl)
@@ -28,5 +30,6 @@ export function createIframeUrl(
     const bytes = serializeParams(options?.data, options?.params || [])
     url.searchParams.append("fxparams", `0x${bytes}`)
   }
+  url.searchParams.append("fxcontext", options?.context || "standalone")
   return url
 }
