@@ -17,11 +17,14 @@ import { TUpdateStateFn, TUpdateableState } from "types/utils"
  * See comments on IRuntimeContext for more details.
  */
 
+export type TExecutionContext = "minting" | "standalone" | "capture"
+
 export interface RuntimeState {
   hash: string
   minter: string
   params: FxParamsData
   iteration: number
+  context: TExecutionContext
 }
 
 export interface RuntimeDefinition {
@@ -82,6 +85,7 @@ const defaultRuntimeContext: IRuntimeContext = {
     params: {},
     update: () => {},
     iteration: 1,
+    context: "standalone",
   },
   definition: {
     params: null,
@@ -106,6 +110,7 @@ export function RuntimeProvider({ children }: Props) {
     minter: "",
     params: {},
     iteration: 1,
+    context: "standalone",
   })
   const [definition, setDefinition] = useState<RuntimeDefinition>({
     params: null,
