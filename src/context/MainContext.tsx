@@ -1,6 +1,7 @@
 import { PropsWithChildren, useState } from "react"
 import { createContext } from "react"
-import { decodeUrl } from "utils/url"
+import { appendUrlParameters, decodeUrl } from "utils/url"
+import { TExecutionContext } from "./RuntimeContext"
 
 /**
  * The Main Context will wait for the project URL to be available to render
@@ -38,11 +39,17 @@ export const MainContext = createContext(defaultMainContext)
 
 type Props = PropsWithChildren<any>
 export function MainProvider({ children }: Props) {
-  const [baseUrl, _] = useState(
-    decodeUrl(new URLSearchParams(window.location.search).get("target") || "")
+  const baseUrl = decodeUrl(
+    new URLSearchParams(window.location.search).get("target") || ""
   )
+  const initialContext = new URLSearchParams(window.location.search).get(
+    "fxcontext"
+  ) as TExecutionContext
+
   // initialize the URL from the query parameter target
-  const [url, setUrl] = useState(baseUrl)
+  const [url, setUrl] = useState(
+    appendUrlParameters(baseUrl, { fxcontext: initialContext })
+  )
 
   const [features, setFeatures] = useState<any>(null)
 
