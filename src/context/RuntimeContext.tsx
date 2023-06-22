@@ -110,7 +110,10 @@ export function RuntimeProvider({ children }: Props) {
     minter: "",
     params: {},
     iteration: 1,
-    context: "standalone",
+    context:
+      (new URLSearchParams(window.location.search).get(
+        "fxcontext"
+      ) as TExecutionContext) || "standalone",
   })
   const [definition, setDefinition] = useState<RuntimeDefinition>({
     params: null,
