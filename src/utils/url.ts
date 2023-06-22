@@ -33,3 +33,21 @@ export function createIframeUrl(
   url.searchParams.append("fxcontext", options?.context || "standalone")
   return url
 }
+export function appendUrlParameters(
+  url: string,
+  parameters: Record<string, string | null>
+): string {
+  const params = Object.entries(parameters)
+    .filter(([key, value]) => value !== null)
+    .map(
+      ([key, value]) =>
+        `${encodeURIComponent(key)}=${encodeURIComponent(value as string)}`
+    )
+    .join("&")
+
+  if (params) {
+    return `${url}${url.includes("?") ? "&" : "?"}${params}`
+  }
+
+  return url
+}
