@@ -7,7 +7,6 @@ import { PanelRoot } from "./Panel/PanelRoot"
 
 export function App() {
   const ctx = useContext(MainContext)
-
   return (
     <div className={style.root}>
       <Layout panel={<PanelRoot />} frame={<Frame url={ctx.url} />} />

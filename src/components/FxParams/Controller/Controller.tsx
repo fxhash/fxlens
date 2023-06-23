@@ -32,6 +32,7 @@ export interface ControllerProps {
   inputContainerProps?: {
     ref: RefObject<HTMLDivElement>
   }
+  isCodeDriven?: boolean
 }
 
 export function Controller(props: ControllerProps) {
@@ -41,9 +42,17 @@ export function Controller(props: ControllerProps) {
     layout = "default",
     className,
     inputContainerProps,
+    isCodeDriven,
   } = props
   return (
-    <div className={cx(classes.controller, classes[layout], className)}>
+    <div
+      className={cx(classes.controller, classes[layout], className)}
+      title={
+        isCodeDriven
+          ? "This parameter is solely code-driven. Controller is just shown for debugging purposes."
+          : ""
+      }
+    >
       {id && <label htmlFor={id}>{label || id}</label>}
       <div className={classes.inputContainer} {...inputContainerProps}>
         {props.children}
@@ -61,6 +70,7 @@ export interface HTMLInputControllerProps {
   className?: string
   label?: string
   layout?: "default" | "invert" | "box"
+  isCodeDriven?: boolean
 }
 
 export type FxParamControllerProps<Type extends FxParamType> = Omit<
@@ -80,17 +90,24 @@ export function HTMLInputController(props: HTMLInputControllerProps) {
     value,
     type,
     className,
-    inputProps = {},
+    inputProps,
     layout = "default",
+    isCodeDriven,
   } = props
   return (
-    <Controller id={id} label={label} layout={layout}>
+    <Controller
+      id={id}
+      label={label}
+      layout={layout}
+      isCodeDriven={isCodeDriven}
+    >
       <BaseParamsInput
         className={className}
         type={type}
         id={id}
         onChange={onChange}
         value={value}
+        disabled={isCodeDriven}
         {...inputProps}
       />
     </Controller>
@@ -115,9 +132,15 @@ export function HTMLInputControllerWithTextInput(
     inputProps = {},
     layout = "default",
     textInputProps,
+    isCodeDriven,
   } = props
   return (
-    <Controller id={id} label={label} layout={layout}>
+    <Controller
+      id={id}
+      label={label}
+      layout={layout}
+      isCodeDriven={isCodeDriven}
+    >
       <BaseParamsInput
         className={className}
         type={type}
@@ -125,6 +148,7 @@ export function HTMLInputControllerWithTextInput(
         onChange={onChange}
         value={value}
         autoComplete="off"
+        disabled={isCodeDriven}
         {...inputProps}
       />
       <BaseParamsInput
@@ -133,6 +157,7 @@ export function HTMLInputControllerWithTextInput(
         onChange={onChange}
         value={value}
         autoComplete="off"
+        disabled={isCodeDriven}
         {...textInputProps}
       />
     </Controller>
