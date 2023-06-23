@@ -17,10 +17,14 @@ import { TUpdateStateFn, TUpdateableState } from "types/utils"
  * See comments on IRuntimeContext for more details.
  */
 
+export type TExecutionContext = "minting" | "standalone" | "capture"
+
 export interface RuntimeState {
   hash: string
   minter: string
   params: FxParamsData
+  iteration: number
+  context: TExecutionContext
 }
 
 export interface RuntimeDefinition {
@@ -80,6 +84,8 @@ const defaultRuntimeContext: IRuntimeContext = {
     minter: "",
     params: {},
     update: () => {},
+    iteration: 1,
+    context: "standalone",
   },
   definition: {
     params: null,
@@ -103,6 +109,11 @@ export function RuntimeProvider({ children }: Props) {
     hash: "",
     minter: "",
     params: {},
+    iteration: 1,
+    context:
+      (new URLSearchParams(window.location.search).get(
+        "fxcontext"
+      ) as TExecutionContext) || "standalone",
   })
   const [definition, setDefinition] = useState<RuntimeDefinition>({
     params: null,
@@ -110,17 +121,17 @@ export function RuntimeProvider({ children }: Props) {
   })
 
   const update: TUpdateStateFn<RuntimeState> = (data) => {
-    setState({
-      ...state,
+    setState((lastState) => ({
+      ...lastState,
       ...data,
-    })
+    }))
   }
 
   const updateDefinition: TUpdateStateFn<RuntimeDefinition> = (data) => {
-    setDefinition({
-      ...definition,
+    setDefinition((lastDefinition) => ({
+      ...lastDefinition,
       ...data,
-    })
+    }))
   }
 
   // enhance each param definition with the version (useful for serialization)
