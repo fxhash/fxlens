@@ -1,0 +1,110 @@
+@use './variables';
+
+:root {
+  --fxl-font-family: #{variables.$font-sans};
+
+  --fxl-font-size-xs: #{variables.$font-size-xs};
+  --fxl-font-size-s: #{variables.$font-size-s};
+  --fxl-font-size-regular: #{variables.$font-size-regular};
+  --fxl-font-size-m: #{variables.$font-size-m};
+  --fxl-font-size-l: #{variables.$font-size-l};
+
+  --fxl-color-light: #{variables.$color-light};
+  --fxl-color-light1: #{variables.$color-light1};
+  --fxl-color-light2: #{variables.$color-light2};
+  --fxl-color-dark: #{variables.$color-dark};
+  --fxl-color-dark1: #{variables.$color-dark1};
+  --fxl-color-dark2: #{variables.$color-dark2};
+  
+  --fxl-color-primary: #{variables.$color-primary};
+  --fxl-color-primary-light: #{variables.$color-primary-light};
+  --fxl-color-secondary: #{variables.$color-secondary};
+  --fxl-color-secondary-light: #{variables.$color-secondary-light};
+  --fxl-color-background: #{variables.$color-background};
+  --fxl-color-text-primary: #{variables.$color-text-primary};
+  --fxl-color-text-secondary: #{variables.$color-text-secondary};
+
+  --fxl-color-background2: #{variables.$color-dark1};
+  --fxl-color-background3: #{variables.$color-dark2};
+  
+  --fxl-spacing: #{variables.$spacing};
+  --fxl-spacing-sm: #{variables.$spacing-sm};
+  --fxl-spacing-xs: #{variables.$spacing-xs};
+  --fxl-spacing-xxs: #{variables.$spacing-xxs};
+  --fxl-spacing-l: #{variables.$spacing-l};
+  --fxl-spacing-xl: #{variables.$spacing-xl};
+  --fxl-spacing-xxl: #{variables.$spacing-xxl};
+}
+
+body, button, input {
+  margin: 0;
+  font-family: var(--fxl-font-family);
+  color: var(--fxl-color-text-primary);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  font-size: 16px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  color: var(--fxl-color-background);
+  background: var(--fxl-color-primary);
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--fxl-color-light2);
+
+  &:hover {
+    background: var(--fxl-color-light1);
+  }
+
+  &:active {
+    background: var(--fxl-color-primary);
+  }
+}
+
+::-webkit-scrollbar-track {
+  background: var(--fxl-color-dark2);
+}
+
+h1, h2 {
+  font-size: var(--fxl-font-size-m);
+  margin: var(--fxl-spacing-l) 0 var(--fxl-spacing-xs) 0;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+h3 {
+  font-size: var(--fxl-font-size-regular);
+}
+
+h4 {
+  margin: var(--fxl-spacing-xs) 0 var(--fxl-spacing-xs) 0;
+
+}
+
+p, small {
+  margin: var(--fxl-spacing-sm) 0 var(--fxl-spacing) 0;
+}
+
+ul {
+  margin: var(--fxl-spacing-sm) 0 var(--fxl-spacing) 0;
+  padding-left: var(--fxl-spacing-sm);
+  li {
+    margin-bottom: var(--fxl-spacing-l);
+  }
+}

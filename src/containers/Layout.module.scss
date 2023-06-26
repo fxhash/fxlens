@@ -1,0 +1,17 @@
+.root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+
+  .panel {
+    width: 400px;
+    height: 100%;
+    background-color: var(--fxl-color-dark);
+  }
+
+  .frame {
+    flex-grow: 2;
+    height: 100%;
+  }
+}

@@ -1,0 +1,9 @@
+.root {
+  h1 {
+    display: block;
+  }
+  small {
+    font-size: var(--fxl-font-size-sm);
+    color: var(--fxl-color-text-secondary);
+  }
+}

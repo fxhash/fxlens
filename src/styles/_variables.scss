@@ -1,0 +1,56 @@
+@use "sass:math";
+
+// font
+$font-sans: "Fira Code", monospace;
+$font-size-xs: 0.7rem;
+$font-size-s: 0.8rem;
+$font-size-regular: 13px;
+$font-size-m: 1.25rem;
+$font-size-l: 1.4rem;
+
+// spacing
+$spacing: 16px !default;
+
+$spacing-sm: floor($spacing - 4) !default;
+$spacing-xs: floor(math.div($spacing, 2)) !default;
+$spacing-xxs: floor(math.div($spacing, 4)) !default;
+
+$spacing-l: ceil(math.div($spacing, 2) * 3) !default;
+$spacing-xl: ceil(math.div($spacing, 2) * 4) !default;
+$spacing-xxl: ceil(math.div($spacing, 2) * 5) !default;
+$spacing-xxxl: ceil(math.div($spacing, 2) * 6) !default;
+$spacing-oversize: ceil(math.div($spacing, 2) * 7) !default;
+
+// breakpoints
+$breakpoint-vlg: 1600px;
+$breakpoint-lg: 1200px;
+$breakpoint-md: 960px;
+$breakpoint-sm: 768px;
+
+// colors
+$color-fuchsia: #f79efa;
+$color-orange: orangered;
+$color-space: #5c635c;
+$color-green: springgreen;
+$color-blue: dodgerblue;
+
+$color-magenta: #FF005C;
+
+$color-light: #ffffff;
+$color-light1: #727272;
+$color-light2: #363636;
+
+$color-dark: #000000;
+$color-dark1: #181818;
+$color-dark2: #1c1c1c;
+
+$color-white: $color-light;
+$color-black: $color-dark;
+
+$color-primary: $color-magenta;
+$color-primary-light: lighten($color-primary, 20%);
+$color-secondary: $color-blue;
+$color-secondary-light: lighten($color-secondary, 30%);
+$color-background: $color-black;
+$color-text-primary: $color-light;
+$color-text-secondary: $color-light1;
