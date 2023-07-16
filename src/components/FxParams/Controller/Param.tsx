@@ -13,6 +13,7 @@ import {
 } from "../validation"
 import { SafeParseError, SafeParseSuccess, z } from "zod"
 import { ControllerInvalid } from "./Invalid"
+import { BytesController } from "./Bytes"
 
 interface FxParamControllerDefiniton<Type extends FxParamType> {
   type: Type
@@ -38,6 +39,11 @@ export const controllerDefinitions: FxParamControllerDefinitions = {
   string: {
     type: "string",
     controller: StringController,
+    handler: (e) => e.target.value,
+  },
+  bytes: {
+    type: "bytes",
+    controller: BytesController,
     handler: (e) => e.target.value,
   },
   boolean: {
