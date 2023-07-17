@@ -51,6 +51,10 @@ const BytesControllerSchema = BaseControllerDefinitionSchema.extend({
   type: z.literal(ControllerTypeSchema.enum.bytes),
   options: FxParamOptions_bytesSchema,
   default: z.any().optional(),
+  update: z.literal("code-driven", {
+    invalid_type_error: "Bytes parameters must be code-driven",
+    required_error: "Bytes parameters must be code-driven",
+  }),
 })
 
 const NumberControllerSchema = BaseControllerDefinitionSchema.extend({
