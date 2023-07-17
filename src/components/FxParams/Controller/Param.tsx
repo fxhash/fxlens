@@ -89,13 +89,14 @@ export function ParameterController(props: ParameterControllerProps) {
     onChange(parameter.id, value)
   }
 
-  if (parsedDefinition && !parsedDefinition.success)
+  if (parsedDefinition && !parsedDefinition.success) {
     return (
       <ControllerInvalid
         definition={parameter}
         error={parsedDefinition.error}
       />
     )
+  }
 
   const isCodeDriven = parameter.update === "code-driven"
 
