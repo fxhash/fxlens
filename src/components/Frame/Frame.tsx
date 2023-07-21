@@ -82,5 +82,12 @@ export function Frame({ url, className }: Props) {
     })
   })
 
-  return <iframe ref={ref} src={url} className={cs(style.root, className)} />
+  return (
+    <iframe
+      ref={ref}
+      src={url}
+      className={cs(style.root, className)}
+      allow="accelerometer; camera; gyroscope; microphone; xr-spatial-tracking;"
+    />
+  )
 }

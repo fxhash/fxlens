@@ -2,6 +2,17 @@ import { FxParamDefinition, FxParamType } from "components/FxParams/types"
 import { serializeParams } from "components/FxParams/utils"
 import { TExecutionContext } from "context/RuntimeContext"
 
+function generateRandomSequence(length: number): string {
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  let result = ""
+
+  for (let i = 0; i < length; i++) {
+    result += chars.charAt(Math.floor(Math.random() * chars.length))
+  }
+
+  return result
+}
+
 export function encodeUrl(url: string) {
   return encodeURIComponent(url)
 }
@@ -28,7 +39,8 @@ export function createIframeUrl(
     url.searchParams.append("fxiteration", `${options.iteration}`)
   if (options?.data) {
     const bytes = serializeParams(options?.data, options?.params || [])
-    url.searchParams.append("fxparams", `0x${bytes}`)
+    url.hash = `0x${bytes}`
+    url.searchParams.append("fxparamsUpdate", generateRandomSequence(3))
   }
   url.searchParams.append("fxcontext", options?.context || "standalone")
   return url
