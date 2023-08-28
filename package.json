@@ -19,12 +19,15 @@
     "@types/testing-library__user-event": "^4.2.0",
     "@typescript-eslint/eslint-plugin": "^5.42.1",
     "@typescript-eslint/parser": "^5.42.1",
+    "concurrently": "^8.2.1",
     "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
+    "pnpm-sync-dependencies-meta-injected": "^0.0.9",
     "prettier": "^2.8.3"
   },
   "dependencies": {
+    "@fxhash/params": "workspace:*",
     "@fortawesome/fontawesome-free": "^6.2.1",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
     "@fortawesome/free-brands-svg-icons": "^6.2.1",
@@ -43,13 +46,19 @@
     "web-vitals": "^2.1.4",
     "zod": "^3.21.4"
   },
+  "dependenciesMeta": {
+    "@fxhash/params": {
+      "injected": true
+    }
+  },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "_syncPnpm": "pnpm sync-dependencies-meta-injected"
   },
   "eslintConfig": {
     "extends": [

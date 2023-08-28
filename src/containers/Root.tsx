@@ -1,7 +1,7 @@
 import { MainProvider } from "context/MainContext"
 import { ParamsHistoryProvider } from "components/FxParams/ParamsHistory"
 import { PropsWithChildren } from "react"
-import { RuntimeProvider } from "context/RuntimeContext"
+import { RuntimeProvider } from "@fxhash/params/RuntimeContext"
 
 /**
  * The root component is the first one called by the index. It serves as a
@@ -10,6 +10,7 @@ import { RuntimeProvider } from "context/RuntimeContext"
  */
 type Props = PropsWithChildren<any>
 export function Root({ children }: Props) {
+  console.log("HEllo", RuntimeProvider)
   return (
     <MainProvider>
       <RuntimeProvider>
