@@ -52,13 +52,13 @@
     }
   },
   "scripts": {
-    "dev": "react-scripts start",
+    "dev": "concurrently 'react-scripts start' 'pnpm _syncPnpm --watch'",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "_syncPnpm": "pnpm sync-dependencies-meta-injected"
+    "_syncPnpm": "DEBUG=sync-pnpm pnpm sync-dependencies-meta-injected"
   },
   "eslintConfig": {
     "extends": [
