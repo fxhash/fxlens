@@ -10,7 +10,6 @@ import { RuntimeProvider } from "@fxhash/params/RuntimeContext"
  */
 type Props = PropsWithChildren<any>
 export function Root({ children }: Props) {
-  console.log("HEllo", RuntimeProvider)
   return (
     <MainProvider>
       <RuntimeProvider>
