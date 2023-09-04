@@ -1,7 +1,7 @@
 import { MainProvider } from "context/MainContext"
 import { ParamsHistoryProvider } from "components/FxParams/ParamsHistory"
 import { PropsWithChildren } from "react"
-import { RuntimeProvider } from "@fxhash/params/RuntimeContext"
+import { RuntimeProvider } from "context/RuntimeContext"
 
 /**
  * The root component is the first one called by the index. It serves as a
