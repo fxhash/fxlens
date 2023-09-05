@@ -1,5 +1,6 @@
 {
   "name": "fxlens",
+  "private": true,
   "author": "fxhash",
   "license": "MIT",
   "version": "1.0.0",
@@ -44,7 +45,7 @@
     "zod": "^3.21.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "dev": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
