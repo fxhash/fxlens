@@ -10,6 +10,7 @@ import {
   faChevronDown,
   faChevronRight,
 } from "@fortawesome/free-solid-svg-icons"
+import { FxParamType, FxParamTypeMap } from "./types"
 
 interface ControllerBladeProps {
   parameter: any
@@ -48,7 +49,7 @@ export type ControlsOnChangeDataHandler = (
   newData: Record<string, any>,
   changedParam?: {
     id: string
-    value: any
+    value: FxParamTypeMap[FxParamType]
   }
 ) => void
 
@@ -69,9 +70,9 @@ export const Controls = ({
 }: ControlsProps) => {
   const consolidatedParams = consolidateParams(params, data)
   const p: React.RefObject<HTMLDivElement> = createRef()
-  const [collapsedGroups, setCollapsedGroups] = useState<{
-    [key: string]: boolean
-  }>({})
+  const [collapsedGroups, setCollapsedGroups] = useState<
+    Record<string, boolean>
+  >({})
 
   const toggleGroup = (groupName: string) => {
     setCollapsedGroups((prev) => ({
@@ -82,11 +83,13 @@ export const Controls = ({
 
   useEffect(() => {
     const ps: any = {}
-    consolidatedParams.forEach((param: any) => {
-      ps[param.id] = param.value
-    })
-    if (stringifyParamsData(data) !== stringifyParamsData(ps)) {
-      onChangeData(ps)
+    if (consolidatedParams?.length > 0) {
+      consolidatedParams.forEach((param: any) => {
+        ps[param.id] = param.value
+      })
+      if (stringifyParamsData(data) !== stringifyParamsData(ps)) {
+        onChangeData(ps)
+      }
     }
   }, [params, data, onChangeData])
 
