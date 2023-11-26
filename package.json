@@ -4,21 +4,12 @@
   "author": "fxhash",
   "license": "MIT",
   "version": "1.0.0",
-  "scripts": {
-    "dev": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint ./src",
-    "lint:fix": "eslint ./src --fix"
-  },
   "dependencies": {
     "@fortawesome/fontawesome-free": "6.4.0",
     "@fortawesome/fontawesome-svg-core": "6.4.0",
     "@fortawesome/free-brands-svg-icons": "6.4.0",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
-    "@fxhash/utils": "workspace:*",
     "classnames": "2.3.2",
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
@@ -30,7 +21,8 @@
     "sha1": "1.1.1",
     "typescript": "4.9.5",
     "web-vitals": "2.1.4",
-    "zod": "3.21.4"
+    "zod": "3.21.4",
+    "@fxhash/utils": "0.0.1"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "5.16.5",
@@ -70,5 +62,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "scripts": {
+    "dev": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix"
   }
 }
