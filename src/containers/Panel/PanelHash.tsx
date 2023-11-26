@@ -1,32 +1,21 @@
 import styles from "./PanelHash.module.scss"
 import { useContext } from "react"
-import { MainContext } from "context/MainContext"
-import { faRotate } from "@fortawesome/free-solid-svg-icons"
 import { PanelGroup } from "components/Panel/PanelGroup"
 import { BaseInput, IconButton } from "components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { RuntimeContext } from "context/RuntimeContext"
-
-const getNewHash = () => {
-  const alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-  return (
-    "oo" +
-    Array(49)
-      .fill(0)
-      .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
-      .join("")
-  )
-}
+import { IconTezos } from "components/Icon/Tezos"
+import { faEthereum } from "@fortawesome/free-brands-svg-icons"
+import { mockTransactionHash } from "@fxhash/utils"
 
 export function PanelHash() {
-  const ctx = useContext(MainContext)
   const runtime = useContext(RuntimeContext)
 
   const handleChange = (e: any) => {
     runtime.state.update({ hash: e.target.value })
   }
-  const handleRefresh = () => {
-    runtime.state.update({ hash: getNewHash() })
+  const handleRefresh = (hash: string) => {
+    runtime.state.update({ hash })
   }
 
   return (
@@ -42,8 +31,17 @@ export function PanelHash() {
           onChange={handleChange}
           className={styles.hashInput}
         />
-        <IconButton onClick={handleRefresh} color="secondary">
-          <FontAwesomeIcon icon={faRotate} size="1x" />
+        <IconButton
+          onClick={() => handleRefresh(mockTransactionHash("TEZOS"))}
+          color="secondary"
+        >
+          <IconTezos />
+        </IconButton>
+        <IconButton
+          onClick={() => handleRefresh(mockTransactionHash("ETHEREUM"))}
+          color="secondary"
+        >
+          <FontAwesomeIcon icon={faEthereum} size="1x" />
         </IconButton>
       </div>
     </PanelGroup>
