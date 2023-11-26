@@ -10,15 +10,8 @@ import classes from "./PanelParams.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons"
 import { getRandomParamValues } from "components/FxParams/utils"
-import {
-  FxParamDefinition,
-  FxParamsData,
-  FxParamType,
-} from "components/FxParams/types"
-import {
-  IParamsHistoryEntry,
-  ParamsHistoryContext,
-} from "components/FxParams/ParamsHistory"
+import { FxParamDefinition, FxParamType } from "components/FxParams/types"
+import { ParamsHistoryContext } from "components/FxParams/ParamsHistory"
 import { LockButton } from "components/FxParams/LockButton/LockButton"
 import cx from "classnames"
 import { useState } from "react"
@@ -32,30 +25,6 @@ export function PanelParams() {
   const { iframe } = useContext(MainContext)
   const runtime = useContext(RuntimeContext)
 
-  const sendSyncParameters = (syncParams: FxParamsData) => {
-    iframe?.contentWindow?.postMessage(
-      {
-        id: "fxhash_params:update",
-        data: {
-          params: syncParams,
-        },
-      },
-      "*"
-    )
-  }
-
-  const findSyncParams = (params: FxParamsData) => {
-    return Object.keys(params).reduce((acc: FxParamsData, paramId) => {
-      if (
-        runtime?.definition?.params?.find((p) => p.id === paramId)?.update ===
-        "sync"
-      ) {
-        acc[paramId] = params[paramId]
-      }
-      return acc
-    }, {})
-  }
-
   const [lockedParamIds, setLockedParamIds] = useState<string[]>([])
   const { history, offset, undo, redo } = useContext(ParamsHistoryContext)
 
@@ -67,14 +36,21 @@ export function PanelParams() {
     changedParam
   ) => {
     runtime.state.update({ params: newData })
-    const isSyncParam =
-      changedParam &&
-      runtime.definition.params?.find((d) => d.id === changedParam.id)
+    const realtimeSync =
+      runtime.definition.params?.find((d) => d.id === changedParam?.id)
         ?.update === "sync"
-    if (isSyncParam) {
-      sendSyncParameters({
-        [changedParam.id]: changedParam.value,
-      })
+    if (realtimeSync && changedParam) {
+      iframe?.contentWindow?.postMessage(
+        {
+          id: "fxhash_params:update",
+          data: {
+            params: {
+              [changedParam.id]: changedParam.value,
+            },
+          },
+        },
+        "*"
+      )
     }
   }
 
@@ -101,8 +77,6 @@ export function PanelParams() {
     runtime.state.update({
       params: { ...runtime.state.params, ...randomValues },
     })
-    const syncParams = findSyncParams(randomValues)
-    sendSyncParameters(syncParams)
   }
   const handleToggleLockAllParams = () => {
     if (lockedParamIds.length > 0) {
@@ -123,18 +97,11 @@ export function PanelParams() {
       setLockedParamIds(updatedIds)
     }
   }
-
   const handleUndo = () => {
-    undo((entry?: IParamsHistoryEntry) => {
-      const syncParams = findSyncParams(entry?.data as FxParamsData)
-      sendSyncParameters(syncParams)
-    })
+    undo()
   }
   const handleRedo = () => {
-    redo((entry?: IParamsHistoryEntry) => {
-      const syncParams = findSyncParams(entry?.data as FxParamsData)
-      sendSyncParameters(syncParams)
-    })
+    redo()
   }
   const allLocked = useMemo(
     () => lockedParamIds?.length === runtime.definition.params?.length,

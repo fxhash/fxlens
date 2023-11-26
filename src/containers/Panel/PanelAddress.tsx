@@ -1,21 +1,12 @@
 import styles from "./PanelAddress.module.scss"
 import { useContext } from "react"
-import { faRotate } from "@fortawesome/free-solid-svg-icons"
 import { PanelGroup } from "components/Panel/PanelGroup"
 import { BaseInput, IconButton } from "components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { RuntimeContext } from "context/RuntimeContext"
-
-const getNewAddress = () => {
-  const alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ"
-  return (
-    "tz1" +
-    Array(33)
-      .fill(0)
-      .map((_) => alphabet[(Math.random() * alphabet.length) | 0])
-      .join("")
-  )
-}
+import { mockBlockchainAddress } from "@fxhash/utils"
+import { faEthereum } from "@fortawesome/free-brands-svg-icons"
+import { IconTezos } from "components/Icon/Tezos"
 
 export function PanelAddress() {
   const runtime = useContext(RuntimeContext)
@@ -23,8 +14,8 @@ export function PanelAddress() {
   const handleChange = (e: any) => {
     runtime.state.update({ minter: e.target.value })
   }
-  const handleRefresh = () => {
-    runtime.state.update({ minter: getNewAddress() })
+  const handleRefresh = (address: string) => {
+    runtime.state.update({ minter: address })
   }
 
   return (
@@ -39,8 +30,17 @@ export function PanelAddress() {
           onChange={handleChange}
           className={styles.hashInput}
         />
-        <IconButton onClick={handleRefresh} color="secondary">
-          <FontAwesomeIcon icon={faRotate} size="1x" />
+        <IconButton
+          onClick={() => handleRefresh(mockBlockchainAddress("TEZOS"))}
+          color="secondary"
+        >
+          <IconTezos />
+        </IconButton>
+        <IconButton
+          onClick={() => handleRefresh(mockBlockchainAddress("ETHEREUM"))}
+          color="secondary"
+        >
+          <FontAwesomeIcon icon={faEthereum} size="1x" />
         </IconButton>
       </div>
     </PanelGroup>

@@ -14,22 +14,22 @@ import { RuntimeContext } from "context/RuntimeContext"
 const isEqual = (a: any, b: any) =>
   stringifyParamsData(a) === stringifyParamsData(b)
 
-export type ParamsHistoryActionType = "params-update"
+type ParamsHistoryActionType = "params-update"
 
-export interface IParamsHistoryEntry {
+interface IParamsHistoryEntry {
   type: ParamsHistoryActionType
   data: any
 }
 
-export type ParamsHistoryAction = (entry: IParamsHistoryEntry) => void
+type ParamsHistoryAction = (entry: IParamsHistoryEntry) => void
 
 export interface IParamsHistoryContext {
   history: IParamsHistoryEntry[]
   pushHistory: (entry: IParamsHistoryEntry) => void
   offset: number
   setOffset: (o: number) => void
-  undo: (callback?: (entry?: IParamsHistoryEntry) => void) => void
-  redo: (callback?: (entry?: IParamsHistoryEntry) => void) => void
+  undo: () => void
+  redo: () => void
 }
 
 const defaultParamsHistoryContext: IParamsHistoryContext = {
@@ -66,16 +66,14 @@ export function ParamsHistoryProvider({ children }: Props) {
     []
   )
 
-  const undo = (callback?: (entry?: IParamsHistoryEntry) => void) => {
+  const undo = () => {
     if (offset >= history.length) return
     setOffset(offset + 1)
-    callback?.(history?.[offset + 1])
   }
 
-  const redo = (callback?: (entry?: IParamsHistoryEntry) => void) => {
+  const redo = () => {
     if (offset <= 0) return
     setOffset(offset - 1)
-    callback?.(history?.[offset - 1])
   }
 
   // when offset change apply action based on history entry

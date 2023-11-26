@@ -66,10 +66,9 @@ export function PanelControls() {
             )
             const p = [
               `fxhash=${runtime.state.hash}`,
-              `fxparams=0x${bytes}`,
               `fxminter=${runtime.state.minter}`,
             ]
-            const target = `${ctx.baseUrl}?${p.join("&")}`
+            const target = `${ctx.baseUrl}?${p.join("&")}#0x${bytes}`
             window.open(target)
           }}
         >
