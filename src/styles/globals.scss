@@ -1,4 +1,4 @@
-@use './variables';
+@use "./variables";
 
 :root {
   --fxl-font-family: #{variables.$font-sans};
@@ -15,7 +15,7 @@
   --fxl-color-dark: #{variables.$color-dark};
   --fxl-color-dark1: #{variables.$color-dark1};
   --fxl-color-dark2: #{variables.$color-dark2};
-  
+
   --fxl-color-primary: #{variables.$color-primary};
   --fxl-color-primary-light: #{variables.$color-primary-light};
   --fxl-color-secondary: #{variables.$color-secondary};
@@ -26,7 +26,7 @@
 
   --fxl-color-background2: #{variables.$color-dark1};
   --fxl-color-background3: #{variables.$color-dark2};
-  
+
   --fxl-spacing: #{variables.$spacing};
   --fxl-spacing-sm: #{variables.$spacing-sm};
   --fxl-spacing-xs: #{variables.$spacing-xs};
@@ -36,7 +36,9 @@
   --fxl-spacing-xxl: #{variables.$spacing-xxl};
 }
 
-body, button, input {
+body,
+button,
+input {
   margin: 0;
   font-family: var(--fxl-font-family);
   color: var(--fxl-color-text-primary);
@@ -79,7 +81,8 @@ html {
   background: var(--fxl-color-dark2);
 }
 
-h1, h2 {
+h1,
+h2 {
   font-size: var(--fxl-font-size-m);
   margin: var(--fxl-spacing-l) 0 var(--fxl-spacing-xs) 0;
 }
@@ -94,10 +97,10 @@ h3 {
 
 h4 {
   margin: var(--fxl-spacing-xs) 0 var(--fxl-spacing-xs) 0;
-
 }
 
-p, small {
+p,
+small {
   margin: var(--fxl-spacing-sm) 0 var(--fxl-spacing) 0;
 }
 
