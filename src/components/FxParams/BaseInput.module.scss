@@ -1,8 +1,6 @@
 $height: 30px;
 
-.baseInput,
-.baseSelect,
-.baseButton {
+.baseInput, .baseSelect, .baseButton {
   font-family: var(--fxl-font-family);
   font-size: var(--fxl-font-size-regular);
   height: $height;
@@ -16,6 +14,7 @@ $height: 30px;
   }
   &:focus-visible {
     outline: 1px solid var(--fxl-color-primary);
+  
   }
   &:disabled {
     opacity: 0.6;
@@ -49,7 +48,7 @@ $height: 30px;
 }
 
 .iconButton {
-  width: $height !important;
+  width: $height !important; 
   cursor: pointer;
   padding: 0;
   display: flex;
@@ -64,7 +63,7 @@ $slider-thumb-height: 15px;
 $slider-thumb-width: 15px;
 $slider-thumb-border-radius: 50%;
 
-.baseInput[type="range"] {
+.baseInput[type="range"]{
   -webkit-appearance: none;
   appearance: none;
   height: $slider-track-height !important;
@@ -119,3 +118,4 @@ $checkbox-thumb-spacing: 15px;
     }
   }
 }
+

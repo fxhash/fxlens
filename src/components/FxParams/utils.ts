@@ -150,10 +150,10 @@ export const ParameterProcessors: FxParamProcessors = {
           ? "01"
           : "00"
         : typeof input === "string"
-          ? input === "true"
-            ? "01"
-            : "00"
+        ? input === "true"
+          ? "01"
           : "00"
+        : "00"
     },
     deserialize: (input) => {
       return input === "00" ? false : true
@@ -294,8 +294,8 @@ export function serializeParams(
       typeof v !== "undefined"
         ? v
         : typeof def.default !== "undefined"
-          ? def.default
-          : processor.random(def)
+        ? def.default
+        : processor.random(def)
     const serialized = processor.serialize(val, def)
     bytes += serialized
   }
@@ -360,19 +360,16 @@ export function getRandomParamValues(
   params: FxParamDefinition<FxParamType>[],
   options?: { noTransform: boolean }
 ): any {
-  return params.reduce(
-    (acc, definition) => {
-      const processor = ParameterProcessors[
-        definition.type as FxParamType
-      ] as FxParamProcessor<FxParamType>
-      const v = processor.random(definition) as FxParamType
-      acc[definition.id] = options?.noTransform
-        ? v
-        : processor.transform?.(v) || v
-      return acc
-    },
-    {} as Record<string, any>
-  )
+  return params.reduce((acc, definition) => {
+    const processor = ParameterProcessors[
+      definition.type as FxParamType
+    ] as FxParamProcessor<FxParamType>
+    const v = processor.random(definition) as FxParamType
+    acc[definition.id] = options?.noTransform
+      ? v
+      : processor.transform?.(v) || v
+    return acc
+  }, {} as Record<string, any>)
 }
 
 export function sumBytesParams(
