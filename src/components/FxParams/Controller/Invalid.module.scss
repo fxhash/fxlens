@@ -3,7 +3,7 @@
   display: flex;
   width: 100%;
   flex-direction: column;
-  margin-bottom: var(--fxl-spacing-xxs);
+	margin-bottom: var(--fxl-spacing-xxs);
   label {
     color: var(--fxl-color-light1);
     cursor: pointer;
@@ -46,7 +46,7 @@
 .errorsWrapper {
   border: 2px solid var(--fxl-color-dark2);
   border-top: none;
-  padding: var(--fxl-spacing-sm);
+	padding: var(--fxl-spacing-sm);
 }
 .attributes {
   margin-bottom: var(--fxl-spacing-l);
@@ -55,7 +55,7 @@
   h3 {
     font-weight: 400;
   }
-  p {
+  p{
     color: var(--fxl-color-light1);
   }
 }

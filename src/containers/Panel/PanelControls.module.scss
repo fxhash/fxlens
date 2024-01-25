@@ -8,7 +8,7 @@
   display: flex;
   align-items: center;
   label {
-    margin-left: var(--fxl-spacing-sm);
+    margin-left: var(--fxl-spacing-sm)
   }
 }
 .buttonsWrapper {
@@ -24,9 +24,7 @@
   &:checked ~ label {
     &::before {
       background: var(--fxl-color-light1);
-      box-shadow:
-        3px 3px 0px var(--fxl-color-dark2) inset,
-        -3px -3px 0px var(--fxl-color-dark2) inset;
+      box-shadow: 3px 3px 0px var(--fxl-color-dark2) inset, -3px -3px 0px var(--fxl-color-dark2) inset;
     }
   }
 }
