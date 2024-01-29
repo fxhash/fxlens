@@ -1,6 +1,6 @@
 > **⚠️ Disclaimer**: This project is still in development. Some changes will be introduced over the next weeks, so please use this project with caution.
 
-# fx(lens) 
+# fx(lens)
 
 Interactive environment to view, tweak and develop generative tokens for the fx(hash) platform.
 
@@ -13,7 +13,6 @@ Interactive environment to view, tweak and develop generative tokens for the fx(
 - Randmomize fx(params) values with individual parameter locking
 - Undo/redo stack for fx(params) values
 - Schema validation of parameters with hints
-
 
 ### Prerequisites
 
@@ -44,10 +43,9 @@ http://localhost:3000/?target=http://localhost:3301
 
 Checkout the [boilerplate documentation](https://github.com/fxhash/params-boilerplate#available-fxparams-types) for more info about the different fx(params) types.
 
-
 ## Randomization
 
-You can explore randomness of the parameters by using the "Randomize params"-Button. Each parameter change is being kept inside the undo/redo stack; Making sure you don't loose any beloved configuration. When you like one of the parameters you can use the "lock"-button to not randomize this parameter and keep it "frozen". 
+You can explore randomness of the parameters by using the "Randomize params"-Button. Each parameter change is being kept inside the undo/redo stack; Making sure you don't loose any beloved configuration. When you like one of the parameters you can use the "lock"-button to not randomize this parameter and keep it "frozen".
 
 ## Validation
 
