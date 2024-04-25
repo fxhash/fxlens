@@ -1,9 +1,9 @@
 import style from "./PanelFeatures.module.scss"
 import cs from "classnames"
 import { useContext } from "react"
-import { MainContext } from "context/MainContext"
-import { Features } from "components/Features"
-import { PanelGroup } from "components/Panel/PanelGroup"
+import { MainContext } from "@/context/MainContext"
+import { Features } from "@/components/Features"
+import { PanelGroup } from "@/components/Panel/PanelGroup"
 
 export function PanelFeatures() {
   const ctx = useContext(MainContext)
