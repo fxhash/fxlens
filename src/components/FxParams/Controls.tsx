@@ -1,5 +1,5 @@
 import { createRef, useEffect, useMemo, useState } from "react"
-import { consolidateParams } from "components/FxParams/utils"
+import { consolidateParams } from "@/components/FxParams/utils"
 import { ParameterController } from "./Controller/Param"
 import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"

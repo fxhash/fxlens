@@ -1,23 +1,23 @@
 import {
   Controls,
   ControlsOnChangeDataHandler,
-} from "components/FxParams/Controls"
-import { PanelGroup } from "components/Panel/PanelGroup"
+} from "@/components/FxParams/Controls"
+import { PanelGroup } from "@/components/Panel/PanelGroup"
 import { useCallback, useContext, useMemo } from "react"
-import { ProgressBar } from "components/ProgressBar/ProgressBar"
-import { BaseButton, IconButton } from "components/FxParams/BaseInput"
+import { ProgressBar } from "@/components/ProgressBar/ProgressBar"
+import { BaseButton, IconButton } from "@/components/FxParams/BaseInput"
 import classes from "./PanelParams.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons"
-import { getRandomParamValues } from "components/FxParams/utils"
-import { FxParamDefinition, FxParamType } from "components/FxParams/types"
-import { ParamsHistoryContext } from "components/FxParams/ParamsHistory"
-import { LockButton } from "components/FxParams/LockButton/LockButton"
+import { getRandomParamValues } from "@/components/FxParams/utils"
+import { FxParamDefinition, FxParamType } from "@/components/FxParams/types"
+import { ParamsHistoryContext } from "@/components/FxParams/ParamsHistory"
+import { LockButton } from "@/components/FxParams/LockButton/LockButton"
 import cx from "classnames"
 import { useState } from "react"
-import { MainContext } from "context/MainContext"
-import { useMessageListener } from "components/FxParams/hooks"
-import { RuntimeContext } from "context/RuntimeContext"
+import { MainContext } from "@/context/MainContext"
+import { useMessageListener } from "@/components/FxParams/hooks"
+import { RuntimeContext } from "@/context/RuntimeContext"
 
 const MAX_BYTES = 50000
 
@@ -37,7 +37,7 @@ export function PanelParams() {
   ) => {
     runtime.state.update({ params: newData })
     const realtimeSync =
-      runtime.definition.params?.find((d) => d.id === changedParam?.id)
+      runtime.definition.params?.find((d: any) => d.id === changedParam?.id)
         ?.update === "sync"
     if (realtimeSync && changedParam) {
       iframe?.contentWindow?.postMessage(
@@ -109,7 +109,8 @@ export function PanelParams() {
   )
 
   const allParamsCodeDriven = useMemo(
-    () => runtime.definition.params?.every((p) => p.update === "code-driven"),
+    () =>
+      runtime.definition.params?.every((p: any) => p.update === "code-driven"),
     [runtime.definition.params]
   )
 

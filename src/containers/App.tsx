@@ -1,5 +1,5 @@
-import { Frame } from "components/Frame/Frame"
-import { MainContext } from "context/MainContext"
+import { Frame } from "@/components/Frame/Frame"
+import { MainContext } from "@/context/MainContext"
 import { useContext } from "react"
 import style from "./App.module.scss"
 import { Layout } from "./Layout"
