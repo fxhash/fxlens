@@ -23,6 +23,7 @@ export interface IMainContext {
   setFeatures: (features: any) => void
   iframe: HTMLIFrameElement | null
   setIframe: (iframe: HTMLIFrameElement) => void
+  devCli?: boolean
 }
 
 const defaultMainContext: IMainContext = {
@@ -33,15 +34,17 @@ const defaultMainContext: IMainContext = {
   setFeatures: () => {},
   iframe: null,
   setIframe: () => {},
+  devCli: false,
 }
 
 export const MainContext = createContext(defaultMainContext)
 
 type Props = PropsWithChildren<any>
 export function MainProvider({ children }: Props) {
-  const baseUrl = decodeUrl(
-    new URLSearchParams(window.location.search).get("target") || ""
-  )
+  const params = new URLSearchParams(window.location.search)
+  const baseUrl = decodeUrl(params.get("target") || "")
+  // running through fxhash cli dev cmd
+  const devCli = params.get("devCli") ? true : false
   const initialContext = new URLSearchParams(window.location.search).get(
     "fxcontext"
   ) as TExecutionContext
@@ -63,6 +66,7 @@ export function MainProvider({ children }: Props) {
     setFeatures,
     iframe,
     setIframe,
+    devCli,
   }
 
   return <MainContext.Provider value={context}>{children}</MainContext.Provider>
