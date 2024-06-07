@@ -1,10 +1,10 @@
 import styles from "./PanelIteration.module.scss"
 import { useContext } from "react"
 import { faPlus, faMinus } from "@fortawesome/free-solid-svg-icons"
-import { PanelGroup } from "components/Panel/PanelGroup"
-import { BaseInput, IconButton } from "components/FxParams/BaseInput"
+import { PanelGroup } from "@/components/Panel/PanelGroup"
+import { BaseInput, IconButton } from "@/components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { RuntimeContext } from "context/RuntimeContext"
+import { RuntimeContext } from "@/context/RuntimeContext"
 
 export function PanelIteration() {
   const runtime = useContext(RuntimeContext)

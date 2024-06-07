@@ -3,10 +3,10 @@ import cs from "classnames"
 import { useRef } from "react"
 import { useEffect } from "react"
 import { useContext } from "react"
-import { MainContext } from "context/MainContext"
-import { FxParamDefinition, FxParamType } from "components/FxParams/types"
-import { usePostMessageListener } from "components/FxParams/hooks"
-import { RuntimeContext, RuntimeDefinition } from "context/RuntimeContext"
+import { MainContext } from "@/context/MainContext"
+import { FxParamDefinition, FxParamType } from "@/components/FxParams/types"
+import { usePostMessageListener } from "@/components/FxParams/hooks"
+import { RuntimeContext, RuntimeDefinition } from "@/context/RuntimeContext"
 
 interface Props {
   url: string

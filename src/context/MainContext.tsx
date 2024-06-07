@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState } from "react"
 import { createContext } from "react"
-import { appendUrlParameters, decodeUrl } from "utils/url"
+import { appendUrlParameters, decodeUrl } from "@/utils/url"
 import { TExecutionContext } from "./RuntimeContext"
 
 /**

@@ -1,12 +1,12 @@
 import styles from "./PanelAddress.module.scss"
 import { useContext } from "react"
-import { PanelGroup } from "components/Panel/PanelGroup"
-import { BaseInput, IconButton } from "components/FxParams/BaseInput"
+import { PanelGroup } from "@/components/Panel/PanelGroup"
+import { BaseInput, IconButton } from "@/components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { RuntimeContext } from "context/RuntimeContext"
+import { RuntimeContext } from "@/context/RuntimeContext"
 import { mockBlockchainAddress } from "@fxhash/utils"
 import { faEthereum } from "@fortawesome/free-brands-svg-icons"
-import { IconTezos } from "components/Icon/Tezos"
+import { IconTezos } from "@/components/Icon/Tezos"
 
 export function PanelAddress() {
   const runtime = useContext(RuntimeContext)
