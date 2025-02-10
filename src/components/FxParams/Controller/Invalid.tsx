@@ -30,9 +30,7 @@ function Attribute(props: AttributeProps) {
   if (!definition[id]) return null
   return (
     <h4>
-      <>
-        {id}: {definition[id]}
-      </>
+      {id}: {definition[id] as any}
     </h4>
   )
 }
@@ -66,7 +64,7 @@ export function ControllerInvalid(props: ControllerInvalidProps) {
             <Attribute definition={definition} id="name" />
           </div>
           <ul className={cx(classes.issues, { [classes.isOpen]: showIssues })}>
-            {error.issues.map((issue) => (
+            {error.issues.map(issue => (
               <Issue
                 key={`${issue.code}-${issue.path.join("-")}`}
                 issue={issue}
