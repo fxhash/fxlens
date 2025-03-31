@@ -30,9 +30,7 @@ function Attribute(props: AttributeProps) {
   if (!definition[id]) return null
   return (
     <h4>
-      <>
-        {id}: {definition[id]}
-      </>
+      {id}: {definition[id] as any}
     </h4>
   )
 }
