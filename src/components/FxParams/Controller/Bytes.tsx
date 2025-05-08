@@ -3,7 +3,6 @@ import css from "./Bytes.module.scss"
 import {
   Controller,
   FxParamControllerProps,
-  HTMLInputController,
 } from "./Controller"
 
 export function BytesController(props: FxParamControllerProps<"bytes">) {

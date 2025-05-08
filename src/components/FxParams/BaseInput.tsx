@@ -1,6 +1,5 @@
 import {
   ButtonHTMLAttributes,
-  HtmlHTMLAttributes,
   InputHTMLAttributes,
   SelectHTMLAttributes,
 } from "react"

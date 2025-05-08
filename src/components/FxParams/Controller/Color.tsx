@@ -2,13 +2,10 @@ import {
   useState,
   useEffect,
   useRef,
-  LegacyRef,
-  MutableRefObject,
-  RefObject,
   ChangeEvent,
   useMemo,
 } from "react"
-import { hexToRgba, rgbaToHex } from "../utils"
+import { hexToRgba, rgbaToHex } from "@fxhash/params"
 import {
   FxParamControllerProps,
   Controller,

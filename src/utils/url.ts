@@ -1,5 +1,4 @@
-import { FxParamDefinition, FxParamType } from "@/components/FxParams/types"
-import { serializeParams } from "@/components/FxParams/utils"
+import { serializeParams, FxParamDefinition, FxParamType } from "@fxhash/params"
 import { TExecutionContext } from "@/context/RuntimeContext"
 
 function generateRandomSequence(length: number): string {

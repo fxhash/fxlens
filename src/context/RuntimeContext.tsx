@@ -1,15 +1,13 @@
-import {
-  FxParamDefinition,
-  FxParamType,
-  FxParamsData,
-} from "@/components/FxParams/types"
 import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
 import sha1 from "sha1"
 import {
+  FxParamDefinition,
+  FxParamsData,
+  FxParamType,
   jsonStringifyBigint,
   sumBytesParams,
-} from "@/components/FxParams/utils"
+} from "@fxhash/params"
 import { TUpdateStateFn, TUpdateableState } from "@/types/utils"
 
 /**
@@ -86,14 +84,14 @@ const defaultRuntimeContext: IRuntimeContext = {
     hash: "",
     minter: "",
     params: {},
-    update: () => {},
+    update: () => { },
     iteration: 1,
     context: "standalone",
   },
   definition: {
     params: null,
     version: null,
-    update: () => {},
+    update: () => { },
   },
   details: {
     paramsByteSize: 0,

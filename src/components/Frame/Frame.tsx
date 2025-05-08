@@ -4,7 +4,7 @@ import { useRef } from "react"
 import { useEffect } from "react"
 import { useContext } from "react"
 import { MainContext } from "@/context/MainContext"
-import { FxParamDefinition, FxParamType } from "@/components/FxParams/types"
+import { FxParamDefinition, FxParamType } from "@fxhash/params"
 import { usePostMessageListener } from "@/components/FxParams/hooks"
 import { RuntimeContext, RuntimeDefinition } from "@/context/RuntimeContext"
 
@@ -63,6 +63,7 @@ export function Frame({ url, className }: Props) {
       hash,
       minter,
     } = e.data.data
+    console.log("fxhash_getInfo", e.data.data)
     const defUpdate: Partial<RuntimeDefinition> = {}
     if (definitions) {
       const definitionsWithDefaults = definitions.map(
