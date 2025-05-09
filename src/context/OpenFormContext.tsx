@@ -31,7 +31,8 @@ const defaultContext: OpenFormContext = {
   getChildNodes: () => [],
   getParentNodes: () => [],
   liveMode: false,
-  setLiveMode: () => { }
+  setLiveMode: () => { },
+  tree: []
 };
 
 export const OpenFormContext = createContext<OpenFormContext>(defaultContext);
