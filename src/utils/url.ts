@@ -1,5 +1,4 @@
-import { FxParamDefinition, FxParamType } from "@/components/FxParams/types"
-import { serializeParams } from "@/components/FxParams/utils"
+import { serializeParams, FxParamDefinition, FxParamType } from "@fxhash/params"
 import { TExecutionContext } from "@/context/RuntimeContext"
 
 function generateRandomSequence(length: number): string {
@@ -29,6 +28,7 @@ export function createIframeUrl(
     data?: Record<string, FxParamType> | null
     params?: FxParamDefinition<FxParamType>[] | null
     iteration?: number
+    lineage?: string[]
     context?: TExecutionContext
   }
 ) {
@@ -37,9 +37,17 @@ export function createIframeUrl(
   if (options?.minter) url.searchParams.append("fxminter", options.minter)
   if (options?.iteration)
     url.searchParams.append("fxiteration", `${options.iteration}`)
+  if (options?.lineage) {
+    url.hash = `lineage=${options.lineage.join(",")}`
+  }
   if (options?.data) {
     const bytes = serializeParams(options?.data, options?.params || [])
-    url.hash = `0x${bytes}`
+    if (options.lineage) {
+      url.hash += `&params=0x${bytes}`
+    } else {
+
+      url.hash = `0x${bytes}`
+    }
     url.searchParams.append("fxparamsUpdate", generateRandomSequence(3))
   }
   url.searchParams.append("fxcontext", options?.context || "standalone")

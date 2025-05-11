@@ -12,4 +12,12 @@
   .body {
     flex-grow: 1;
   }
+  .tabs {
+    display: flex;
+    gap: var(--fxl-spacing);
+    margin-bottom: var(--fxl-spacing);
+    .tab {
+      width: 100%;
+    }
+  }
 }

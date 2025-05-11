@@ -6,6 +6,7 @@
 
   .panel {
     width: 400px;
+    min-width: 400px;
     height: 100%;
     background-color: var(--fxl-color-dark);
   }
@@ -13,5 +14,6 @@
   .frame {
     flex-grow: 2;
     height: 100%;
+    width: 100%;
   }
 }

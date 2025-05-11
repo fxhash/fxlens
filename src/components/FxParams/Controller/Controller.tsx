@@ -4,7 +4,7 @@ import {
   ReactNode,
   RefObject,
 } from "react"
-import { FxParamOptionsMap, FxParamType } from "../types"
+import { FxParamOptionsMap, FxParamType } from "@fxhash/params"
 import classes from "./Controller.module.scss"
 import cx from "classnames"
 import { BaseInput } from "../BaseInput"

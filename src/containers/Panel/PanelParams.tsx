@@ -9,8 +9,6 @@ import { BaseButton, IconButton } from "@/components/FxParams/BaseInput"
 import classes from "./PanelParams.module.scss"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRotateLeft, faRotateRight } from "@fortawesome/free-solid-svg-icons"
-import { getRandomParamValues } from "@/components/FxParams/utils"
-import { FxParamDefinition, FxParamType } from "@/components/FxParams/types"
 import { ParamsHistoryContext } from "@/components/FxParams/ParamsHistory"
 import { LockButton } from "@/components/FxParams/LockButton/LockButton"
 import cx from "classnames"
@@ -18,6 +16,7 @@ import { useState } from "react"
 import { MainContext } from "@/context/MainContext"
 import { useMessageListener } from "@/components/FxParams/hooks"
 import { RuntimeContext } from "@/context/RuntimeContext"
+import { getRandomParamValues, FxParamDefinition, FxParamType } from "@fxhash/params"
 
 const MAX_BYTES = 50000
 
@@ -114,12 +113,13 @@ export function PanelParams() {
     [runtime.definition.params]
   )
 
+  if (!runtime.definition.params || runtime.definition.params.length === 0) return null
+
   return (
     <PanelGroup
       title="Params"
-      description={`fx(params) can be defined in your code and are pulled in real time from the code running. ${
-        byteAttention ? `Parameter value space is limited to 50kb.` : ""
-      }`}
+      description={`fx(params) can be defined in your code and are pulled in real time from the code running. ${byteAttention ? `Parameter value space is limited to 50kb.` : ""
+        }`}
       descriptionClassName={classes.description}
     >
       {byteAttention && <ProgressBar max={MAX_BYTES} progress={bytes} />}

@@ -8,8 +8,8 @@ import {
 } from "react"
 import { createContext } from "react"
 import debounce from "lodash.debounce"
-import { stringifyParamsData } from "./utils"
 import { RuntimeContext } from "@/context/RuntimeContext"
+import { stringifyParamsData } from "@fxhash/params"
 
 const isEqual = (a: any, b: any) =>
   stringifyParamsData(a) === stringifyParamsData(b)
@@ -34,11 +34,11 @@ export interface IParamsHistoryContext {
 
 const defaultParamsHistoryContext: IParamsHistoryContext = {
   history: [],
-  pushHistory: () => {},
+  pushHistory: () => { },
   offset: 0,
-  setOffset: () => {},
-  undo: () => {},
-  redo: () => {},
+  setOffset: () => { },
+  undo: () => { },
+  redo: () => { },
 }
 
 export const ParamsHistoryContext = createContext(defaultParamsHistoryContext)
