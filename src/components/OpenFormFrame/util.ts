@@ -33,6 +33,39 @@ export function searchParents(nodeHash: string, nodes: RawOpenFormNode[], links:
 
   return findParents(nodeHash);
 }
+/**
+ * Recursively retrieves all children of a node from a graph data structure
+ * @param {string} nodeHash - The hash of the node to find children for
+ * @param {RawOpenFormNode[]} nodes - Array of nodes in the graph
+ * @param {RawOpenFormLink[]} links - Array of links connecting the nodes
+ * @returns {RawOpenFormNode[]} - Array of child nodes
+ */
+export function searchChildren(nodeHash: string, nodes: RawOpenFormNode[], links: RawOpenFormLink[]): RawOpenFormNode[] {
+  const visited = new Set<string>();
+
+  function findChildren(hash: string): RawOpenFormNode[] {
+    if (visited.has(hash)) {
+      return [];
+    }
+    visited.add(hash);
+
+    const immediateChildren = links
+      .filter(link => link.source === hash)
+      .map(link => link.target);
+
+    const childNodes = nodes.filter(node =>
+      immediateChildren.includes(node.hash)
+    );
+
+    const descendantNodes = immediateChildren.flatMap(childHash =>
+      findChildren(childHash)
+    );
+
+    return [...childNodes, ...descendantNodes];
+  }
+
+  return findChildren(nodeHash);
+}
 
 /**
  * Automatically identifies root nodes and builds a nested structure
@@ -43,7 +76,7 @@ export function searchParents(nodeHash: string, nodes: RawOpenFormNode[], links:
 export function buildNestedStructureFromRoots(
   nodes: RawOpenFormNode[],
   links: RawOpenFormLink[]
-): NestedOpenFormNode[] {
+): NestedOpenFormNode<RawOpenFormNode>[] {
   // Create node map for faster lookups
   const nodeMap = new Map<string, RawOpenFormNode>();
   nodes.forEach(node => nodeMap.set(node.hash, node));
@@ -88,7 +121,7 @@ export function buildNestedStructureFromRoots(
   });
 
   // Function to build a nested node and its descendants
-  const buildNode = (hash: string, visited = new Set<string>()): NestedOpenFormNode | null => {
+  const buildNode = (hash: string, visited = new Set<string>()): NestedOpenFormNode<RawOpenFormNode> | null => {
     if (visited.has(hash)) return null; // Prevent circular references
     visited.add(hash);
 
@@ -96,7 +129,7 @@ export function buildNestedStructureFromRoots(
     if (!node) return null;
 
     const childHashes = childrenMap.get(hash) || [];
-    const nestedChildren: NestedOpenFormNode[] = [];
+    const nestedChildren: NestedOpenFormNode<RawOpenFormNode>[] = [];
 
     childHashes.forEach(childHash => {
       const childNode = buildNode(childHash, new Set([...visited]));
@@ -106,13 +139,13 @@ export function buildNestedStructureFromRoots(
     });
 
     return {
-      hash: node.hash,
+      ...node,
       children: nestedChildren
     };
   };
 
   // Build the nested structure starting from root nodes
-  const result: NestedOpenFormNode[] = [];
+  const result: NestedOpenFormNode<RawOpenFormNode>[] = [];
   rootHashes.forEach(rootHash => {
     const nestedRoot = buildNode(rootHash);
     if (nestedRoot) {
@@ -124,7 +157,7 @@ export function buildNestedStructureFromRoots(
   const processedNodes = new Set<string>();
 
   // Mark all nodes in the result as processed
-  const markProcessed = (node: NestedOpenFormNode) => {
+  const markProcessed = (node: NestedOpenFormNode<RawOpenFormNode>) => {
     processedNodes.add(node.hash);
     node.children.forEach(markProcessed);
   };

@@ -11,7 +11,8 @@ import { PanelContext } from "./PanelContext"
 import { BaseButton } from "@/components/FxParams/BaseInput"
 import { MainContext } from "@/context/MainContext"
 import { useContext } from "react"
-import { PanelOpenForm } from "@/components/PanelOpenForm/PanelOpenForm"
+import { PanelOpenForm } from "@/components/OpenFormPanel/PanelOpenForm"
+import { Graph } from "@/components/OpenFormPanel/Graph"
 
 export function PanelRoot() {
   const ctx = useContext(MainContext)
@@ -46,6 +47,7 @@ export function PanelRoot() {
           {ctx.mode === "open" && <PanelOpenForm />}
         </div>
       </div>
+      {ctx.mode === "open" && <Graph />}
       {ctx.mode === "long" && <PanelControls />}
     </div >
   )

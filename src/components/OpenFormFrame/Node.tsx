@@ -1,25 +1,28 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
-import { NestedOpenFormNode, RawOpenFormLink, RawOpenFormNode } from "./_types";
-import style from "./OpenFormFrame.module.scss"
+import { NestedOpenFormNode, RawOpenFormNode } from "./_types";
+import style from "./Node.module.scss"
 import { searchParents } from "./util";
 import { captureURL } from "@/utils/capture";
 import { createIframeUrl } from "@/utils/url";
 import { MainContext } from "@/context/MainContext";
-import { BaseButton, IconButton } from "../FxParams/BaseInput";
+import { IconButton } from "../FxParams/BaseInput";
 import { OpenFormContext } from "@/context/OpenFormContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faLevelUp, faRemove } from "@fortawesome/free-solid-svg-icons";
+import { faRemove, faShareNodes } from "@fortawesome/free-solid-svg-icons";
+import classNames from "classnames";
+import { useOpenFormGraph } from "@fxhash/open-form-graph";
 
 interface NodeProps {
   x: number
   y: number
-  node: NestedOpenFormNode
+  node: NestedOpenFormNode<RawOpenFormNode>
   onAdd?: () => void
   onRemove?: () => void
 }
 export function Node(props: NodeProps) {
-  const { state, addNode, removeNode } = useContext(OpenFormContext)
+  const { state, addNode, removeNode, focusedNodeId } = useContext(OpenFormContext)
   const ctx = useContext(MainContext);
+  const { onClickNode } = useOpenFormGraph()
   const { nodes, links } = state
   const { node, x, y, onAdd, onRemove, } = props
   const [isLoading, setIsLoading] = useState(false)
@@ -29,9 +32,7 @@ export function Node(props: NodeProps) {
   const hashRef = useRef<string | null>(null)
 
   const iframeUrl = useMemo(() => {
-    console.log(nodes, links)
     const lineage = searchParents(node.hash, nodes, links)
-    console.log("lineage", lineage);
     const url = createIframeUrl(ctx.baseUrl, {
       hash: node.hash,
       lineage: [...lineage.map((n) => n.hash), node.hash],
@@ -62,17 +63,18 @@ export function Node(props: NodeProps) {
   }, [iframeUrl])
 
   return (
-    <div className={style.node}>
-      <h3 className={style.header}>
-        {node.hash.substring(0, 8)}
-        <a href={iframeUrl?.toString()} target="_blank" rel="noopener noreferrer">
-          link
-        </a>
-      </h3>
-      <div className={style.content}>
+    <div className={classNames(style.node, { [style.focus]: node.id === focusedNodeId })}
+    >
+      <div className={style.header}>
+      </div>
+      <div className={style.content}
+        onClick={() => {
+          onClickNode(node.hash)
+        }}
+      >
         {!live &&
           <>
-            {isLoading && <div>loading</div>}
+            {isLoading && <div className={style.loading}>loading</div>}
             {!isLoading && imgSrc && (
               <img
                 src={imgSrc}
@@ -84,25 +86,31 @@ export function Node(props: NodeProps) {
             )}</>
         }
         {live && iframeUrl && <iframe src={iframeUrl.toString()} />}
-        <IconButton className={style.del} onClick={() => onRemove?.()} color="secondary">
+        <IconButton className={style.del} onClick={(e) => {
+          e.stopPropagation()
+          onRemove?.()
+        }} color="secondary">
           <FontAwesomeIcon icon={faRemove} />
         </IconButton>
       </div>
       <div className={style.footer}>
-        <BaseButton color="secondary" onClick={() => onAdd?.()}>evolve</BaseButton>
-        <BaseButton color="secondary" onClick={() => onAdd?.()}>open iframe</BaseButton>
+        <IconButton color="secondary" onClick={() => onAdd?.()}>
+          <FontAwesomeIcon icon={faShareNodes} />
+        </IconButton>
       </div>
-      <div className={style.children}>
-        {node.children.map(c =>
-          <Node
-            key={c.hash}
-            node={c}
-            x={x + 1}
-            y={y}
-            onAdd={() => addNode(c.hash)}
-            onRemove={() => removeNode(c.hash)}
-          />).reverse()}
-      </div>
+      {node.children.length > 0 &&
+        <div className={style.children}>
+          {node.children.map(c =>
+            <Node
+              key={c.hash}
+              node={c}
+              x={x + 1}
+              y={y}
+              onAdd={() => addNode(c.hash)}
+              onRemove={() => removeNode(c.hash)}
+            />).reverse()}
+        </div>
+      }
     </div >
   )
 }

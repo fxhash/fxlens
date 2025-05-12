@@ -1,8 +1,8 @@
-import { NestedOpenFormNode, OpenFormData, RawOpenFormLink, RawOpenFormNode } from "@/components/OpenFormFrame/_types";
-import { buildNestedStructureFromRoots } from "@/components/OpenFormFrame/util";
+import { NestedOpenFormNode, OpenFormData, RawOpenFormNode } from "@/components/OpenFormFrame/_types";
+import { buildNestedStructureFromRoots, searchChildren } from "@/components/OpenFormFrame/util";
+import { OpenFormGraphProvider, VOID_ROOT_ID } from "@fxhash/open-form-graph";
 import { mockEthereumTransactionHash } from "@fxhash/utils";
 import { createContext, Dispatch, useCallback, useMemo, useState } from "react";
-
 
 // Extend OpenFormContext to include node management functions
 export interface OpenFormContext {
@@ -15,9 +15,12 @@ export interface OpenFormContext {
   getParentNodes: (hash: string) => RawOpenFormNode[];
   liveMode: boolean
   setLiveMode: Dispatch<boolean>
-  tree: NestedOpenFormNode[]
+  tree: NestedOpenFormNode<RawOpenFormNode>[]
+  focusedNodeId: string | null
+  setFocusedNodeId: Dispatch<string | null>
+  focusedNode: RawOpenFormNode | null
+  focusChildren: RawOpenFormNode[]
 }
-
 
 const defaultContext: OpenFormContext = {
   state: {
@@ -32,15 +35,29 @@ const defaultContext: OpenFormContext = {
   getParentNodes: () => [],
   liveMode: false,
   setLiveMode: () => { },
-  tree: []
+  tree: [],
+  focusedNodeId: null,
+  setFocusedNodeId: () => { },
+  focusedNode: null,
+  focusChildren: []
 };
+
+function createNode() {
+  const hash = mockEthereumTransactionHash();
+  return {
+    hash,
+    id: hash,
+    label: hash,
+  }
+}
 
 export const OpenFormContext = createContext<OpenFormContext>(defaultContext);
 
 export function OpenFormProvider({ children }: { children: React.ReactNode }) {
+  const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null);
   const [liveMode, setLiveMode] = useState(false);
   const [state, setState] = useState<OpenFormData>({
-    nodes: [],
+    nodes: [createNode()],
     links: []
   });
 
@@ -48,7 +65,7 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
   const addNode = useCallback((parentHash?: string, customHash?: string, properties: Partial<Omit<Node, 'hash'>> = {}): string => {
     // Create node with custom hash if provided, or generate a new one
     const hash = customHash || mockEthereumTransactionHash();
-    const newNode = { hash, ...properties };
+    const newNode = { hash, id: hash, label: hash, ...properties };
 
     setState(prevState => {
       // Check if a node with this hash already exists
@@ -91,9 +108,7 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
         return prevState;
       }
 
-      // Get all child links (links where the node is the source)
       const childLinks = prevState.links.filter(link => link.source === hash);
-      // Get all child hashes from these links
       const childHashes = childLinks.map(link => link.target);
 
       // Create a recursive function to collect all descendant hashes
@@ -147,14 +162,14 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
   }, [state.links, state.nodes]);
 
   // Update a node's properties
-  const updateNode = useCallback((hash: string, properties: Partial<Omit<Node, 'hash'>>): void => {
+  const updateNode = useCallback((id: string, properties: Partial<Omit<Node, 'id'>>): void => {
     setState(prevState => {
       // Find the node to update
-      const nodeIndex = prevState.nodes.findIndex(node => node.hash === hash);
+      const nodeIndex = prevState.nodes.findIndex(node => node.id === id);
 
       // If node doesn't exist, return the current state
       if (nodeIndex === -1) {
-        console.warn(`Cannot update: Node with hash ${hash} not found.`);
+        console.warn(`Cannot update: Node with hash ${id} not found.`);
         return prevState;
       }
 
@@ -178,6 +193,15 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     return buildNestedStructureFromRoots(state.nodes, state.links).reverse();
   }, [state.nodes, state.links]);
 
+  const focusedNode = useMemo(() => {
+    return state.nodes.find(node => node.hash === focusedNodeId) || null;
+  }, [state.nodes, focusedNodeId]);
+
+  const focusChildren = useMemo(() => {
+    if (!focusedNodeId) return [];
+    return searchChildren(focusedNodeId, state.nodes, state.links);
+  }, [focusedNodeId, state.nodes, state.links]);
+
   const context: OpenFormContext = {
     state,
     setState,
@@ -188,12 +212,23 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     getParentNodes,
     liveMode,
     setLiveMode,
-    tree
+    tree,
+    focusedNodeId,
+    setFocusedNodeId,
+    focusedNode,
+    focusChildren
   };
 
   return (
     <OpenFormContext.Provider value={context}>
-      {children}
+      <OpenFormGraphProvider
+        rootId={VOID_ROOT_ID}
+        theme="dark"
+        data={state}
+        config={{ focusPadding: 50, minDagLevelDistance: 30, maxDagLevelDistance: 150 }}
+      >
+        {children}
+      </OpenFormGraphProvider>
     </OpenFormContext.Provider>
   );
 }

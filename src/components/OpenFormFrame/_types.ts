@@ -1,6 +1,8 @@
 
 export type RawOpenFormNode = {
   hash: string
+  id: string
+  label: string
 }
 export type RawOpenFormLink = {
   source: string
@@ -12,7 +14,6 @@ export type OpenFormData = {
   links: RawOpenFormLink[]
 }
 
-export type NestedOpenFormNode = {
-  hash: string
-  children: NestedOpenFormNode[]
-}
+export type NestedOpenFormNode<N extends RawOpenFormNode> = {
+  children: NestedOpenFormNode<N>[]
+} & N

@@ -1,10 +1,17 @@
 import html2canvas from 'html2canvas';
 
+const _imageCache: Record<string, string> = {}
+
 export async function captureURL(url: string) {
+  if (_imageCache[url]) {
+    return _imageCache[url]
+  }
   // Create an iframe to load the content
   const iframe = document.createElement('iframe');
   iframe.style.border = 'none';
   iframe.src = url;
+  iframe.style.width = "800px"
+  iframe.style.height = "800px"
 
   document.body.appendChild(iframe);
   iframe.setAttribute('crossorigin', 'anonymous');
@@ -26,13 +33,14 @@ export async function captureURL(url: string) {
       allowTaint: true,
       useCORS: true,
       logging: false,
-      scale: 1
+      scale: 1,
+      backgroundColor: "transparent"
     });
     const imageData = canvas.toDataURL('image/png');
 
     // Clean up
     document.body.removeChild(iframe);
-
+    _imageCache[url] = imageData
     return imageData;
   } catch (err) {
     console.error('Capture error:', err);

@@ -1,32 +1,33 @@
 import { useContext, useMemo, } from "react";
-import { RawOpenFormNode, RawOpenFormLink } from "./_types";
-import { buildNestedStructureFromRoots } from "./util";
 import style from "./OpenFormFrame.module.scss"
 import { Node } from "./Node";
 import { OpenFormContext } from "@/context/OpenFormContext";
-import { BaseButton } from "../FxParams/BaseInput";
+import { FullscreenNode } from "./FullScreenNode";
+import { useOpenFormGraph } from "@fxhash/open-form-graph";
 
-interface OpenFormFrameProps {
-  nodes: RawOpenFormNode[];
-  links: RawOpenFormLink[];
-}
-
-export function OpenFormFrame(props: OpenFormFrameProps) {
-
-  const { addNode, removeNode, tree } = useContext(OpenFormContext)
-
+export function OpenFormFrame() {
+  const { addNode, removeNode, tree, state } = useContext(OpenFormContext)
+  const { selectedNode } = useOpenFormGraph()
+  const _selectedNode = useMemo(() => {
+    return state.nodes.find((n) => n.id === selectedNode?.id)
+  }, [selectedNode])
   return (
     <div className={style.container}>
-      {tree.map((node, i) => (
-        <Node
-          key={node.hash}
-          node={node}
-          x={0}
-          y={i}
-          onAdd={() => addNode(node.hash)}
-          onRemove={() => removeNode(node.hash)}
-        />
-      ))}
+      {!selectedNode &&
+        <>
+          {tree.map((node, i) => (
+            <Node
+              key={node.id}
+              node={node}
+              x={0}
+              y={i}
+              onAdd={() => addNode(node.id)}
+              onRemove={() => removeNode(node.id)}
+            />
+          ))}
+        </>
+      }
+      {_selectedNode && <FullscreenNode hash={_selectedNode?.id} />}
     </div>
   );
 }
