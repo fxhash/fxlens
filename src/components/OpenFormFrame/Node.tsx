@@ -32,10 +32,10 @@ export function Node(props: NodeProps) {
   const hashRef = useRef<string | null>(null)
 
   const iframeUrl = useMemo(() => {
-    const lineage = searchParents(node.hash, nodes, links)
+    const lineage = searchParents(node.hash, nodes, links).reverse()
     const url = createIframeUrl(ctx.baseUrl, {
       hash: node.hash,
-      lineage: [...lineage.map((n) => n.hash), node.hash],
+      lineage: [...lineage.map((n) => n.hash)],
     });
     return url
   }, [node.hash, nodes, links])
@@ -69,7 +69,8 @@ export function Node(props: NodeProps) {
       </div>
       <div className={style.content}
         onClick={() => {
-          onClickNode(node.hash)
+          console.log(node)
+          onClickNode(node.id)
         }}
       >
         {!live &&

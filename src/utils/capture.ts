@@ -9,6 +9,8 @@ export async function captureURL(url: string) {
   // Create an iframe to load the content
   const iframe = document.createElement('iframe');
   iframe.style.border = 'none';
+  iframe.style.visibility = "hidden";
+  iframe.style.position = "absolute";
   iframe.src = url;
   iframe.style.width = "800px"
   iframe.style.height = "800px"
