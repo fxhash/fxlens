@@ -27,7 +27,7 @@ export function OpenFormFrame() {
           ))}
         </>
       }
-      {_selectedNode && <FullscreenNode hash={_selectedNode?.id} />}
+      {_selectedNode && <FullscreenNode hash={_selectedNode?.hash} id={_selectedNode.id} />}
     </div>
   );
 }

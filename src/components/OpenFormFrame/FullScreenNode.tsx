@@ -8,22 +8,23 @@ import classNames from "classnames";
 import { MainContext } from "@/context/MainContext";
 
 interface NodeProps {
+  id: string
   hash: string
 }
 export function FullscreenNode(props: NodeProps) {
   const { state } = useContext(OpenFormContext)
   const ctx = useContext(MainContext);
   const { nodes, links } = state
-  const { hash, } = props
+  const { hash, id, } = props
 
   const iframeUrl = useMemo(() => {
-    const lineage = searchParents(hash, nodes, links).reverse()
+    const lineage = searchParents(id, nodes, links).reverse()
     const url = createIframeUrl(ctx.baseUrl, {
       hash: hash,
       lineage: [...lineage.map((n) => n.hash)],
     });
     return url
-  }, [hash, nodes, links])
+  }, [hash, nodes, links, id])
 
 
   return (

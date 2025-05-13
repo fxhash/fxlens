@@ -72,5 +72,6 @@ export function MainProvider({ children }: Props) {
     setIframe,
   }
 
-  return <MainContext.Provider value={context}>{children}</MainContext.Provider>
+  return <MainContext.Provider value={context}>
+    {children}</MainContext.Provider>
 }

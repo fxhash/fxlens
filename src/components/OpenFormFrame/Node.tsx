@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRemove, faShareNodes } from "@fortawesome/free-solid-svg-icons";
 import classNames from "classnames";
 import { useOpenFormGraph } from "@fxhash/open-form-graph";
+import { useImageLoader } from "@/context/ImageLoader";
 
 interface NodeProps {
   x: number
@@ -25,14 +26,10 @@ export function Node(props: NodeProps) {
   const { onClickNode } = useOpenFormGraph()
   const { nodes, links } = state
   const { node, x, y, onAdd, onRemove, } = props
-  const [isLoading, setIsLoading] = useState(false)
-  const [imgSrc, setImgSrc] = useState<string | undefined>(undefined)
-  const [error, setError] = useState<Error | undefined>(undefined)
   const [live, setLive] = useState(false)
-  const hashRef = useRef<string | null>(null)
 
   const iframeUrl = useMemo(() => {
-    const lineage = searchParents(node.hash, nodes, links).reverse()
+    const lineage = searchParents(node.id, nodes, links).reverse()
     const url = createIframeUrl(ctx.baseUrl, {
       hash: node.hash,
       lineage: [...lineage.map((n) => n.hash)],
@@ -40,45 +37,28 @@ export function Node(props: NodeProps) {
     return url
   }, [node.hash, nodes, links])
 
-  useEffect(() => {
-    if (!iframeUrl || live || hashRef.current === node.hash) return
-    async function loadImage() {
-      setError(undefined)
-      setIsLoading(true)
-      try {
-        console.log(`Loading image for node ${node.hash}`);
-        const imageData = await captureURL(iframeUrl.toString());
-        setImgSrc(imageData)
-        setIsLoading(false)
-        hashRef.current = node.hash
-      }
-      catch (error) {
-        console.error(`Error loading image for node ${node.hash}:`, error);
-        setImgSrc(undefined)
-        setIsLoading(false)
-        setError(error as Error)
-      }
-    }
-    loadImage()
-  }, [iframeUrl])
+  const { imageSrc, isLoading, error } = useImageLoader(
+    `node-${node.id}`,
+    !live ? iframeUrl.toString() : undefined,
+    captureURL,
+    x
+  );
 
   return (
-    <div className={classNames(style.node, { [style.focus]: node.id === focusedNodeId })}
-    >
-      <div className={style.header}>
+    <div className={classNames(style.node, { [style.focus]: node.id === focusedNodeId })}>
+      <div className={style.header} style={{ color: "white" }}>
       </div>
       <div className={style.content}
         onClick={() => {
-          console.log(node)
           onClickNode(node.id)
         }}
       >
         {!live &&
           <>
             {isLoading && <div className={style.loading}>loading</div>}
-            {!isLoading && imgSrc && (
+            {!isLoading && imageSrc && (
               <img
-                src={imgSrc}
+                src={imageSrc}
                 alt={`Node ${node.hash.substring(0, 8)}`}
                 className="node-preview"
               />)}
@@ -103,12 +83,12 @@ export function Node(props: NodeProps) {
         <div className={style.children}>
           {node.children.map(c =>
             <Node
-              key={c.hash}
+              key={c.id}
               node={c}
               x={x + 1}
               y={y}
-              onAdd={() => addNode(c.hash)}
-              onRemove={() => removeNode(c.hash)}
+              onAdd={() => addNode(c.id)}
+              onRemove={() => removeNode(c.id)}
             />).reverse()}
         </div>
       }

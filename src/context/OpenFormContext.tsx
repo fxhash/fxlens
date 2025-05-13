@@ -4,15 +4,14 @@ import { OpenFormGraphProvider, VOID_ROOT_ID } from "@fxhash/open-form-graph";
 import { mockEthereumTransactionHash } from "@fxhash/utils";
 import { createContext, Dispatch, useCallback, useMemo, useState } from "react";
 
-// Extend OpenFormContext to include node management functions
 export interface OpenFormContext {
   state: OpenFormData;
   setState: Dispatch<OpenFormData>;
-  addNode: (parentHash?: string, customHash?: string, properties?: Partial<Omit<Node, 'hash'>>) => string; // Returns the hash of the new node
-  removeNode: (hash: string) => void;
-  updateNode: (hash: string, properties: Partial<Omit<Node, 'hash'>>) => void;
-  getChildNodes: (hash: string) => RawOpenFormNode[];
-  getParentNodes: (hash: string) => RawOpenFormNode[];
+  addNode: (parentId?: string, customHash?: string, properties?: Partial<Omit<RawOpenFormNode, 'id'>>) => string;
+  removeNode: (id: string) => void;
+  updateNode: (id: string, properties: Partial<Omit<RawOpenFormNode, 'id'>>) => void;
+  getChildNodes: (id: string) => RawOpenFormNode[];
+  getParentNodes: (id: string) => RawOpenFormNode[];
   liveMode: boolean
   setLiveMode: Dispatch<boolean>
   tree: NestedOpenFormNode<RawOpenFormNode>[]
@@ -61,36 +60,33 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     links: []
   });
 
-  // Add a new node, optionally connecting it to a parent node and with custom hash and properties
-  const addNode = useCallback((parentHash?: string, customHash?: string, properties: Partial<Omit<Node, 'hash'>> = {}): string => {
-    // Create node with custom hash if provided, or generate a new one
+  const addNode = useCallback((parentId?: string, customHash?: string, properties: Partial<Omit<RawOpenFormNode, 'id'>> = {}): string => {
     const hash = customHash || mockEthereumTransactionHash();
     const newNode = { hash, id: hash, label: hash, ...properties };
 
     setState(prevState => {
-      // Check if a node with this hash already exists
-      if (prevState.nodes.some(node => node.hash === hash)) {
+      if (prevState.nodes.some(node => node.id === hash)) {
         console.warn(`Node with hash ${hash} already exists. Using existing node.`);
         return prevState;
       }
 
-      // Create a new state with the added node
       const newState = {
         nodes: [...prevState.nodes, newNode],
         links: [...prevState.links]
       };
 
-      // If a parent hash is provided, create a link from parent to new node
-      if (parentHash) {
-        // Verify parent exists
-        const parentExists = prevState.nodes.some(node => node.hash === parentHash);
+      console.log(parentId)
+
+      if (parentId) {
+        const parentExists = prevState.nodes.some(node => node.id === parentId);
+        console.log(parentExists, parentId, newNode.id);
         if (parentExists) {
           newState.links.push({
-            source: parentHash,
-            target: newNode.hash
+            source: parentId,
+            target: newNode.id
           });
         } else {
-          console.warn(`Parent node with hash ${parentHash} does not exist.`);
+          console.warn(`Parent node with hash ${parentId} does not exist.`);
         }
       }
 
@@ -100,40 +96,33 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     return hash;
   }, []);
 
-  // Remove a node and all its connected links
-  const removeNode = useCallback((hash: string): void => {
+  const removeNode = useCallback((id: string): void => {
     setState(prevState => {
-      // Check if node exists
-      if (!prevState.nodes.some(node => node.hash === hash)) {
+      if (!prevState.nodes.some(node => node.id === id)) {
         return prevState;
       }
+      const childLinks = prevState.links.filter(link => link.source === id);
+      const childIds = childLinks.map(link => link.target);
 
-      const childLinks = prevState.links.filter(link => link.source === hash);
-      const childHashes = childLinks.map(link => link.target);
-
-      // Create a recursive function to collect all descendant hashes
-      const collectDescendants = (hashes: string[]): string[] => {
-        if (hashes.length === 0) return [];
+      const collectDescendants = (ids: string[]): string[] => {
+        if (ids.length === 0) return [];
 
         const descendantLinks = prevState.links.filter(link =>
-          hashes.includes(link.source)
+          ids.includes(link.source)
         );
         const descendantHashes = descendantLinks.map(link => link.target);
 
         return [
-          ...hashes,
+          ...ids,
           ...collectDescendants(descendantHashes)
         ];
       };
 
-      // Get all descendants including direct children
-      const allDescendantHashes = collectDescendants(childHashes);
-
-      // Filter out the node and all its descendants
-      const hashesToRemove = new Set([hash, ...allDescendantHashes]);
+      const allDescendantHashes = collectDescendants(childIds);
+      const hashesToRemove = new Set([id, ...allDescendantHashes]);
 
       return {
-        nodes: prevState.nodes.filter(node => !hashesToRemove.has(node.hash)),
+        nodes: prevState.nodes.filter(node => !hashesToRemove.has(node.id)),
         links: prevState.links.filter(link =>
           !hashesToRemove.has(link.source) && !hashesToRemove.has(link.target)
         )
@@ -141,39 +130,27 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  // Get all direct child nodes of a given node
-  const getChildNodes = useCallback((hash: string): RawOpenFormNode[] => {
-    // Find all links where the node is the source
-    const childLinks = state.links.filter(link => link.source === hash);
-    // Get target hashes from these links
+  const getChildNodes = useCallback((id: string): RawOpenFormNode[] => {
+    const childLinks = state.links.filter(link => link.source === id);
     const childHashes = childLinks.map(link => link.target);
-    // Return all nodes with matching hashes
-    return state.nodes.filter(node => childHashes.includes(node.hash));
+    return state.nodes.filter(node => childHashes.includes(node.id));
   }, [state.links, state.nodes]);
 
-  // Get all direct parent nodes of a given node
-  const getParentNodes = useCallback((hash: string): RawOpenFormNode[] => {
-    // Find all links where the node is the target
-    const parentLinks = state.links.filter(link => link.target === hash);
-    // Get source hashes from these links
+  const getParentNodes = useCallback((id: string): RawOpenFormNode[] => {
+    const parentLinks = state.links.filter(link => link.target === id);
     const parentHashes = parentLinks.map(link => link.source);
-    // Return all nodes with matching hashes
-    return state.nodes.filter(node => parentHashes.includes(node.hash));
+    return state.nodes.filter(node => parentHashes.includes(node.id));
   }, [state.links, state.nodes]);
 
-  // Update a node's properties
-  const updateNode = useCallback((id: string, properties: Partial<Omit<Node, 'id'>>): void => {
+  const updateNode = useCallback((id: string, properties: Partial<Omit<RawOpenFormNode, 'id'>>): void => {
     setState(prevState => {
-      // Find the node to update
       const nodeIndex = prevState.nodes.findIndex(node => node.id === id);
 
-      // If node doesn't exist, return the current state
       if (nodeIndex === -1) {
         console.warn(`Cannot update: Node with hash ${id} not found.`);
         return prevState;
       }
 
-      // Create a new array with the updated node
       const updatedNodes = [...prevState.nodes];
       updatedNodes[nodeIndex] = {
         ...updatedNodes[nodeIndex],
@@ -194,7 +171,7 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
   }, [state.nodes, state.links]);
 
   const focusedNode = useMemo(() => {
-    return state.nodes.find(node => node.hash === focusedNodeId) || null;
+    return state.nodes.find(node => node.id === focusedNodeId) || null;
   }, [state.nodes, focusedNodeId]);
 
   const focusChildren = useMemo(() => {

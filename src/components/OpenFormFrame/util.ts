@@ -21,7 +21,7 @@ export function searchParents(nodeHash: string, nodes: RawOpenFormNode[], links:
       .map(link => link.source);
 
     const parentNodes = nodes.filter(node =>
-      immediateParents.includes(node.hash)
+      immediateParents.includes(node.id)
     );
 
     const ancestorNodes = immediateParents.flatMap(parentHash =>
@@ -54,7 +54,7 @@ export function searchChildren(nodeHash: string, nodes: RawOpenFormNode[], links
       .map(link => link.target);
 
     const childNodes = nodes.filter(node =>
-      immediateChildren.includes(node.hash)
+      immediateChildren.includes(node.id)
     );
 
     const descendantNodes = immediateChildren.flatMap(childHash =>
@@ -79,7 +79,7 @@ export function buildNestedStructureFromRoots(
 ): NestedOpenFormNode<RawOpenFormNode>[] {
   // Create node map for faster lookups
   const nodeMap = new Map<string, RawOpenFormNode>();
-  nodes.forEach(node => nodeMap.set(node.hash, node));
+  nodes.forEach(node => nodeMap.set(node.id, node));
 
   // Create parent-child relationships
   const childrenMap = new Map<string, string[]>();
@@ -87,8 +87,8 @@ export function buildNestedStructureFromRoots(
 
   // Initialize with empty arrays
   nodes.forEach(node => {
-    childrenMap.set(node.hash, []);
-    parentMap.set(node.hash, []);
+    childrenMap.set(node.id, []);
+    parentMap.set(node.id, []);
   });
 
   // Populate relationships based on links
@@ -158,7 +158,7 @@ export function buildNestedStructureFromRoots(
 
   // Mark all nodes in the result as processed
   const markProcessed = (node: NestedOpenFormNode<RawOpenFormNode>) => {
-    processedNodes.add(node.hash);
+    processedNodes.add(node.id);
     node.children.forEach(markProcessed);
   };
   result.forEach(markProcessed);
