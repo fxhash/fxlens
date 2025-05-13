@@ -7,7 +7,8 @@ import { BigIntController } from "./BigInt"
 import { SelectController } from "./Select"
 import { StringController } from "./String"
 import {
-  FxParamDefinition, FxParamType,
+  FxParamDefinition,
+  FxParamType,
   validateParameterDefinition,
   ControllerDefinitionSchemaType,
 } from "@fxhash/params"
@@ -68,8 +69,8 @@ export interface ParameterControllerProps {
   value: any
   onChange: (id: string, value: any) => void
   parsed?:
-  | SafeParseError<ControllerDefinitionSchemaType>
-  | SafeParseSuccess<ControllerDefinitionSchemaType>
+    | SafeParseError<ControllerDefinitionSchemaType>
+    | SafeParseSuccess<ControllerDefinitionSchemaType>
 }
 
 export function ParameterController(props: ParameterControllerProps) {

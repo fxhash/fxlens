@@ -13,9 +13,8 @@ export function App() {
     <div className={style.root}>
       <Layout
         panel={<PanelRoot />}
-        frame={ctx.mode === "long"
-          ? <Frame url={ctx.url} />
-          : <OpenFormFrame />
+        frame={
+          ctx.mode === "long" ? <Frame url={ctx.url} /> : <OpenFormFrame />
         }
       />
     </div>

@@ -45,7 +45,6 @@ export function createIframeUrl(
     if (options.lineage) {
       url.hash += `&params=0x${bytes}`
     } else {
-
       url.hash = `0x${bytes}`
     }
     url.searchParams.append("fxparamsUpdate", generateRandomSequence(3))

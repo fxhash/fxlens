@@ -1,4 +1,3 @@
-
 .item {
   display: flex;
   flex-direction: column;
@@ -13,10 +12,10 @@
     }
   }
 }
-  .children {
-    margin-top: 8px;
-    margin-left: 16px;
-  }
+.children {
+  margin-top: 8px;
+  margin-left: 16px;
+}
 .opaque {
   opacity: 0.3;
 }
@@ -35,7 +34,7 @@
 
 .focus {
   margin-bottom: 4px;
-  display:flex;
+  display: flex;
   justify-content: flex-end;
   gap: 8px;
 }

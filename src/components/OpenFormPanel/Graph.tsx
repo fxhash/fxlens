@@ -13,7 +13,5 @@ export function Graph() {
         </AutoSizer>
       </div>
     </div>
-
   )
-
 }

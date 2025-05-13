@@ -1,5 +1,5 @@
 .node {
-  display:flex;
+  display: flex;
   gap: 8px;
   flex-direction: column;
   margin: 10px;
@@ -9,7 +9,8 @@
     height: 100px;
     width: 100px;
     position: relative;
-    img, iframe {
+    img,
+    iframe {
       width: auto;
       height: 100%;
       object-fit: contain;
@@ -26,7 +27,8 @@
   &.focus > .content {
     border: 2px solid var(--fxl-color-primary);
   }
-  .footer, .header {
+  .footer,
+  .header {
     justify-content: space-between;
     display: flex;
   }
@@ -49,7 +51,6 @@
   display: flex;
   gap: 10px;
 }
-
 
 .full {
   width: 100%;

@@ -1,4 +1,3 @@
-
 export type RawOpenFormNode = {
   hash: string
   id: string

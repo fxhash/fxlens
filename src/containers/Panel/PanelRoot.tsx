@@ -37,18 +37,22 @@ export function PanelRoot() {
         </div>
         <PanelHeader />
         <div className={cs(style.body)}>
-          {ctx.mode === "long" &&
-            <>          <PanelHash />
+          {ctx.mode === "long" && (
+            <>
+              {" "}
+              <PanelHash />
               <PanelAddress />
               <PanelContext />
               <PanelParams />
               <PanelIteration />
-              <PanelFeatures /></>}
+              <PanelFeatures />
+            </>
+          )}
           {ctx.mode === "open" && <PanelOpenForm />}
         </div>
       </div>
       {ctx.mode === "open" && <Graph />}
       {ctx.mode === "long" && <PanelControls />}
-    </div >
+    </div>
   )
 }

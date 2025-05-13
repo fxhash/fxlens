@@ -10,19 +10,19 @@ export function PanelOpenForm() {
 
   return (
     <div className={style.panel}>
-      <PanelGroup title="create root iteration" description="create a new open root iteration">
-        <BaseButton onClick={() => addNode()}>
-          new root iteration
-        </BaseButton>
+      <PanelGroup
+        title="create root iteration"
+        description="create a new open root iteration"
+      >
+        <BaseButton onClick={() => addNode()}>new root iteration</BaseButton>
       </PanelGroup>
       <PanelGroup title="">
-        {tree.map(node =>
+        {tree.map((node) => (
           <div className={style.root}>
             <Item node={node} depth={0} />
           </div>
-        )}
+        ))}
       </PanelGroup>
     </div>
-
   )
 }

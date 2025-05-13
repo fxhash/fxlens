@@ -84,14 +84,14 @@ const defaultRuntimeContext: IRuntimeContext = {
     hash: "",
     minter: "",
     params: {},
-    update: () => { },
+    update: () => {},
     iteration: 1,
     context: "standalone",
   },
   definition: {
     params: null,
     version: null,
-    update: () => { },
+    update: () => {},
   },
   details: {
     paramsByteSize: 0,

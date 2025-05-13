@@ -1,11 +1,10 @@
-
-import { useContext, useMemo } from "react";
+import { useContext, useMemo } from "react"
 import style from "./Node.module.scss"
-import { searchParents } from "./util";
-import { createIframeUrl } from "@/utils/url";
-import { OpenFormContext } from "@/context/OpenFormContext";
-import classNames from "classnames";
-import { MainContext } from "@/context/MainContext";
+import { searchParents } from "./util"
+import { createIframeUrl } from "@/utils/url"
+import { OpenFormContext } from "@/context/OpenFormContext"
+import classNames from "classnames"
+import { MainContext } from "@/context/MainContext"
 
 interface NodeProps {
   id: string
@@ -13,23 +12,22 @@ interface NodeProps {
 }
 export function FullscreenNode(props: NodeProps) {
   const { state } = useContext(OpenFormContext)
-  const ctx = useContext(MainContext);
+  const ctx = useContext(MainContext)
   const { nodes, links } = state
-  const { hash, id, } = props
+  const { hash, id } = props
 
   const iframeUrl = useMemo(() => {
     const lineage = searchParents(id, nodes, links).reverse()
     const url = createIframeUrl(ctx.baseUrl, {
       hash: hash,
       lineage: [...lineage.map((n) => n.hash)],
-    });
+    })
     return url
   }, [hash, nodes, links, id])
-
 
   return (
     <div className={classNames(style.full)}>
       <iframe src={iframeUrl.toString()} />
-    </div >
+    </div>
   )
 }

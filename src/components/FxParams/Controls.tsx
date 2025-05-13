@@ -7,7 +7,7 @@ import {
   FxParamTypeMap,
   stringifyParamsData,
   validateParameterDefinition,
-  consolidateParams
+  consolidateParams,
 } from "@fxhash/params"
 
 interface ControllerBladeProps {

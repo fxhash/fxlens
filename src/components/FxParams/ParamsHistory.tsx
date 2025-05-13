@@ -34,11 +34,11 @@ export interface IParamsHistoryContext {
 
 const defaultParamsHistoryContext: IParamsHistoryContext = {
   history: [],
-  pushHistory: () => { },
+  pushHistory: () => {},
   offset: 0,
-  setOffset: () => { },
-  undo: () => { },
-  redo: () => { },
+  setOffset: () => {},
+  undo: () => {},
+  redo: () => {},
 }
 
 export const ParamsHistoryContext = createContext(defaultParamsHistoryContext)

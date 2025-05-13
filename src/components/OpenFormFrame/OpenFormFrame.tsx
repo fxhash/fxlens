@@ -1,9 +1,9 @@
-import { useContext, useMemo, } from "react";
+import { useContext, useMemo } from "react"
 import style from "./OpenFormFrame.module.scss"
-import { Node } from "./Node";
-import { OpenFormContext } from "@/context/OpenFormContext";
-import { FullscreenNode } from "./FullScreenNode";
-import { useOpenFormGraph } from "@fxhash/open-form-graph";
+import { Node } from "./Node"
+import { OpenFormContext } from "@/context/OpenFormContext"
+import { FullscreenNode } from "./FullScreenNode"
+import { useOpenFormGraph } from "@fxhash/open-form-graph"
 
 export function OpenFormFrame() {
   const { addNode, removeNode, tree, state } = useContext(OpenFormContext)
@@ -13,7 +13,7 @@ export function OpenFormFrame() {
   }, [selectedNode])
   return (
     <div className={style.container}>
-      {!selectedNode &&
+      {!selectedNode && (
         <>
           {tree.map((node, i) => (
             <Node
@@ -26,8 +26,10 @@ export function OpenFormFrame() {
             />
           ))}
         </>
-      }
-      {_selectedNode && <FullscreenNode hash={_selectedNode?.hash} id={_selectedNode.id} />}
+      )}
+      {_selectedNode && (
+        <FullscreenNode hash={_selectedNode?.hash} id={_selectedNode.id} />
+      )}
     </div>
-  );
+  )
 }

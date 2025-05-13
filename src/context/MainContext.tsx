@@ -30,13 +30,13 @@ export interface IMainContext {
 const defaultMainContext: IMainContext = {
   baseUrl: "",
   url: "",
-  setUrl: () => { },
+  setUrl: () => {},
   features: null,
-  setFeatures: () => { },
+  setFeatures: () => {},
   iframe: null,
-  setIframe: () => { },
+  setIframe: () => {},
   mode: "long",
-  setMode: () => { },
+  setMode: () => {},
 }
 
 export const MainContext = createContext(defaultMainContext)
@@ -72,6 +72,5 @@ export function MainProvider({ children }: Props) {
     setIframe,
   }
 
-  return <MainContext.Provider value={context}>
-    {children}</MainContext.Provider>
+  return <MainContext.Provider value={context}>{children}</MainContext.Provider>
 }

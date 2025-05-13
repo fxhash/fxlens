@@ -1,10 +1,4 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  ChangeEvent,
-  useMemo,
-} from "react"
+import { useState, useEffect, useRef, ChangeEvent, useMemo } from "react"
 import { hexToRgba, rgbaToHex } from "@fxhash/params"
 import {
   FxParamControllerProps,
