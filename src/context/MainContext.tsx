@@ -1,6 +1,6 @@
 import { PropsWithChildren, useState } from "react"
 import { createContext } from "react"
-import { appendUrlParameters, decodeUrl } from "utils/url"
+import { appendUrlParameters, decodeUrl } from "@/utils/url"
 import { TExecutionContext } from "./RuntimeContext"
 
 /**
@@ -23,6 +23,8 @@ export interface IMainContext {
   setFeatures: (features: any) => void
   iframe: HTMLIFrameElement | null
   setIframe: (iframe: HTMLIFrameElement) => void
+  mode: "long" | "open"
+  setMode: (mode: "long" | "open") => void
 }
 
 const defaultMainContext: IMainContext = {
@@ -33,12 +35,15 @@ const defaultMainContext: IMainContext = {
   setFeatures: () => {},
   iframe: null,
   setIframe: () => {},
+  mode: "long",
+  setMode: () => {},
 }
 
 export const MainContext = createContext(defaultMainContext)
 
 type Props = PropsWithChildren<any>
 export function MainProvider({ children }: Props) {
+  const [mode, setMode] = useState<"long" | "open">("long")
   const baseUrl = decodeUrl(
     new URLSearchParams(window.location.search).get("target") || ""
   )
@@ -56,6 +61,8 @@ export function MainProvider({ children }: Props) {
   const [iframe, setIframe] = useState<HTMLIFrameElement | null>(null)
 
   const context: IMainContext = {
+    mode,
+    setMode,
     baseUrl,
     url,
     setUrl,

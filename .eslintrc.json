@@ -1,20 +1,10 @@
 {
-  "parser": "@typescript-eslint/parser",
+  "extends": ["@fxhash/eslint-config"],
   "parserOptions": {
-    "ecmaVersion": 2020,
     "sourceType": "module"
   },
-  "env": {
-    "node": true,
-    "browser": true
-  },
-  "plugins": ["@typescript-eslint"],
-  "extends": [
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended"
-  ],
   "rules": {
     "@typescript-eslint/no-empty-function": "warn",
-    "@typescript-eslint/no-explicit-any": "warn"
+    "no-prototype-builtins": "warn"
   }
 }

@@ -1,11 +1,14 @@
-import { createRef, useEffect, useMemo, useState } from "react"
-import { consolidateParams } from "components/FxParams/utils"
+import { createRef, useEffect, useMemo } from "react"
 import { ParameterController } from "./Controller/Param"
 import { LockButton } from "./LockButton/LockButton"
 import classes from "./Controls.module.scss"
-import { validateParameterDefinition } from "./validation"
-import { stringifyParamsData } from "./utils"
-import { FxParamType, FxParamTypeMap } from "./types.js"
+import {
+  FxParamType,
+  FxParamTypeMap,
+  stringifyParamsData,
+  validateParameterDefinition,
+  consolidateParams,
+} from "@fxhash/params"
 
 interface ControllerBladeProps {
   parameter: any

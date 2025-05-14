@@ -1,11 +1,11 @@
 import style from "./PanelControls.module.scss"
 import { useCallback, useContext, useEffect, useState } from "react"
-import { IMainContext, MainContext } from "context/MainContext"
-import { serializeParams } from "components/FxParams/utils"
+import { IMainContext, MainContext } from "@/context/MainContext"
+import { serializeParams } from "@fxhash/params"
 import debounce from "lodash.debounce"
-import { BaseButton, BaseInput } from "components/FxParams/BaseInput"
-import { createIframeUrl } from "utils/url"
-import { IRuntimeContext, RuntimeContext } from "context/RuntimeContext"
+import { BaseButton, BaseInput } from "@/components/FxParams/BaseInput"
+import { createIframeUrl } from "@/utils/url"
+import { IRuntimeContext, RuntimeContext } from "@/context/RuntimeContext"
 
 type TUpdateIframe = (ctx: IMainContext, runtime: IRuntimeContext) => void
 

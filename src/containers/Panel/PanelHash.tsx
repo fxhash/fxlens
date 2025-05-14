@@ -1,10 +1,10 @@
 import styles from "./PanelHash.module.scss"
 import { useContext } from "react"
-import { PanelGroup } from "components/Panel/PanelGroup"
-import { BaseInput, IconButton } from "components/FxParams/BaseInput"
+import { PanelGroup } from "@/components/Panel/PanelGroup"
+import { BaseInput, IconButton } from "@/components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { RuntimeContext } from "context/RuntimeContext"
-import { IconTezos } from "components/Icon/Tezos"
+import { RuntimeContext } from "@/context/RuntimeContext"
+import { IconTezos } from "@/components/Icon/Tezos"
 import { faEthereum } from "@fortawesome/free-brands-svg-icons"
 import { mockTransactionHash } from "@fxhash/utils"
 
@@ -17,6 +17,8 @@ export function PanelHash() {
   const handleRefresh = (hash: string) => {
     runtime.state.update({ hash })
   }
+
+  console.log(runtime.state.hash)
 
   return (
     <PanelGroup

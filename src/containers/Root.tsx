@@ -1,7 +1,10 @@
-import { MainProvider } from "context/MainContext"
-import { ParamsHistoryProvider } from "components/FxParams/ParamsHistory"
+import { MainProvider } from "@/context/MainContext"
+import { ParamsHistoryProvider } from "@/components/FxParams/ParamsHistory"
 import { PropsWithChildren } from "react"
-import { RuntimeProvider } from "context/RuntimeContext"
+import { RuntimeProvider } from "@/context/RuntimeContext"
+import { OpenFormProvider } from "@/context/OpenFormContext"
+import { captureURL } from "@/utils/capture"
+import { ImageLoaderProvider } from "@/context/ImageLoader"
 
 /**
  * The root component is the first one called by the index. It serves as a
@@ -11,10 +14,14 @@ import { RuntimeProvider } from "context/RuntimeContext"
 type Props = PropsWithChildren<any>
 export function Root({ children }: Props) {
   return (
-    <MainProvider>
-      <RuntimeProvider>
-        <ParamsHistoryProvider>{children}</ParamsHistoryProvider>
-      </RuntimeProvider>
-    </MainProvider>
+    <ImageLoaderProvider maxConcurrent={1} defaultLoader={captureURL}>
+      <OpenFormProvider>
+        <MainProvider>
+          <RuntimeProvider>
+            <ParamsHistoryProvider>{children}</ParamsHistoryProvider>
+          </RuntimeProvider>
+        </MainProvider>
+      </OpenFormProvider>
+    </ImageLoaderProvider>
   )
 }

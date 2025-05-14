@@ -8,8 +8,8 @@ import {
 } from "react"
 import { createContext } from "react"
 import debounce from "lodash.debounce"
-import { stringifyParamsData } from "./utils"
-import { RuntimeContext } from "context/RuntimeContext"
+import { RuntimeContext } from "@/context/RuntimeContext"
+import { stringifyParamsData } from "@fxhash/params"
 
 const isEqual = (a: any, b: any) =>
   stringifyParamsData(a) === stringifyParamsData(b)

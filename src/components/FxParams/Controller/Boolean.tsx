@@ -1,5 +1,4 @@
 import { FxParamControllerProps, HTMLInputController } from "./Controller"
-import classes from "./Controller.module.scss"
 
 export function BooleanController(props: FxParamControllerProps<"boolean">) {
   const { ...rest } = props

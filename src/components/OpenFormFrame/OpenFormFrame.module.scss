@@ -1,0 +1,11 @@
+.container {
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  color: black;
+  height: 100%;
+  width: 100%;
+  overflow: scroll;
+  position: relative;
+  background: var(--fxl-color-background);
+}

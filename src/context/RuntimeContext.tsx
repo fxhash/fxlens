@@ -1,13 +1,14 @@
-import {
-  FxParamDefinition,
-  FxParamType,
-  FxParamsData,
-} from "components/FxParams/types"
 import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
 import sha1 from "sha1"
-import { jsonStringifyBigint, sumBytesParams } from "components/FxParams/utils"
-import { TUpdateStateFn, TUpdateableState } from "types/utils"
+import {
+  FxParamDefinition,
+  FxParamsData,
+  FxParamType,
+  jsonStringifyBigint,
+  sumBytesParams,
+} from "@fxhash/params"
+import { TUpdateStateFn, TUpdateableState } from "@/types/utils"
 
 /**
  * The Runtime Context is responsible for managing the state of a project ran

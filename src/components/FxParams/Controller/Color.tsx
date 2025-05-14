@@ -1,14 +1,5 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  LegacyRef,
-  MutableRefObject,
-  RefObject,
-  ChangeEvent,
-  useMemo,
-} from "react"
-import { hexToRgba, rgbaToHex } from "../utils"
+import { useState, useEffect, useRef, ChangeEvent, useMemo } from "react"
+import { hexToRgba, rgbaToHex } from "@fxhash/params"
 import {
   FxParamControllerProps,
   Controller,
@@ -43,7 +34,15 @@ export function ColorController(props: FxParamControllerProps<"color">) {
   const handleChangeColor = (newColor: RgbaColor) => {
     onChange(rgbaToHex(newColor.r, newColor.g, newColor.b, newColor.a))
   }
-  const color = useMemo(() => hexToRgba(value), [value])
+
+  const _v = value?.hex?.rgba || value
+
+  const color = useMemo(() => hexToRgba(_v), [_v])
+
+  // TODO: Cleanup how colors are being passed
+  // when params are submitted from code the hash is ommited
+  // when randomizing in fxlens the hash is included
+  const v = _v.replace("#", "")
 
   return (
     <Controller
@@ -62,10 +61,10 @@ export function ColorController(props: FxParamControllerProps<"color">) {
         <div
           className={cx(classes.square, classes.leftTop)}
           style={{
-            background: `linear-gradient(-45deg, ${value} 0%, ${value} 50%, ${value.slice(
+            background: `linear-gradient(-45deg, #${v} 0%, #${v} 50%, #${v.slice(
               0,
-              7
-            )} 50%, ${value.slice(0, 7)} 100%)`,
+              6
+            )} 50%, #${v.slice(0, 6)} 100%)`,
           }}
         />
       </BaseButton>

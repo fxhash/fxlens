@@ -1,15 +1,15 @@
 import styles from "./PanelContext.module.scss"
 import { useContext } from "react"
-import { MainContext } from "context/MainContext"
+import { MainContext } from "@/context/MainContext"
 import { faRotate } from "@fortawesome/free-solid-svg-icons"
-import { PanelGroup } from "components/Panel/PanelGroup"
+import { PanelGroup } from "@/components/Panel/PanelGroup"
 import {
   BaseInput,
   BaseSelect,
   IconButton,
-} from "components/FxParams/BaseInput"
+} from "@/components/FxParams/BaseInput"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { RuntimeContext, TExecutionContext } from "context/RuntimeContext"
+import { RuntimeContext, TExecutionContext } from "@/context/RuntimeContext"
 
 const contexts = ["minting", "standalone", "capture"]
 
