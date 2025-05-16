@@ -1,5 +1,4 @@
 import { useMemo, ReactElement } from "react"
-import { FxParamDefinition, FxParamType } from "../types"
 import { FxParamInputChangeHandler, FxParamControllerProps } from "./Controller"
 import { BooleanController } from "./Boolean"
 import { ColorController } from "./Color"
@@ -8,10 +7,12 @@ import { BigIntController } from "./BigInt"
 import { SelectController } from "./Select"
 import { StringController } from "./String"
 import {
+  FxParamDefinition,
+  FxParamType,
   validateParameterDefinition,
   ControllerDefinitionSchemaType,
-} from "../validation"
-import { SafeParseError, SafeParseSuccess, z } from "zod"
+} from "@fxhash/params"
+import { SafeParseError, SafeParseSuccess } from "zod"
 import { ControllerInvalid } from "./Invalid"
 import { BytesController } from "./Bytes"
 

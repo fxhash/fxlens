@@ -1,10 +1,6 @@
 import { useMemo } from "react"
 import css from "./Bytes.module.scss"
-import {
-  Controller,
-  FxParamControllerProps,
-  HTMLInputController,
-} from "./Controller"
+import { Controller, FxParamControllerProps } from "./Controller"
 
 export function BytesController(props: FxParamControllerProps<"bytes">) {
   const { options } = props
