@@ -3,7 +3,7 @@ import {
   HTMLInputControllerWithTextInput,
 } from "./Controller"
 import classes from "./Controller.module.scss"
-import { MAX_SAFE_INT64, MIN_SAFE_INT64 } from "../utils"
+import { MAX_SAFE_INT64, MIN_SAFE_INT64 } from "@fxhash/params"
 import { useMemo } from "react"
 
 export function BigIntController(props: FxParamControllerProps<"bigint">) {

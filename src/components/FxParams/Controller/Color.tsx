@@ -1,14 +1,5 @@
-import {
-  useState,
-  useEffect,
-  useRef,
-  LegacyRef,
-  MutableRefObject,
-  RefObject,
-  ChangeEvent,
-  useMemo,
-} from "react"
-import { hexToRgba, rgbaToHex } from "../utils"
+import { useState, useEffect, useRef, ChangeEvent, useMemo } from "react"
+import { hexToRgba, rgbaToHex } from "@fxhash/params"
 import {
   FxParamControllerProps,
   Controller,
@@ -44,12 +35,14 @@ export function ColorController(props: FxParamControllerProps<"color">) {
     onChange(rgbaToHex(newColor.r, newColor.g, newColor.b, newColor.a))
   }
 
-  const color = useMemo(() => hexToRgba(value), [value])
+  const _v = value?.hex?.rgba || value
+
+  const color = useMemo(() => hexToRgba(_v), [_v])
 
   // TODO: Cleanup how colors are being passed
   // when params are submitted from code the hash is ommited
   // when randomizing in fxlens the hash is included
-  const v = value.replace("#", "")
+  const v = _v.replace("#", "")
 
   return (
     <Controller
