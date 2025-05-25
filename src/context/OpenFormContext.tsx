@@ -3,6 +3,7 @@ import {
   OpenFormData,
   RawOpenFormNode,
 } from "@/components/OpenFormFrame/_types"
+import { CaptureTrigger, CaptureTarget } from "@/utils/capture"
 import {
   buildNestedStructureFromRoots,
   searchChildren,
@@ -33,6 +34,16 @@ export interface OpenFormContext {
   setFocusedNodeId: Dispatch<string | null>
   focusedNode: RawOpenFormNode | null
   focusChildren: RawOpenFormNode[]
+  previewSize: number
+  setPreviewSize: Dispatch<number>
+  captureTrigger: CaptureTrigger
+  setCaptureTrigger: Dispatch<CaptureTrigger>
+  captureTarget: CaptureTarget
+  setCaptureTarget: Dispatch<CaptureTarget>
+  captureDelay: number
+  setCaptureDelay: Dispatch<number>
+  captureSelector: string
+  setCaptureSelector: Dispatch<string>
 }
 
 const defaultContext: OpenFormContext = {
@@ -53,6 +64,16 @@ const defaultContext: OpenFormContext = {
   setFocusedNodeId: () => {},
   focusedNode: null,
   focusChildren: [],
+  previewSize: 100,
+  setPreviewSize: () => {},
+  captureTrigger: CaptureTrigger.PROGRAMMATIC,
+  setCaptureTrigger: () => {},
+  captureTarget: CaptureTarget.VIEWPORT,
+  setCaptureTarget: () => {},
+  captureDelay: 0,
+  setCaptureDelay: () => {},
+  captureSelector: '',
+  setCaptureSelector: () => {},
 }
 
 function createNode() {
@@ -69,6 +90,11 @@ export const OpenFormContext = createContext<OpenFormContext>(defaultContext)
 export function OpenFormProvider({ children }: { children: React.ReactNode }) {
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null)
   const [liveMode, setLiveMode] = useState(false)
+  const [previewSize, setPreviewSize] = useState<number>(100)
+  const [captureTrigger, setCaptureTrigger] = useState<CaptureTrigger>(CaptureTrigger.PROGRAMMATIC)
+  const [captureTarget, setCaptureTarget] = useState<CaptureTarget>(CaptureTarget.VIEWPORT)
+  const [captureDelay, setCaptureDelay] = useState<number>(0)
+  const [captureSelector, setCaptureSelector] = useState<string>('')
   const [state, setState] = useState<OpenFormData>({
     nodes: [createNode()],
     links: [],
@@ -224,6 +250,16 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     setFocusedNodeId,
     focusedNode,
     focusChildren,
+    previewSize: previewSize,
+    setPreviewSize: setPreviewSize,
+    captureTrigger,
+    setCaptureTrigger,
+    captureTarget,
+    setCaptureTarget,
+    captureDelay,
+    setCaptureDelay,
+    captureSelector,
+    setCaptureSelector,
   }
 
   return (

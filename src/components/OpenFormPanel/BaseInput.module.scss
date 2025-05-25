@@ -1,0 +1,70 @@
+// Variables
+$height: 30px;
+$slider-track-height: 3px;
+$slider-thumb-height: 15px;
+$slider-thumb-width: 15px;
+$slider-thumb-border-radius: 50%;
+
+// Base input styles
+.baseInput {
+  font-family: var(--fxl-font-family);
+  font-size: var(--fxl-font-size-regular);
+  height: $height;
+  color: var(--fxl-color-text-primary);
+  background: var(--fxl-color-background2);
+  border: 1px solid var(--fxl-color-light2);
+  padding: 0 var(--fxl-spacing-xxs);
+  outline-offset: -1px;
+  
+  &:hover {
+    background: var(--fxl-color-background3);
+  }
+  
+  &:focus-visible {
+    outline: 1px solid var(--fxl-color-primary);
+  }
+}
+
+// Range input styles
+.baseInput[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: $slider-track-height !important;
+  background: var(--fxl-color-light2);
+  outline: none;
+  padding: 0 !important;
+  border: none;
+}
+
+.baseInput[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  width: $slider-thumb-width;
+  height: $slider-thumb-height;
+  background: var(--fxl-color-primary);
+  border-radius: $slider-thumb-border-radius;
+  
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.baseInput[type="range"]::-moz-range-thumb {
+  cursor: pointer;
+  width: $slider-thumb-width;
+  height: $slider-thumb-height;
+  background: var(--fxl-color-primary);
+  border-radius: $slider-thumb-border-radius;
+}
+
+// Number input styles - hide spinner
+.baseInput[type="number"]::-webkit-outer-spin-button,
+.baseInput[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.baseInput[type="number"] {
+  -moz-appearance: textfield;
+}

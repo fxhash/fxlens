@@ -1,8 +1,8 @@
-import { useContext, useEffect, useMemo, useRef, useState } from "react"
+import { useContext, useMemo } from "react"
 import { NestedOpenFormNode, RawOpenFormNode } from "./_types"
 import style from "./Node.module.scss"
 import { searchParents } from "./util"
-import { captureURL } from "@/utils/capture"
+import { captureURL, CaptureOptions } from "@/utils/capture"
 import { createIframeUrl } from "@/utils/url"
 import { MainContext } from "@/context/MainContext"
 import { IconButton } from "../FxParams/BaseInput"
@@ -21,13 +21,22 @@ interface NodeProps {
   onRemove?: () => void
 }
 export function Node(props: NodeProps) {
-  const { state, addNode, removeNode, focusedNodeId } =
-    useContext(OpenFormContext)
+  const { 
+    state, 
+    addNode, 
+    removeNode, 
+    focusedNodeId, 
+    previewSize,
+    captureTrigger,
+    captureTarget,
+    captureDelay,
+    captureSelector
+  } = useContext(OpenFormContext)
   const ctx = useContext(MainContext)
   const { onClickNode } = useOpenFormGraph()
   const { nodes, links } = state
   const { node, x, y, onAdd, onRemove } = props
-  const [live, setLive] = useState(false)
+  const live = false
 
   const iframeUrl = useMemo(() => {
     const lineage = searchParents(node.id, nodes, links).reverse()
@@ -38,10 +47,21 @@ export function Node(props: NodeProps) {
     return url
   }, [node.hash, nodes, links])
 
+  // Create capture options from context settings
+  const captureOptions: CaptureOptions = {
+    trigger: captureTrigger,
+    target: captureTarget,
+    delay: captureDelay,
+    selector: captureSelector
+  }
+
+  // Custom capture function that passes options to captureURL
+  const captureWithOptions = (url: string) => captureURL(url, captureOptions)
+
   const { imageSrc, isLoading, error } = useImageLoader(
     `node-${node.id}`,
     !live ? iframeUrl.toString() : undefined,
-    captureURL,
+    captureWithOptions,
     x
   )
 
@@ -54,6 +74,7 @@ export function Node(props: NodeProps) {
       <div className={style.header} style={{ color: "white" }}></div>
       <div
         className={style.content}
+        style={{ height: `${previewSize}px`, width: `${previewSize}px` }}
         onClick={() => {
           onClickNode(node.id)
         }}

@@ -1,0 +1,33 @@
+// Controller styles
+.controller {
+  display: flex;
+  align-items: center;
+  gap: var(--fxl-spacing-xxs);
+  margin-bottom: var(--fxl-spacing-xxs);
+
+  label {
+    flex: 1;
+    font-size: var(--fxl-font-size-s);
+    word-break: break-all;
+  }
+
+  .inputContainer {
+    width: 200px;
+    display: flex;
+    align-items: center;
+
+    input, select {
+      &:only-child {
+        width: 100%;
+      }
+      &:nth-child(1):not(:only-child) {
+        margin-right: var(--fxl-spacing-xxs);
+        width: 65%;
+      }
+      &:nth-child(2) {
+        margin-left: var(--fxl-spacing-xxs);
+        width: 35%;
+      }
+    }
+  }
+}
