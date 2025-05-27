@@ -16,11 +16,7 @@ import {
   ImageLoaderContext,
   PreviewSize,
 } from "@/context/ImageLoader"
-import {
-  faChevronDown,
-  faChevronRight,
-  faSquare,
-} from "@fortawesome/free-solid-svg-icons"
+import { faSquare } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const LABELS: Record<string, string> = {
@@ -31,7 +27,7 @@ const LABELS: Record<string, string> = {
 }
 
 export function PanelOpenForm() {
-  const { addNode, tree } = useContext(OpenFormContext)
+  const { addNode, tree, rootDepth, setRootDepth } = useContext(OpenFormContext)
 
   const {
     triggerMode,
@@ -128,10 +124,27 @@ export function PanelOpenForm() {
         </div>
       </PanelGroup>
       <PanelGroup
-        title="create root iteration"
-        description="create a new open root iteration"
+        title="lineage"
+        description="explore how your project evolves"
       >
-        <BaseButton onClick={() => addNode()}>new root iteration</BaseButton>
+        <div className={style.lineage}>
+          <HTMLInputControllerWithTextInput
+            id="root depth"
+            type="range"
+            value={rootDepth.toString()}
+            onChange={(evt) => setRootDepth(Number(evt.target.value))}
+            inputProps={{ min: 0, max: 20_000, step: 1 }}
+            textInputProps={{
+              type: "number",
+              min: 0,
+              max: 20_000,
+              step: 1,
+            }}
+          />
+          <BaseButton onClick={() => addNode()}>
+            create new iteration at root
+          </BaseButton>
+        </div>
       </PanelGroup>
       <PanelGroup title="">
         {tree.map((node) => (

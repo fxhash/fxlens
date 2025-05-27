@@ -7,7 +7,6 @@ import {
   buildNestedStructureFromRoots,
   searchChildren,
 } from "@/components/OpenFormFrame/util"
-import { TriggerMode } from "@/utils/capture"
 import { OpenFormGraphProvider, VOID_ROOT_ID } from "@fxhash/open-form-graph"
 import { mockEthereumTransactionHash } from "@fxhash/utils"
 import { createContext, Dispatch, useCallback, useMemo, useState } from "react"
@@ -34,6 +33,9 @@ export interface OpenFormContext {
   setFocusedNodeId: Dispatch<string | null>
   focusedNode: RawOpenFormNode | null
   focusChildren: RawOpenFormNode[]
+  rootDepth: number
+  setRootDepth: Dispatch<number>
+  rootLineage: string[]
 }
 
 const defaultContext: OpenFormContext = {
@@ -54,6 +56,9 @@ const defaultContext: OpenFormContext = {
   setFocusedNodeId: () => {},
   focusedNode: null,
   focusChildren: [],
+  rootDepth: 0,
+  setRootDepth: () => {},
+  rootLineage: [],
 }
 
 function createNode() {
@@ -68,6 +73,7 @@ function createNode() {
 export const OpenFormContext = createContext<OpenFormContext>(defaultContext)
 
 export function OpenFormProvider({ children }: { children: React.ReactNode }) {
+  const [rootDepth, setRootDepth] = useState(0)
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null)
   const [liveMode, setLiveMode] = useState(false)
   const [state, setState] = useState<OpenFormData>({
@@ -210,6 +216,12 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     return searchChildren(focusedNodeId, state.nodes, state.links)
   }, [focusedNodeId, state.nodes, state.links])
 
+  const rootLineage = useMemo(() => {
+    return Array(rootDepth)
+      .fill(0)
+      .map(() => mockEthereumTransactionHash())
+  }, [rootDepth])
+
   const context: OpenFormContext = {
     state,
     setState,
@@ -225,6 +237,9 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
     setFocusedNodeId,
     focusedNode,
     focusChildren,
+    rootDepth,
+    setRootDepth,
+    rootLineage,
   }
 
   return (

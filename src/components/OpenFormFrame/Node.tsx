@@ -20,7 +20,7 @@ interface NodeProps {
   onRemove?: () => void
 }
 export function Node(props: NodeProps) {
-  const { state, addNode, removeNode, focusedNodeId } =
+  const { state, addNode, removeNode, focusedNodeId, rootLineage } =
     useContext(OpenFormContext)
   const ctx = useContext(MainContext)
   const { previewSize } = useContext(ImageLoaderContext)
@@ -33,10 +33,10 @@ export function Node(props: NodeProps) {
     const lineage = searchParents(node.id, nodes, links).reverse()
     const url = createIframeUrl(ctx.baseUrl, {
       hash: node.hash,
-      lineage: [...lineage.map((n) => n.hash)],
+      lineage: [...lineage.map((n) => n.hash), ...rootLineage],
     })
     return url
-  }, [node.hash, nodes, links])
+  }, [node.hash, nodes, links, rootLineage])
 
   const { imageSrc, isLoading, error } = useImageLoader(
     `node-${node.id}`,

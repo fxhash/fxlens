@@ -35,7 +35,7 @@ interface ImageLoaderContextType {
   enqueueImage: (
     id: string,
     url: string,
-    loadFn?: (url: CaptureIframeOptions) => Promise<string>,
+    loadFn?: (options: CaptureIframeOptions) => Promise<string>,
     priority?: number
   ) => void
   dequeueImage: (id: string) => void
@@ -256,6 +256,7 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
             triggerMode,
             width,
             height,
+            delay: triggerDelay,
             selector: captureTarget === "SELECTOR" ? cssSelector : undefined,
           })
           log(`Got image source for ${id}: ${imageSrc.substring(0, 30)}...`)
@@ -287,6 +288,7 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
       updateImageState,
       log,
       triggerMode,
+      triggerDelay,
       width,
       height,
       captureTarget,
@@ -393,7 +395,7 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
 export function useImageLoader(
   id: string,
   url?: string,
-  loadFn?: (url: string) => Promise<string>,
+  loadFn?: (options: CaptureIframeOptions) => Promise<string>,
   priority = 0
 ) {
   const { enqueueImage, dequeueImage, getImageState, debug } =
