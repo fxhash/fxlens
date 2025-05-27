@@ -7,6 +7,7 @@ import {
   buildNestedStructureFromRoots,
   searchChildren,
 } from "@/components/OpenFormFrame/util"
+import { TriggerMode } from "@/utils/capture"
 import { OpenFormGraphProvider, VOID_ROOT_ID } from "@fxhash/open-form-graph"
 import { mockEthereumTransactionHash } from "@fxhash/utils"
 import { createContext, Dispatch, useCallback, useMemo, useState } from "react"

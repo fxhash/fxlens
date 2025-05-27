@@ -15,4 +15,8 @@
     height: 100%;
     width: 100%;
   }
+  .openFrame {
+    background: var(--fxl-color-background);
+    overflow: scroll;
+  }
 }

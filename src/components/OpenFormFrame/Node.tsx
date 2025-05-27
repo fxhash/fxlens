@@ -2,7 +2,6 @@ import { useContext, useEffect, useMemo, useRef, useState } from "react"
 import { NestedOpenFormNode, RawOpenFormNode } from "./_types"
 import style from "./Node.module.scss"
 import { searchParents } from "./util"
-import { captureURL } from "@/utils/capture"
 import { createIframeUrl } from "@/utils/url"
 import { MainContext } from "@/context/MainContext"
 import { IconButton } from "../FxParams/BaseInput"
@@ -11,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faRemove, faShareNodes } from "@fortawesome/free-solid-svg-icons"
 import classNames from "classnames"
 import { useOpenFormGraph } from "@fxhash/open-form-graph"
-import { useImageLoader } from "@/context/ImageLoader"
+import { ImageLoaderContext, useImageLoader } from "@/context/ImageLoader"
 
 interface NodeProps {
   x: number
@@ -24,6 +23,7 @@ export function Node(props: NodeProps) {
   const { state, addNode, removeNode, focusedNodeId } =
     useContext(OpenFormContext)
   const ctx = useContext(MainContext)
+  const { previewSize } = useContext(ImageLoaderContext)
   const { onClickNode } = useOpenFormGraph()
   const { nodes, links } = state
   const { node, x, y, onAdd, onRemove } = props
@@ -41,9 +41,20 @@ export function Node(props: NodeProps) {
   const { imageSrc, isLoading, error } = useImageLoader(
     `node-${node.id}`,
     !live ? iframeUrl.toString() : undefined,
-    captureURL,
+    undefined,
     x
   )
+
+  const contentSize = useMemo(() => {
+    switch (previewSize) {
+      case "xs":
+        return { width: 100, height: 100 }
+      case "sm":
+        return { width: 200, height: 200 }
+      case "lg":
+        return { width: 400, height: 400 }
+    }
+  }, [previewSize])
 
   return (
     <div
@@ -57,6 +68,7 @@ export function Node(props: NodeProps) {
         onClick={() => {
           onClickNode(node.id)
         }}
+        style={{ ...contentSize }}
       >
         {!live && (
           <>

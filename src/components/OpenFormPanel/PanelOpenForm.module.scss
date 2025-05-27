@@ -17,3 +17,21 @@
   height: 300px;
   padding: 10px;
 }
+
+.captureSettings {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sizeInput {
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+  align-items: center;
+}
+
+.previewSize {
+  display: flex;
+  gap: 10px;
+}

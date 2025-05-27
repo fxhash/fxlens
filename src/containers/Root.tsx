@@ -3,7 +3,7 @@ import { ParamsHistoryProvider } from "@/components/FxParams/ParamsHistory"
 import { PropsWithChildren } from "react"
 import { RuntimeProvider } from "@/context/RuntimeContext"
 import { OpenFormProvider } from "@/context/OpenFormContext"
-import { captureURL } from "@/utils/capture"
+import { captureIframe } from "@/utils/capture"
 import { ImageLoaderProvider } from "@/context/ImageLoader"
 
 /**
@@ -14,14 +14,14 @@ import { ImageLoaderProvider } from "@/context/ImageLoader"
 type Props = PropsWithChildren<any>
 export function Root({ children }: Props) {
   return (
-    <ImageLoaderProvider maxConcurrent={1} defaultLoader={captureURL}>
-      <OpenFormProvider>
+    <OpenFormProvider>
+      <ImageLoaderProvider maxConcurrent={1} defaultLoader={captureIframe}>
         <MainProvider>
           <RuntimeProvider>
             <ParamsHistoryProvider>{children}</ParamsHistoryProvider>
           </RuntimeProvider>
         </MainProvider>
-      </OpenFormProvider>
-    </ImageLoaderProvider>
+      </ImageLoaderProvider>
+    </OpenFormProvider>
   )
 }
