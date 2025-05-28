@@ -1,6 +1,6 @@
 {
   "name": "fxlens",
-  "version": "1.0.0",
+  "version": "2.1.0",
   "author": "fxhash",
   "browserslist": {
     "production": [
@@ -20,6 +20,9 @@
     "@fortawesome/free-brands-svg-icons": "6.4.0",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
+    "@fxhash/open-form-graph": "0.0.1",
+    "@fxhash/params": "0.0.11",
+    "@fxhash/utils": "0.0.3",
     "classnames": "2.3.2",
     "html2canvas": "1.4.1",
     "lodash.debounce": "4.0.8",
@@ -33,11 +36,9 @@
     "typescript": "5.8.2",
     "web-vitals": "2.1.4",
     "zod": "3.24.3",
-    "@fxhash/open-form-graph": "0.0.0",
-    "@fxhash/params": "0.0.10",
-    "@fxhash/utils": "0.0.2"
   },
   "devDependencies": {
+    "@fxhash/eslint-config": "1.0.2"
     "@types/eslint": "8.44.0",
     "@types/lodash.debounce": "4.0.7",
     "@types/lodash.throttle": "4.1.7",
@@ -51,7 +52,6 @@
     "vite": "6.3.0",
     "vite-plugin-svgr": "4.3.0",
     "vite-tsconfig-paths": "5.1.4",
-    "@fxhash/eslint-config": "1.0.2"
   },
   "eslintConfig": {
     "extends": [
