@@ -1,3 +1,4 @@
+import { CaptureIframeOptions, TriggerMode } from "@/utils/capture"
 import React, {
   createContext,
   useContext,
@@ -7,6 +8,7 @@ import React, {
   useCallback,
   ReactNode,
   useMemo,
+  Dispatch,
 } from "react"
 
 type QueueItem = {
@@ -26,11 +28,14 @@ type ImageState = {
 
 type ImageStates = Record<string, ImageState>
 
+export type CaptureTarget = "VIEWPORT" | "SELECTOR"
+export type PreviewSize = "xs" | "sm" | "lg"
+
 interface ImageLoaderContextType {
   enqueueImage: (
     id: string,
     url: string,
-    loadFn?: (url: string) => Promise<string>,
+    loadFn?: (options: CaptureIframeOptions) => Promise<string>,
     priority?: number
   ) => void
   dequeueImage: (id: string) => void
@@ -39,6 +44,21 @@ interface ImageLoaderContextType {
   imageStates: ImageStates
   debug: boolean
   setDebug: (value: boolean) => void
+
+  triggerMode: TriggerMode
+  setTriggerMode: Dispatch<TriggerMode>
+  triggerDelay: number
+  setTriggerDelay: Dispatch<number>
+  captureTarget: CaptureTarget
+  setCaptureTarget: Dispatch<CaptureTarget>
+  width: number
+  setWidth: Dispatch<number>
+  height: number
+  setHeight: Dispatch<number>
+  cssSelector: string
+  setCssSelector: Dispatch<string>
+  previewSize: PreviewSize
+  setPreviewSize: Dispatch<PreviewSize>
 }
 
 const defaultContext: ImageLoaderContextType = {
@@ -49,14 +69,29 @@ const defaultContext: ImageLoaderContextType = {
   imageStates: {},
   debug: false,
   setDebug: () => {},
+  triggerMode: "DELAY",
+  setTriggerMode: () => {},
+  triggerDelay: 1000,
+  setTriggerDelay: () => {},
+  captureTarget: "VIEWPORT",
+  setCaptureTarget: () => {},
+  width: 800,
+  height: 800,
+  setWidth: () => {},
+  setHeight: () => {},
+  cssSelector: "",
+  setCssSelector: () => {},
+  previewSize: "sm",
+  setPreviewSize: () => {},
 }
 
-const ImageLoaderContext = createContext<ImageLoaderContextType>(defaultContext)
+export const ImageLoaderContext =
+  createContext<ImageLoaderContextType>(defaultContext)
 
 interface ImageLoaderProviderProps {
   children: ReactNode
   maxConcurrent?: number
-  defaultLoader?: (url: string) => Promise<string>
+  defaultLoader?: (options: CaptureIframeOptions) => Promise<string>
   debug?: boolean
 }
 
@@ -66,15 +101,22 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
   defaultLoader,
   debug: initialDebug = false,
 }) => {
+  const [previewSize, setPreviewSize] = useState<PreviewSize>("sm")
+  const [cssSelector, setCssSelector] = useState("")
+  const [width, setWidth] = useState(800)
+  const [height, setHeight] = useState(800)
+  const [captureTarget, setCaptureTarget] = useState<CaptureTarget>("VIEWPORT")
+  const [triggerMode, setTriggerMode] = useState<TriggerMode>("DELAY")
+  const [triggerDelay, setTriggerDelay] = useState(1000)
   const [imageStates, setImageStates] = useState<ImageStates>({})
   const [debug, setDebug] = useState(initialDebug)
 
   const queueRef = useRef<QueueItem[]>([])
   const processingRef = useRef<boolean>(false)
   const currentLoadingRef = useRef<number>(0)
-  const loadersRef = useRef<Record<string, (url: string) => Promise<string>>>(
-    {}
-  )
+  const loadersRef = useRef<
+    Record<string, (options: CaptureIframeOptions) => Promise<string>>
+  >({})
 
   const log = useCallback(
     (...args: any[]) => {
@@ -166,7 +208,7 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
     (
       id: string,
       url: string,
-      loadFn?: (url: string) => Promise<string>,
+      loadFn?: (options: CaptureIframeOptions) => Promise<string>,
       priority = 0
     ) => {
       if (!url) {
@@ -206,18 +248,17 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
           log(`Executing load function for image ${id}`)
 
           const loader =
-            loadFn ||
-            loadersRef.current[id] ||
-            loadersRef.current._default ||
-            (async (url: string) => {
-              log(`Using default loader for ${id}`)
-              const response = await fetch(url)
-              const blob = await response.blob()
-              return URL.createObjectURL(blob)
-            })
+            loadFn || loadersRef.current[id] || loadersRef.current._default
 
-          log(`Starting loader for image ${id}`)
-          const imageSrc = await loader(url)
+          log(`Starting loader for image ${id}, ${triggerMode}`)
+          const imageSrc = await loader({
+            url,
+            triggerMode,
+            width,
+            height,
+            delay: triggerDelay,
+            selector: captureTarget === "SELECTOR" ? cssSelector : undefined,
+          })
           log(`Got image source for ${id}: ${imageSrc.substring(0, 30)}...`)
 
           updateImageState(id, {
@@ -241,7 +282,18 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
 
       processQueue()
     },
-    [imageStates, processQueue, updateImageState, log]
+    [
+      imageStates,
+      processQueue,
+      updateImageState,
+      log,
+      triggerMode,
+      triggerDelay,
+      width,
+      height,
+      captureTarget,
+      cssSelector,
+    ]
   )
 
   const dequeueImage = useCallback(
@@ -293,6 +345,20 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
       imageStates,
       debug,
       setDebug,
+      triggerMode,
+      setTriggerMode,
+      triggerDelay,
+      setTriggerDelay,
+      captureTarget,
+      setCaptureTarget,
+      width,
+      setWidth,
+      height,
+      setHeight,
+      cssSelector,
+      setCssSelector,
+      previewSize,
+      setPreviewSize,
     }),
     [
       enqueueImage,
@@ -302,6 +368,20 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
       imageStates,
       debug,
       setDebug,
+      triggerMode,
+      setTriggerMode,
+      triggerDelay,
+      setTriggerDelay,
+      captureTarget,
+      setCaptureTarget,
+      width,
+      setWidth,
+      height,
+      setHeight,
+      cssSelector,
+      setCssSelector,
+      previewSize,
+      setPreviewSize,
     ]
   )
 
@@ -315,7 +395,7 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
 export function useImageLoader(
   id: string,
   url?: string,
-  loadFn?: (url: string) => Promise<string>,
+  loadFn?: (options: CaptureIframeOptions) => Promise<string>,
   priority = 0
 ) {
   const { enqueueImage, dequeueImage, getImageState, debug } =

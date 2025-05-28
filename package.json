@@ -1,6 +1,6 @@
 {
   "name": "fxlens",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "author": "fxhash",
   "browserslist": {
     "production": [
@@ -67,3 +67,4 @@
     "lint:fix": "eslint ./src --fix"
   }
 }
+
