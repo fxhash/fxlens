@@ -11,4 +11,9 @@
     display: flex;
     flex-direction: column;
   }
+  .collapsibleTitle {
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+  }
 }

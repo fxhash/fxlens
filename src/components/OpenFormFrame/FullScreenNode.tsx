@@ -11,7 +11,7 @@ interface NodeProps {
   hash: string
 }
 export function FullscreenNode(props: NodeProps) {
-  const { state } = useContext(OpenFormContext)
+  const { state, rootLineage } = useContext(OpenFormContext)
   const ctx = useContext(MainContext)
   const { nodes, links } = state
   const { hash, id } = props
@@ -20,10 +20,10 @@ export function FullscreenNode(props: NodeProps) {
     const lineage = searchParents(id, nodes, links).reverse()
     const url = createIframeUrl(ctx.baseUrl, {
       hash: hash,
-      lineage: [...lineage.map((n) => n.hash)],
+      lineage: [...rootLineage, ...lineage.map((n) => n.hash)],
     })
     return url
-  }, [hash, nodes, links, id])
+  }, [hash, nodes, links, id, rootLineage, ctx.baseUrl])
 
   return (
     <div className={classNames(style.full)}>
