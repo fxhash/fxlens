@@ -103,13 +103,10 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
           links: [...prevState.links],
         }
 
-        console.log(parentId)
-
         if (parentId) {
           const parentExists = prevState.nodes.some(
             (node) => node.id === parentId
           )
-          console.log(parentExists, parentId, newNode.id)
           if (parentExists) {
             newState.links.push({
               source: parentId,

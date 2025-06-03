@@ -37,7 +37,7 @@ export function Node(props: NodeProps) {
       context: fastCapture ? "fast-capture" : "capture",
     })
     return url
-  }, [node.hash, nodes, links, rootLineage])
+  }, [node.hash, nodes, links, rootLineage, fastCapture])
 
   const { imageSrc, isLoading, error } = useImageLoader(
     `node-${node.id}`,
