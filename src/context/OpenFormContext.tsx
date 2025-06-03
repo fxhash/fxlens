@@ -245,14 +245,10 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
   return (
     <OpenFormContext.Provider value={context}>
       <OpenFormGraphProvider
+        rootImageSources={["/fx-logo-white.png", "/fx-logo-grey.png"]}
         rootId={VOID_ROOT_ID}
         theme="dark"
         data={state}
-        config={{
-          focusPadding: 50,
-          minDagLevelDistance: 30,
-          maxDagLevelDistance: 150,
-        }}
       >
         {children}
       </OpenFormGraphProvider>

@@ -44,22 +44,41 @@ export function PanelOpenForm() {
     setCssSelector,
     previewSize,
     setPreviewSize,
+    fastCapture,
+    setFastCapture,
   } = useContext(ImageLoaderContext)
 
   return (
     <div className={style.panel}>
       <PanelGroup title="capture settings" collapsible>
         <div className={style.captureSettings}>
-          <span className={style.label}>preview size</span>
-          <div className={style.previewSize}>
-            {(["xs", "sm", "lg"] as PreviewSize[]).map((size) => (
-              <IconButton
-                color={previewSize === size ? "primary" : "secondary"}
-                onClick={() => setPreviewSize(size)}
-              >
-                <FontAwesomeIcon size={size} icon={faSquare} />
-              </IconButton>
-            ))}
+          <div className={style.previewSizeContainer}>
+            <div className={style.previewSizeWrap}>
+              <span className={style.label}>preview size</span>
+              <div className={style.previewSize}>
+                {(["xs", "sm", "lg"] as PreviewSize[]).map((size) => (
+                  <IconButton
+                    color={previewSize === size ? "primary" : "secondary"}
+                    onClick={() => setPreviewSize(size)}
+                  >
+                    <FontAwesomeIcon size={size} icon={faSquare} />
+                  </IconButton>
+                ))}
+              </div>
+            </div>
+            <div className={style.fastCapture}>
+              <span className={style.label}>fast capture</span>
+              <BaseInput
+                id="quick-capture"
+                checked={fastCapture}
+                type="checkbox"
+                onChange={(evt) =>
+                  evt.target.checked
+                    ? setFastCapture(true)
+                    : setFastCapture(false)
+                }
+              />
+            </div>
           </div>
           <span className={style.label}>trigger</span>
           <BaseSelect
