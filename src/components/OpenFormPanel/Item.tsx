@@ -1,8 +1,4 @@
-import {
-  faRemove,
-  faShareNodes,
-  faVolleyball,
-} from "@fortawesome/free-solid-svg-icons"
+import { faRemove, faShareNodes } from "@fortawesome/free-solid-svg-icons"
 import { BaseButton, BaseInput, IconButton } from "../FxParams/BaseInput"
 import { NestedOpenFormNode, RawOpenFormNode } from "../OpenFormFrame/_types"
 import style from "./Item.module.scss"
@@ -20,11 +16,11 @@ interface ItemProps {
 
 export function Item(props: ItemProps) {
   const { removeNode, addNode, updateNode } = useContext(OpenFormContext)
-  const { selectedNode, highlights, setSelectedNodeId } = useOpenFormGraph()
+  const { selectedNode, setSelectedNode } = useOpenFormGraph()
   const { node, depth } = props
 
   const isFocus = node.id === selectedNode?.id
-  const isHighlight = highlights.nodes.findIndex((n) => n.id === node.id) > -1
+  const isHighlight = false // highlights.nodes.findIndex((n) => n.id === node.id) > -1
   const isActive = isHighlight || isFocus
 
   const fadeOut = !!selectedNode && !isActive
@@ -41,7 +37,7 @@ export function Item(props: ItemProps) {
           >
             update seed
           </BaseButton>
-          <BaseButton onClick={() => setSelectedNodeId(null)}>
+          <BaseButton onClick={() => setSelectedNode(null)}>
             close live view
           </BaseButton>
         </div>

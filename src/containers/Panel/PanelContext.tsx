@@ -1,20 +1,12 @@
 import styles from "./PanelContext.module.scss"
 import { useContext } from "react"
-import { MainContext } from "@/context/MainContext"
-import { faRotate } from "@fortawesome/free-solid-svg-icons"
 import { PanelGroup } from "@/components/Panel/PanelGroup"
-import {
-  BaseInput,
-  BaseSelect,
-  IconButton,
-} from "@/components/FxParams/BaseInput"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { BaseSelect } from "@/components/FxParams/BaseInput"
 import { RuntimeContext, TExecutionContext } from "@/context/RuntimeContext"
 
-const contexts = ["minting", "standalone", "capture"]
+const contexts = ["minting", "standalone", "capture", "fast-capture"]
 
 export function PanelContext() {
-  const ctx = useContext(MainContext)
   const runtime = useContext(RuntimeContext)
 
   const handleChange = (context: TExecutionContext) => {

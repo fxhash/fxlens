@@ -20,9 +20,9 @@
     "@fortawesome/free-brands-svg-icons": "6.4.0",
     "@fortawesome/free-solid-svg-icons": "6.4.0",
     "@fortawesome/react-fontawesome": "0.2.0",
-    "@fxhash/open-form-graph": "0.0.1",
-    "@fxhash/params": "0.0.11",
-    "@fxhash/utils": "0.0.3",
+    "@fxhash/open-form-graph": "0.0.2",
+    "@fxhash/params": "0.0.12",
+    "@fxhash/utils": "0.0.4",
     "classnames": "2.3.2",
     "html2canvas": "1.4.1",
     "lodash.debounce": "4.0.8",
@@ -38,7 +38,7 @@
     "zod": "3.24.3"
   },
   "devDependencies": {
-    "@fxhash/eslint-config": "1.0.2",
+    "@fxhash/eslint-config": "1.0.4",
     "@types/eslint": "8.44.0",
     "@types/lodash.debounce": "4.0.7",
     "@types/lodash.throttle": "4.1.7",
