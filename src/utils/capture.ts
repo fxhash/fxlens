@@ -86,14 +86,6 @@ export async function captureIframe(
         const imageData = await domToPng(target as HTMLElement, {
           backgroundColor,
         })
-        /*const canvas = await html2canvas(target as HTMLElement, {
-          allowTaint: true,
-          useCORS: true,
-          logging: false,
-          scale: 1,
-          backgroundColor,
-        })*/
-        //const imageData = canvas.toDataURL("image/png")
         document.body.removeChild(iframe)
         _imageCache[cacheKey] = imageData
         resolve(imageData)
