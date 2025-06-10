@@ -51,6 +51,7 @@
       const visibleRows = Math.min(window.innerHeight, totalBars)
       const isFast = $fx.context === "fast-capture"
       const color = isFast ? "green" : "red"
+
       if (totalBars <= visibleRows) {
         // Small dataset: render each bar
         for (let i = 0; i < totalBars; i++) {
