@@ -24,9 +24,9 @@
     "@fxhash/params": "0.0.12",
     "@fxhash/utils": "0.0.4",
     "classnames": "2.3.2",
-    "html2canvas": "1.4.1",
     "lodash.debounce": "4.0.8",
     "lodash.throttle": "4.1.1",
+    "modern-screenshot": "4.6.2",
     "react": "18.3.1",
     "react-colorful": "5.6.1",
     "react-dom": "18.3.1",
@@ -67,3 +67,4 @@
     "lint:fix": "eslint ./src --fix"
   }
 }
+
