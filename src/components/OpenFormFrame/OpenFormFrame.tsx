@@ -10,7 +10,7 @@ export function OpenFormFrame() {
   const { selectedNode } = useOpenFormGraph()
   const _selectedNode = useMemo(() => {
     return state.nodes.find((n) => n.id === selectedNode?.id)
-  }, [selectedNode])
+  }, [selectedNode, state.nodes])
   return (
     <div className={style.container}>
       {!selectedNode && (
