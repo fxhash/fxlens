@@ -23,8 +23,8 @@ export function Node(props: NodeProps) {
   const { state, addNode, removeNode, focusedNodeId, rootLineage } =
     useContext(OpenFormContext)
   const ctx = useContext(MainContext)
-  const { previewSize } = useContext(ImageLoaderContext)
-  const { onClickNode } = useOpenFormGraph()
+  const { previewSize, fastCapture } = useContext(ImageLoaderContext)
+  const { setSelectedNodeById } = useOpenFormGraph()
   const { nodes, links } = state
   const { node, x, y, onAdd, onRemove } = props
   const [live, setLive] = useState(false)
@@ -34,9 +34,10 @@ export function Node(props: NodeProps) {
     const url = createIframeUrl(ctx.baseUrl, {
       hash: node.hash,
       lineage: [...lineage.map((n) => n.hash), ...rootLineage],
+      context: fastCapture ? "fast-capture" : "capture",
     })
     return url
-  }, [node.hash, nodes, links, rootLineage])
+  }, [node.hash, nodes, links, rootLineage, fastCapture])
 
   const { imageSrc, isLoading, error } = useImageLoader(
     `node-${node.id}`,
@@ -66,7 +67,7 @@ export function Node(props: NodeProps) {
       <div
         className={style.content}
         onClick={() => {
-          onClickNode(node.id)
+          setSelectedNodeById(node.id)
         }}
         style={{ ...contentSize }}
       >

@@ -5,6 +5,7 @@
   height: 100%;
 }
 .root {
+  overflow-x: scroll;
   margin-bottom: 10px;
 }
 
@@ -30,7 +31,19 @@
   gap: 3px;
   align-items: center;
 }
-
+.previewSizeContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.previewSizeWrap,
+.fastCapture {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.fastCapture {
+  align-items: flex-end;
+}
 .previewSize {
   display: flex;
   gap: 10px;

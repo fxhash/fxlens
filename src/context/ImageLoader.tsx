@@ -59,6 +59,8 @@ interface ImageLoaderContextType {
   setCssSelector: Dispatch<string>
   previewSize: PreviewSize
   setPreviewSize: Dispatch<PreviewSize>
+  fastCapture: boolean
+  setFastCapture: Dispatch<boolean>
 }
 
 const defaultContext: ImageLoaderContextType = {
@@ -83,6 +85,8 @@ const defaultContext: ImageLoaderContextType = {
   setCssSelector: () => {},
   previewSize: "sm",
   setPreviewSize: () => {},
+  fastCapture: false,
+  setFastCapture: () => {},
 }
 
 export const ImageLoaderContext =
@@ -101,6 +105,7 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
   defaultLoader,
   debug: initialDebug = false,
 }) => {
+  const [fastCapture, setFastCapture] = useState(false)
   const [previewSize, setPreviewSize] = useState<PreviewSize>("sm")
   const [cssSelector, setCssSelector] = useState("")
   const [width, setWidth] = useState(800)
@@ -359,6 +364,8 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
       setCssSelector,
       previewSize,
       setPreviewSize,
+      fastCapture,
+      setFastCapture,
     }),
     [
       enqueueImage,
@@ -382,6 +389,8 @@ export const ImageLoaderProvider: React.FC<ImageLoaderProviderProps> = ({
       setCssSelector,
       previewSize,
       setPreviewSize,
+      fastCapture,
+      setFastCapture,
     ]
   )
 

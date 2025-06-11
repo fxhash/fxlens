@@ -18,7 +18,11 @@ import { TUpdateStateFn, TUpdateableState } from "@/types/utils"
  * See comments on IRuntimeContext for more details.
  */
 
-export type TExecutionContext = "minting" | "standalone" | "capture"
+export type TExecutionContext =
+  | "minting"
+  | "standalone"
+  | "capture"
+  | "fast-capture"
 
 export interface RuntimeState {
   hash: string

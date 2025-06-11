@@ -103,13 +103,10 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
           links: [...prevState.links],
         }
 
-        console.log(parentId)
-
         if (parentId) {
           const parentExists = prevState.nodes.some(
             (node) => node.id === parentId
           )
-          console.log(parentExists, parentId, newNode.id)
           if (parentExists) {
             newState.links.push({
               source: parentId,
@@ -245,14 +242,10 @@ export function OpenFormProvider({ children }: { children: React.ReactNode }) {
   return (
     <OpenFormContext.Provider value={context}>
       <OpenFormGraphProvider
+        rootImageSources={["/fx-logo-white.png", "/fx-logo-grey.png"]}
         rootId={VOID_ROOT_ID}
         theme="dark"
         data={state}
-        config={{
-          focusPadding: 50,
-          minDagLevelDistance: 30,
-          maxDagLevelDistance: 150,
-        }}
       >
         {children}
       </OpenFormGraphProvider>

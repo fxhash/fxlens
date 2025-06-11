@@ -1,4 +1,4 @@
-import html2canvas from "html2canvas"
+import { domToPng } from "modern-screenshot"
 
 export type TriggerMode = "DELAY" | "FN_TRIGGER"
 
@@ -38,10 +38,11 @@ export async function captureIframe(
   iframe.style.border = "none"
   iframe.style.visibility = "hidden"
   iframe.style.position = "absolute"
+  iframe.style.top = "0"
+  iframe.style.pointerEvents = "none"
   iframe.style.width = `${width}px`
   iframe.style.height = `${height}px`
   iframe.src = url
-  iframe.setAttribute("crossorigin", "anonymous")
   iframe.setAttribute("sandbox", "allow-same-origin allow-scripts")
 
   document.body.appendChild(iframe)
@@ -82,14 +83,9 @@ export async function captureIframe(
           )
         }
 
-        const canvas = await html2canvas(target as HTMLElement, {
-          allowTaint: true,
-          useCORS: true,
-          logging: false,
-          scale: 1,
+        const imageData = await domToPng(target as HTMLElement, {
           backgroundColor,
         })
-        const imageData = canvas.toDataURL("image/png")
         document.body.removeChild(iframe)
         _imageCache[cacheKey] = imageData
         resolve(imageData)
