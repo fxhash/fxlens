@@ -1,4 +1,4 @@
-import { PropsWithChildren, useMemo, useState } from "react"
+import { PropsWithChildren, useContext, useMemo, useState } from "react"
 import { createContext } from "react"
 import sha1 from "sha1"
 import {
@@ -9,6 +9,7 @@ import {
   sumBytesParams,
 } from "@fxhash/params"
 import { TUpdateStateFn, TUpdateableState } from "@/types/utils"
+import { MainContext } from "./MainContext"
 
 /**
  * The Runtime Context is responsible for managing the state of a project ran
@@ -110,6 +111,7 @@ export const RuntimeContext = createContext(defaultRuntimeContext)
 
 type Props = PropsWithChildren<any>
 export function RuntimeProvider({ children }: Props) {
+  const { baseHash } = useContext(MainContext)
   const [state, setState] = useState<RuntimeState>({
     hash: "",
     minter: "",

@@ -10,7 +10,7 @@ import { IRuntimeContext, RuntimeContext } from "@/context/RuntimeContext"
 type TUpdateIframe = (ctx: IMainContext, runtime: IRuntimeContext) => void
 
 const updateIframe: TUpdateIframe = (ctx, runtime) => {
-  const url = createIframeUrl(ctx.baseUrl, {
+  const url = createIframeUrl(ctx.rootUrl, {
     hash: runtime.state.hash,
     minter: runtime.state.minter,
     data: runtime.state.params,
@@ -19,6 +19,7 @@ const updateIframe: TUpdateIframe = (ctx, runtime) => {
     context: runtime.state.context,
   })
   const target = url.toString()
+  console.log(target)
   if (ctx.iframe) {
     ctx.iframe.contentWindow?.location.replace(target)
   }
@@ -68,7 +69,7 @@ export function PanelControls() {
               `fxhash=${runtime.state.hash}`,
               `fxminter=${runtime.state.minter}`,
             ]
-            const target = `${ctx.baseUrl}?${p.join("&")}#0x${bytes}`
+            const target = `${ctx.rootUrl}?${p.join("&")}#0x${bytes}`
             window.open(target)
           }}
         >

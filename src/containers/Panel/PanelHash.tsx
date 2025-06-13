@@ -18,8 +18,6 @@ export function PanelHash() {
     runtime.state.update({ hash })
   }
 
-  console.log(runtime.state.hash)
-
   return (
     <PanelGroup
       title="Current seed"
