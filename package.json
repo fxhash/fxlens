@@ -67,3 +67,4 @@
     "lint:fix": "eslint ./src --fix"
   }
 }
+

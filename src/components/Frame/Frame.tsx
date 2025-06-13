@@ -7,6 +7,7 @@ import { MainContext } from "@/context/MainContext"
 import { FxParamDefinition, FxParamType } from "@fxhash/params"
 import { usePostMessageListener } from "@/components/FxParams/hooks"
 import { RuntimeContext, RuntimeDefinition } from "@/context/RuntimeContext"
+import { createIframeUrl } from "@/utils/url"
 
 interface Props {
   url: string
@@ -63,7 +64,6 @@ export function Frame({ url, className }: Props) {
       hash,
       minter,
     } = e.data.data
-    console.log("fxhash_getInfo", e.data.data)
     const defUpdate: Partial<RuntimeDefinition> = {}
     if (definitions) {
       const definitionsWithDefaults = definitions.map(

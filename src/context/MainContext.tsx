@@ -1,4 +1,4 @@
-import { PropsWithChildren, useState } from "react"
+import { PropsWithChildren, useMemo, useState } from "react"
 import { createContext } from "react"
 import { appendUrlParameters, decodeUrl } from "@/utils/url"
 import { TExecutionContext } from "./RuntimeContext"
@@ -25,6 +25,7 @@ export interface IMainContext {
   setIframe: (iframe: HTMLIFrameElement) => void
   mode: "long" | "open"
   setMode: (mode: "long" | "open") => void
+  baseHash: string | null
 }
 
 const defaultMainContext: IMainContext = {
@@ -37,6 +38,7 @@ const defaultMainContext: IMainContext = {
   setIframe: () => {},
   mode: "long",
   setMode: () => {},
+  baseHash: null,
 }
 
 export const MainContext = createContext(defaultMainContext)
@@ -50,6 +52,11 @@ export function MainProvider({ children }: Props) {
   const initialContext = new URLSearchParams(window.location.search).get(
     "fxcontext"
   ) as TExecutionContext
+
+  const baseHash = useMemo(() => {
+    const url = new URL(baseUrl)
+    return url.searchParams.get("fxhash") || null
+  }, [baseUrl])
 
   // initialize the URL from the query parameter target
   const [url, setUrl] = useState(
@@ -70,6 +77,7 @@ export function MainProvider({ children }: Props) {
     setFeatures,
     iframe,
     setIframe,
+    baseHash,
   }
 
   return <MainContext.Provider value={context}>{children}</MainContext.Provider>
