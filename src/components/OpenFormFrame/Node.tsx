@@ -28,10 +28,9 @@ export function Node(props: NodeProps) {
   const { nodes, links } = state
   const { node, x, y, onAdd, onRemove } = props
   const [live, setLive] = useState(false)
-
   const iframeUrl = useMemo(() => {
     const lineage = searchParents(node.id, nodes, links).reverse()
-    const url = createIframeUrl(ctx.baseUrl, {
+    const url = createIframeUrl(ctx.rootUrl, {
       hash: node.hash,
       lineage: [...lineage.map((n) => n.hash), ...rootLineage],
       context: fastCapture ? "fast-capture" : "capture",

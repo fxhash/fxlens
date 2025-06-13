@@ -26,6 +26,7 @@ export interface IMainContext {
   mode: "long" | "open"
   setMode: (mode: "long" | "open") => void
   baseHash: string | null
+  rootUrl: string
 }
 
 const defaultMainContext: IMainContext = {
@@ -39,6 +40,7 @@ const defaultMainContext: IMainContext = {
   mode: "long",
   setMode: () => {},
   baseHash: null,
+  rootUrl: "",
 }
 
 export const MainContext = createContext(defaultMainContext)
@@ -53,14 +55,18 @@ export function MainProvider({ children }: Props) {
     "fxcontext"
   ) as TExecutionContext
 
+  const parsed = useMemo(() => new URL(baseUrl), [baseUrl])
+
   const baseHash = useMemo(() => {
-    const url = new URL(baseUrl)
-    return url.searchParams.get("fxhash") || null
-  }, [baseUrl])
+    return parsed.searchParams.get("fxhash") || null
+  }, [parsed])
 
   // initialize the URL from the query parameter target
   const [url, setUrl] = useState(
-    appendUrlParameters(baseUrl, { fxcontext: initialContext })
+    appendUrlParameters(parsed.origin + parsed.pathname, {
+      fxcontext: initialContext,
+      fxhash: baseHash,
+    })
   )
 
   const [features, setFeatures] = useState<any>(null)
@@ -78,6 +84,7 @@ export function MainProvider({ children }: Props) {
     iframe,
     setIframe,
     baseHash,
+    rootUrl: parsed.origin + parsed.pathname,
   }
 
   return <MainContext.Provider value={context}>{children}</MainContext.Provider>

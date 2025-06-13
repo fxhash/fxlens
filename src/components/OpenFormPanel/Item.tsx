@@ -43,7 +43,7 @@ export function Item(props: ItemProps) {
             color="secondary"
             onClick={() => {
               const lineage = searchParents(node.id, nodes, links).reverse()
-              const url = createIframeUrl(ctx.baseUrl, {
+              const url = createIframeUrl(ctx.rootUrl, {
                 hash: node.hash,
                 lineage: [...lineage.map((n) => n.hash), ...rootLineage],
               })

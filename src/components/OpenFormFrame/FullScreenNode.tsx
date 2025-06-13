@@ -18,7 +18,7 @@ export function FullscreenNode(props: NodeProps) {
 
   const iframeUrl = useMemo(() => {
     const lineage = searchParents(id, nodes, links).reverse()
-    const url = createIframeUrl(ctx.baseUrl, {
+    const url = createIframeUrl(ctx.rootUrl, {
       hash: hash,
       lineage: [...rootLineage, ...lineage.map((n) => n.hash)],
     })
