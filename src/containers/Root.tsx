@@ -14,14 +14,14 @@ import { ImageLoaderProvider } from "@/context/ImageLoader"
 type Props = PropsWithChildren<any>
 export function Root({ children }: Props) {
   return (
-    <OpenFormProvider>
-      <ImageLoaderProvider maxConcurrent={1} defaultLoader={captureIframe}>
-        <MainProvider>
+    <MainProvider>
+      <OpenFormProvider>
+        <ImageLoaderProvider maxConcurrent={1} defaultLoader={captureIframe}>
           <RuntimeProvider>
             <ParamsHistoryProvider>{children}</ParamsHistoryProvider>
           </RuntimeProvider>
-        </MainProvider>
-      </ImageLoaderProvider>
-    </OpenFormProvider>
+        </ImageLoaderProvider>
+      </OpenFormProvider>
+    </MainProvider>
   )
 }

@@ -27,7 +27,7 @@ const updateIframe: TUpdateIframe = (ctx, runtime) => {
 export function PanelControls() {
   const ctx = useContext(MainContext)
   const runtime = useContext(RuntimeContext)
-  const [autoUpdate, setAutoUpdate] = useState(false)
+  const [autoUpdate, setAutoUpdate] = useState(true)
 
   const updateIframeDebounced = useCallback<TUpdateIframe>(
     debounce<TUpdateIframe>((ctx, runtime) => {

@@ -9,7 +9,15 @@ import {
 } from "@/components/OpenFormFrame/util"
 import { OpenFormGraphProvider, VOID_ROOT_ID } from "@fxhash/open-form-graph"
 import { mockEthereumTransactionHash } from "@fxhash/utils"
-import { createContext, Dispatch, useCallback, useMemo, useState } from "react"
+import {
+  createContext,
+  Dispatch,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react"
+import { MainContext } from "./MainContext"
 
 export interface OpenFormContext {
   state: OpenFormData
@@ -61,23 +69,24 @@ const defaultContext: OpenFormContext = {
   rootLineage: [],
 }
 
-function createNode() {
-  const hash = mockEthereumTransactionHash()
+function createNode(hash?: string | null | undefined): RawOpenFormNode {
+  const _hash = hash || mockEthereumTransactionHash()
   return {
-    hash,
-    id: hash,
-    label: hash,
+    hash: _hash,
+    id: _hash,
+    label: _hash,
   }
 }
 
 export const OpenFormContext = createContext<OpenFormContext>(defaultContext)
 
 export function OpenFormProvider({ children }: { children: React.ReactNode }) {
+  const { baseHash } = useContext(MainContext)
   const [rootDepth, setRootDepth] = useState(0)
   const [focusedNodeId, setFocusedNodeId] = useState<string | null>(null)
   const [liveMode, setLiveMode] = useState(false)
   const [state, setState] = useState<OpenFormData>({
-    nodes: [createNode()],
+    nodes: [createNode(baseHash)],
     links: [],
   })
 

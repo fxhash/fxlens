@@ -77,20 +77,25 @@ export function Item(props: ItemProps) {
           <IconButton color="secondary" onClick={() => addNode(node.id)}>
             <FontAwesomeIcon icon={faShareNodes} />
           </IconButton>
-          <IconButton
-            color="secondary"
-            onClick={() => {
-              if (
-                window.confirm(
-                  "Removing the hash will also remove all its children. Are you sure?"
-                )
-              ) {
-                removeNode(node.id)
-              }
-            }}
-          >
-            <FontAwesomeIcon icon={faRemove} />
-          </IconButton>
+          {node.hash === ctx.baseHash && <div>URL PARAM</div>}
+          {node.hash !== ctx.baseHash && (
+            <>
+              <IconButton
+                color="secondary"
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Removing the hash will also remove all its children. Are you sure?"
+                    )
+                  ) {
+                    removeNode(node.id)
+                  }
+                }}
+              >
+                <FontAwesomeIcon icon={faRemove} />
+              </IconButton>
+            </>
+          )}
         </div>
       </div>
       <div className={style.children}>
