@@ -45,7 +45,7 @@ export function Item(props: ItemProps) {
               const lineage = searchParents(node.id, nodes, links).reverse()
               const url = createIframeUrl(ctx.rootUrl, {
                 hash: node.hash,
-                lineage: [...lineage.map((n) => n.hash), ...rootLineage],
+                lineage: [...rootLineage, ...lineage.map((n) => n.hash)],
               })
               window.open(url)
             }}

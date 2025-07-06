@@ -35,7 +35,7 @@
     "sha1": "1.1.1",
     "typescript": "5.8.2",
     "web-vitals": "2.1.4",
-    "zod": "3.24.3"
+    "zod": "3.25.67"
   },
   "devDependencies": {
     "@fxhash/eslint-config": "1.0.4",
@@ -67,3 +67,4 @@
     "lint:fix": "eslint ./src --fix"
   }
 }
+
